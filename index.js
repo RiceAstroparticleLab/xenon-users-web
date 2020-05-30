@@ -7,34 +7,15 @@ var logger = require('morgan');
 // connect to the mongo server
 // const testMongoURI = 'mongodb://localhost:27017/nodetest1'
 const MongoClient = require('mongodb').MongoClient
-var monk = require('monk')
 const mongoURI = 'mongodb://recode:WebFrameworksRock@fried.rice.edu:27017/admin?readPreference=secondary'
-var dbx
+var xenonnt_db
+var run_db
 MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
-    dbx = db.db("xenonnt")
-    // dbx.collection("users").find().toArray((err, result) => {
-    //     if(err) throw err
-    //     console.log(result)
-    //     db.close()
-    // })
+    xenonnt_db = db.db("xenonnt"),
+    run_db = db.db("run"),
+    console.log(`mongoDB is connected to ${mongoURI}`),
+    err => {console.log(err)}
 })
-
-//const client = new MongoClient(mongoURI, {useUnifiedTopology: true})
-// client.connect().then(client => 
-//     client.db().admin().listDatabases()
-// ).then(dbs => {
-    
-//     console.log("Mongo databases", dbs)
-// }).finally(() => client.close())
-
-// monk(mongoURI).then(
-//      () => {console.log(`mongoDB is connected to ${mongoURI} using monk`)},
-//      err => {console.log(err)}
-// )
-// mongoose.connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true}).then(
-//     () => {console.log(`mongoDB is connected to ${mongoURI}`)},
-//     err => {console.log(err)}
-// )
 
 
 // Routers for subsites
@@ -57,7 +38,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Make our db accessible to our router
 app.use((req,res,next) => {
-    req.dbx = dbx
+    req.xenonnt_db = xenonnt_db
+    req.run_db = run_db
     next()
 })
 

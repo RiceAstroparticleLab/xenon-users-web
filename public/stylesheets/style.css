@@ -1,9 +1,49 @@
-body {
-    padding: 50px;
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  }
-  
-  a {
-    color: #00B7FF;
-  }
-  
+.bg-3 { 
+  background-color: #ffffff;
+  color: #555555;
+}
+.container-fluid {
+  padding-top: 10px;
+  padding-bottom: 70px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+.navbar {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border: 0;
+  border-radius: 0;
+  margin-bottom: 0;
+  font-size: 12px;
+  letter-spacing: 5px;
+}
+.navbar-nav  li a:hover {
+  color: #1abc9c !important;
+}
+.active>a {
+color: #1abc9c !important;;
+}
+
+details {
+  border-top: .5px solid #aaa;
+  border-bottom: .5px solid #aaa;
+  border-radius: 0px;
+  padding: 1em 1em .5em;
+}
+
+summary {
+  font-weight: bold;
+  margin: -.5em -.5em 0;
+  padding: .5em;
+}
+
+details[open] {
+  padding: 1em 1em .5em;
+  border: 1px;
+  background-color: #f0f0f0;
+}
+
+details[open] summary {
+  border-bottom: 1px solid #aaa;
+  margin-bottom: .5em;
+}

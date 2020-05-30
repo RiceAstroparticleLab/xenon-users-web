@@ -1,0 +1,8 @@
+<% for (i = 0; i < data.length; i++) {%>
+    <details>
+        <summary> <%=data[i].last_name + ", " + data[i].first_name %></summary>
+        <p><b>Institute: </b><%= data[i].institute %><br>
+            <b>Email: </b><%= data[i].email%> <br>
+            <b>Position: </b><%= data[i].position%></p>
+    </details>
+<%}%>
