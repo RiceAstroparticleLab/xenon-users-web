@@ -3,11 +3,12 @@ var express = require('express')
 var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan');
+var dotenv = require('dotenv')
 
+dotenv.config()
 // connect to the mongo server
-// const testMongoURI = 'mongodb://localhost:27017/nodetest1'
 const MongoClient = require('mongodb').MongoClient
-const mongoURI = 'mongodb://recode:WebFrameworksRock@fried.rice.edu:27017/admin?readPreference=secondary'
+const mongoURI = process.env.MONGOLAB_URI
 var xenonnt_db
 var run_db
 MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
