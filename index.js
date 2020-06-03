@@ -14,6 +14,7 @@ var run_db
 MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
     xenonnt_db = db.db("xenonnt"),
     run_db = db.db("run"),
+    recode_db = db.db("recode")
     console.log(`mongoDB is connected to ${mongoURI}`),
     err => {console.log(err)}
 })
@@ -41,12 +42,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req,res,next) => {
     req.xenonnt_db = xenonnt_db
     req.run_db = run_db
+    req.recode_db = recode_db
     next()
 })
 
 app.listen(port, () => console.log(`Listening on port ${ port }`))
 app.use('/', landingRouter);
-app.use('/users', userRouter);
+app.use('/', userRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

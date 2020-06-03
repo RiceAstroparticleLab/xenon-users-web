@@ -8,7 +8,7 @@ var router = express.Router()
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  var db = req.run_db
+  var db = req.recode_db
   db.collection('users').distinct("institute", (e, docs) => {
     res.render('landing', {page:'Home', menuId:'home', "data": docs});
   })
@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
 
 /* GET Userlist page. */
 router.get('/fulldirectory', function(req, res) {
-  var db = req.run_db
+  var db = req.recode_db
   db.collection('users').find({}, {"sort": "last_name"}).toArray((e,docs) => {
       res.render('fulldirectory', {page: 'Full Directory', menuId: 'home', "data": docs})
   })
@@ -24,7 +24,7 @@ router.get('/fulldirectory', function(req, res) {
 
 /* GET individual institution page. */
 router.get('/institutes/:institute', function(req, res) {
-  var db = req.run_db
+  var db = req.recode_db
   var given_inst = req.params.institute
   console.log(`Institute: ${given_inst}`)
   //Look up institution if not a valid institute, send error
@@ -75,5 +75,10 @@ router.get('/institutes/:institute', function(req, res) {
   })
 
 })
+
+/* GET New User page. */
+router.get('/newuser', function(req, res) {
+  res.render('newuser', { page: 'New User', menuId: 'home', title: 'Add New User' });
+});
 
 module.exports = router

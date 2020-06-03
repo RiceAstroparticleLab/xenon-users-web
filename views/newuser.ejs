@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<style>
+  label {
+    text-align: left;
+  }
+
+</style>
+<html lang="en">
+<head>
+ <% include components/head %> 
+</head>
+  <body>
+    <% include components/menu %>
+    <div class="container-fluid bg-3"> 
+      <div class="row"></div>
+        <div class="col-md-2 row-height"></div>
+        <div class="col-sm-8 row-height">
+          <h1><%= title %></h1>
+          <form id="formAddUser" name="adduser" method="post" action="/adduser">
+            <label for="fname">First Name</label>
+            <input id="fname" type="text" name="FirstName" />
+            <label for="lname">Last Name</label>
+            <input id="lname" type="text" name="LastName" /> <br>
+            <label for="institute">Institute</label>
+            <input id="institute" type="text" name="Institute" />
+            <label for="uname">Username</label>
+            <input id="uname" type="text" name="Username" />
+            <label for="email">Email</label>
+            <input id="email" type="text" name="Email" />
+            <input type="submit" value="Submit">
+          </form>
+        </div>
+        <div class="col-md-2 row-height"></div>
+      </div>
+    </div>
+  </body>
+</html>
