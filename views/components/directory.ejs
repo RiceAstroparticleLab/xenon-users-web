@@ -1,8 +1,37 @@
-<% for (i = 0; i < data.length; i++) {%>
-    <details>
-        <summary> <%=data[i].last_name + ", " + data[i].first_name %></summary>
-        <p><b>Institute: </b><%= data[i].institute %><br>
-            <b>Email: </b><%= data[i].email%> <br>
-            <b>Position: </b><%= data[i].position%></p>
-    </details>
-<%}%>
+<ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#current">Current Members</a></li>
+    <li><a data-toggle="tab" href="#previous">Previous Members</a></li>
+  </ul>
+  
+  <div class="tab-content">
+    <div id="current" class="tab-pane fade in active">
+        <% for (i = 0; i < data.length; i++) {%>
+            <% if(!data[i].end_date) {%>
+                <details>
+                    <summary> <%=data[i].last_name + ", " + data[i].first_name %></summary>
+                    <p><b>Institute: </b><%= data[i].institute %><br>
+                        <b>Email: </b><%= data[i].email%> <br>
+                        <b>Position: </b><%= data[i].position%> <br>
+                        <b>Start Date: </b><%= data[i].start_date%> <br>
+                        <b>End Date: </b><%= data[i].end_date%></p><br>
+                        <!-- make this button available only if authorized as admin/PI-->
+                        <button type="button" class="btn btn-secondary btn-sm">Manage Account</button>
+                </details>
+            <%}%>
+        <%}%>
+    </div>
+    <div id="previous" class="tab-pane fade">
+        <% for (i = 0; i < data.length; i++) {%>
+            <% if(data[i].end_date) {%>
+                <details>
+                    <summary> <%=data[i].last_name + ", " + data[i].first_name %></summary>
+                    <p><b>Institute: </b><%= data[i].institute %><br>
+                        <b>Email: </b><%= data[i].email%> <br>
+                        <b>Position: </b><%= data[i].position%> <br>
+                        <b>Start Date: </b><%= data[i].start_date%> <br>
+                        <b>End Date: </b><%= data[i].end_date%></p><br>
+                </details>
+            <%}%>
+        <%}%>
+    </div>
+  </div>

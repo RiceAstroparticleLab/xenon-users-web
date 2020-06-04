@@ -11,6 +11,7 @@ const MongoClient = require('mongodb').MongoClient
 const mongoURI = process.env.MONGOLAB_URI
 var xenonnt_db
 var run_db
+var test_db
 MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
     xenonnt_db = db.db("xenonnt"),
     run_db = db.db("run"),
@@ -19,6 +20,11 @@ MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
     err => {console.log(err)}
 })
 
+MongoClient.connect(process.env.MONGO_LOCAL_URI, {useUnifiedTopology: true}, (err, db) => {
+    test_db = db.db('test'),
+    console.log(`mongoDB is connected to ${process.env.MONGO_LOCAL_URI}`),
+    err => {console.log(err)}
+})
 
 // Routers for subsites
 var landingRouter = require('./routes/pages');
@@ -43,6 +49,7 @@ app.use((req,res,next) => {
     req.xenonnt_db = xenonnt_db
     req.run_db = run_db
     req.recode_db = recode_db
+    req.test_db = test_db
     next()
 })
 

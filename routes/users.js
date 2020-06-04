@@ -9,31 +9,40 @@ var router = express.Router()
 // in edit: cell, 
 // admin: % xenon, start date, end date, position, institute
 router.post('/adduser', (req, res) => {
-    var db = req.recode_db
+    var db = req.test_db
 
     // Get our form values. These rely on the "name" attributes
-    var userName = req.body.Username;
-    var userEmail = req.body.Email;
     var firstName = req.body.FirstName;
     var lastName = req.body.LastName;
+    var userEmail = req.body.Email;
+    var position = req.body.Position;
     var instituteName = req.body.Institute;
+    var time = req.body.Time;
+    var tasks = req.body.Tasks;
+    var mlists = req.body.mlist1 || req.body.mlist2 || req.body.mlist3;
+    var start = req.body.StartDate;
+    var end = req.body.EndDate;
     try {
         db.collection('users').insertOne({
             "first_name": firstName,
             "last_name": lastName,
-            "username": userName,
             "email": userEmail,
-            "institute": instituteName
+            "institute": instituteName,
+            "position": position,
+            "time": time,
+            "tasks": tasks,
+            "mailing_lists": mlists,
+            "start_date": start,
+            "end_date": end
         })
         console.log(`success. Added ${firstName} ${lastName}`)
         res.redirect(`/institutes/${instituteName}`)
     } catch (e) {
-        next(e)
         console.log(e)
     }
 })
 
-// remove a user
+// remove a user: really just means set an end date
 
 // find and modify
 

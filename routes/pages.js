@@ -6,6 +6,10 @@ var router = express.Router()
 //     res.render('landing', { title: 'Under Construction' })
 //   })
 
+var today = Date(Date.now())
+console.log(`Today is ${today}`)
+var cur_institute
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   var db = req.recode_db
@@ -26,7 +30,9 @@ router.get('/fulldirectory', function(req, res) {
 router.get('/institutes/:institute', function(req, res) {
   var db = req.recode_db
   var given_inst = req.params.institute
+  cur_institute = given_inst
   console.log(`Institute: ${given_inst}`)
+
   //Look up institution if not a valid institute, send error
 
   // Stats for this institute
@@ -34,43 +40,31 @@ router.get('/institutes/:institute', function(req, res) {
   db.collection('users').find({"institute": given_inst, "position": "PI"}).toArray((e, result) => {
     pi = result
   })
-  var phd_students
-  db.collection('users').find({"institute": given_inst, "position": "PhD Student" || "Phd Student"}).toArray((e, result) => {
-    phd_students = result
-  })
-  var master_students
-  db.collection('users').find({"institute": given_inst, "position": "Master student"}).toArray((e, result) => {
-    master_students = result
-  })
-  var post_doc
-  db.collection('users').find({"institute": given_inst, "position": "Postdoc"}).toArray((e, result) => {
-    post_doc = result
-  })
-  var thesis_students
-  db.collection('users').find({"institute": given_inst, "position": "Thesis student"}).toArray((e, result) => {
-    thesis_students = result
-  })
-  var other_student
-  db.collection('users').find({"institute": given_inst, "position": "Other student"}).toArray((e, result) => {
-    other_student = result
-  })
-  var staff
-  db.collection('users').find({"institute": given_inst, "position": "Staff"}).toArray((e, result) => {
-    staff = result
-  })
- 
 
-  //If valid show all users in that institute
+
+  // If valid show all users in that institute
   db.collection('users').find({"institute": given_inst}, {"sort": "last_name"}).toArray((e, docs) => {
+    var dict = {};
+    // Team Stats
+    for (i = 0; i < docs.length; i++) {
+      var position_str = `${docs[i].position}`
+      if (position_str != "PI") {
+        position_str = position_str.toLowerCase()
+        position_str = position_str[0].toUpperCase() + position_str.slice(1)
+        if(dict[`${position_str}`]) {
+          dict[`${position_str}`] += 1
+        } else {
+          dict[`${position_str}`] = 1
+        }
+      }
+    }
+
+    console.log(dict)
+
     res.render('institutes', {page: `${ given_inst }`, 
       menuId: 'home', 
       "PI": pi,
-      "PhD": phd_students,
-      "Master": master_students,
-      "PD": post_doc,
-      "Thesis": thesis_students,
-      "Other": other_student,
-      "Staff": staff,
+      "dict": dict,
       "data": docs})
   })
 
@@ -78,7 +72,7 @@ router.get('/institutes/:institute', function(req, res) {
 
 /* GET New User page. */
 router.get('/newuser', function(req, res) {
-  res.render('newuser', { page: 'New User', menuId: 'home', title: 'Add New User' });
+  res.render('newuser', { page: 'New User', cur_institute: `${cur_institute}`, menuId: 'home', title: 'Add New User' });
 });
 
 module.exports = router

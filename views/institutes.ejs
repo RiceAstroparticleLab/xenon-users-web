@@ -8,7 +8,7 @@
     padding-top: 10px;
     padding-bottom: 70px;
     padding-left: 40px;
-    padding-right: 40px;
+    padding-right: 40px;  
     }
     .navbar {
     padding-top: 15px;
@@ -20,13 +20,16 @@
     letter-spacing: 5px;
     }
     .navbar-nav  li a:hover {
-    color: #00008b !important;
+    color: #2f2f2f !important;
     }
     .active>a {
-    color: #00008b !important;;
+    color: #2f2f2f !important;;
     }
+    .pull-right {
+      vertical-align: middle;
+    }
+
     details {
-    border-top: .5px solid #aaa;
     border-bottom: .5px solid #aaa;
     border-radius: 0px;
     padding: 1em 1em .5em;
@@ -48,6 +51,14 @@
     border-bottom: 1px solid #aaa;
     margin-bottom: .5em;
     }
+
+    h3 {
+        margin: 0px;
+        display: inline-block;
+        padding-right: 180px;
+    }
+  
+     
 </style>
 <html lang="en"></html>
 <html>
@@ -57,45 +68,30 @@
   <body>
     <% include components/menu %>
     <div class="container-fluid bg-3 text-left">  
-      <div class="row">
-        <div class= "col-sm-1"></div>
-        <div class="col-lg-6">
-          <h1><%= page %></h1>
-        </div>
-        <div class="col-sm-2">
-          <h2>Members</h2>
-        </div>
-        <div class= "col-sm-1">
-          &nbsp;
-          <button type="button" class="btn btn-secondary btn-sm">Add Member</button>
-        </div>
-        <div class= "col-sm-1">
-            &nbsp;
-            <button type="button" class="btn btn-secondary btn-sm">Delete Member</button>
-        </div>
-        <div class= "col-sm-1"></div>
-      </div>
       <div class ="row">
         <div class="col-sm-1"></div>
         <div class="col-lg-6">
-          <h4><%=page%> XENON team at a glance </h4>
-          <p>Total Members: <%= data.length%> <br>
+          <h1><%= page %></h1>
+          <h3><%=page%> XENON team at a glance </h3>
+          <p>Total Members: <%= data.length%> <br> <br>
             PI: <% for (i = 0; i < PI.length; i++) {%>
                   <%=PI[i].last_name + ", " + PI[i].first_name %> <br>
-                <%}%>
-            PhD Students: <%=PhD.length%><br>
-            Master Students: <%=Master.length%><br>
-            Postdoc: <%=PD.length%><br>
-            Thesis students: <%=Thesis.length%><br>
-            Other students: <%=Other%><br>
-            Staff: <%=Staff%><br>    
+                <%}%> <br>
+            <% for(var key in dict) {%>
+              <%=key%>: <%=dict[key]%> <br>
+            <%}%>
           </p>
         </div>
         <div class="col-sm-4">
+          <!-- make this button available only if authorized as admin/PI-->
+            <h3>Members</h3>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='/newuser'">Add Member</button>
+          <!-- make the text on this button toggle between Previous/Current Members-->
           <% include components/directory %>
         </div>
         <div class="col-sm-1"></div>
       </div>
     </div>
   </body>
+  <% include components/script %>
 </html>
