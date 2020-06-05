@@ -29,10 +29,51 @@ MongoClient.connect(process.env.MONGO_LOCAL_URI, {useUnifiedTopology: true}, (er
 // Routers for subsites
 var landingRouter = require('./routes/pages');
 var userRouter = require('./routes/users');
+var instituteRouter = require('./routes/institutes')
+var authRouter = require('./routes/auth')
 
 /* using Express */
 const app = express()
 const port = process.env.PORT || 3000
+
+// Session caching
+var session = require('express-session');
+var MongoDBStore = require('connect-mongodb-session')(session);
+			
+var store = new MongoDBStore({
+  uri: process.env.MONGO_LOCAL_URI,
+  collection: 'mySessions'
+});
+ 
+store.on('connected', function() {
+  store.client; // The underlying MongoClient object from the MongoDB driver
+});
+
+// Catch errors
+var assert = require("assert");
+store.on('error', function(error) {
+  assert.ifError(error);
+  assert.ok(false);
+});
+ 
+app.use(session({
+  secret: process.env.EXPRESS_SESSION,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+  },
+  store: store,
+  // Boilerplate options, see:
+  // * https://www.npmjs.com/package/express-session#resave
+  // * https://www.npmjs.com/package/express-session#saveuninitialized
+  resave: true,
+  saveUninitialized: false
+}));
+
+// Passport Auth
+var passport = require("passport");
+require("./config/passport");
+app.use(passport.initialize());
+app.use(passport.session());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -56,6 +97,8 @@ app.use((req,res,next) => {
 app.listen(port, () => console.log(`Listening on port ${ port }`))
 app.use('/', landingRouter);
 app.use('/', userRouter);
+app.use('/institutes', instituteRouter)
+app.use('/auth', authRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

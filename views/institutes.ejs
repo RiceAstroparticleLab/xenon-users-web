@@ -1,97 +1,31 @@
 <!DOCTYPE html>
-<style>
-    .bg-3 { 
-    background-color: #ffffff;
-    color: #555555;
-    }
-    .container-fluid {
-    padding-top: 10px;
-    padding-bottom: 70px;
-    padding-left: 40px;
-    padding-right: 40px;  
-    }
-    .navbar {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    border: 0;
-    border-radius: 0;
-    margin-bottom: 0;
-    font-size: 12px;
-    letter-spacing: 5px;
-    }
-    .navbar-nav  li a:hover {
-    color: #2f2f2f !important;
-    }
-    .active>a {
-    color: #2f2f2f !important;;
-    }
-    .pull-right {
-      vertical-align: middle;
-    }
-
-    details {
-    border-bottom: .5px solid #aaa;
-    border-radius: 0px;
-    padding: 1em 1em .5em;
-    }
-
-    summary {
-    font-weight: bold;
-    margin: -.5em -.5em 0;
-    padding: .5em;
-    }
-
-    details[open] {
-    padding: 1em 1em .5em;
-    border: 1px;
-    background-color: #f0f0f0;
-    }
-
-    details[open] summary {
-    border-bottom: 1px solid #aaa;
-    margin-bottom: .5em;
-    }
-
-    h3 {
-        margin: 0px;
-        display: inline-block;
-        padding-right: 180px;
-    }
-  
-     
-</style>
-<html lang="en"></html>
-<html>
-  <head>
-    <% include components/head %>
-  </head>
-  <body>
-    <% include components/menu %>
-    <div class="container-fluid bg-3 text-left">  
-      <div class ="row">
-        <div class="col-sm-1"></div>
-        <div class="col-lg-6">
-          <h1><%= page %></h1>
-          <h3><%=page%> XENON team at a glance </h3>
-          <p>Total Members: <%= data.length%> <br> <br>
-            PI: <% for (i = 0; i < PI.length; i++) {%>
-                  <%=PI[i].last_name + ", " + PI[i].first_name %> <br>
-                <%}%> <br>
-            <% for(var key in dict) {%>
-              <%=key%>: <%=dict[key]%> <br>
-            <%}%>
-          </p>
-        </div>
-        <div class="col-sm-4">
-          <!-- make this button available only if authorized as admin/PI-->
-            <h3>Members</h3>
-            <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='/newuser'">Add Member</button>
-          <!-- make the text on this button toggle between Previous/Current Members-->
-          <% include components/directory %>
-        </div>
-        <div class="col-sm-1"></div>
-      </div>
+<html lang="en">
+<head>
+ <% include components/head %> 
+</head>
+<body>
+<% include components/menu %>
+<div class="container-fluid bg-3 text-center">    
+  <h3>Institutes</h3><br>
+  <div class="row">
+    <div class="col-sm-4">
+      <% for (i = 0; i < Math.floor(data.length/3); i++) {%>
+          <p><a href="/institutes/<%=data[i]%>"><%=data[i]%></a></p>
+      <%}%>
     </div>
-  </body>
-  <% include components/script %>
+    <div class="col-sm-4"> 
+      <% for (i = Math.floor(data.length/3) + 1; i < Math.floor(data.length*(2/3)); i++) {%>
+          <p><a href="/institutes/<%=data[i]%>"><%=data[i]%></a></p>
+      <%}%>
+    </div>
+    <div class="col-sm-4"> 
+      <% for (i = Math.floor(data.length*(2/3)) + 1; i < data.length; i++) {%>
+          <p><a href="/institutes/<%=data[i]%>"><%=data[i]%></a></p>
+      <%}%>   
+    </div>
+  </div>
+  <h4>For full member directory visit <a href="/fulldirectory">/fulldirectory</a></h4>
+</div>
+</body>
+<% include components/script %>
 </html>

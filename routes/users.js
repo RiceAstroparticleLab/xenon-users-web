@@ -46,13 +46,4 @@ router.post('/adduser', (req, res) => {
 
 // find and modify
 
-router.post('/getDirectory', (req, res) => {
-    var db = req.users_db;
-    var collection = db.get("users");
-    collection.find({}, {"sort": {"last_name": -1}},
-		    function(e, docs){
-			return res.send(JSON.stringify({"data": docs}));
-		    });
-});
-
 module.exports = router;
