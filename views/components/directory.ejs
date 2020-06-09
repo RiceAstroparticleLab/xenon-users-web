@@ -5,33 +5,31 @@
   
   <div class="tab-content">
     <div id="current" class="tab-pane fade in active">
-        <% for (i = 0; i < data.length; i++) {%>
-            <% if(!data[i].end_date) {%>
-                <details>
-                    <summary> <%=data[i].last_name + ", " + data[i].first_name %></summary>
-                    <p><b>Institute: </b><%= data[i].institute %><br>
-                        <b>Email: </b><%= data[i].email%> <br>
-                        <b>Position: </b><%= data[i].position%> <br>
-                        <b>Start Date: </b><%= data[i].start_date%> <br>
-                        <b>End Date: </b><%= data[i].end_date%></p><br>
-                        <!-- make this button available only if authorized as admin/PI-->
-                        <button type="button" class="btn btn-secondary btn-sm">Manage Account</button>
-                </details>
-            <%}%>
+        <% for (i = 0; i < curr.length; i++) {%>
+            <details>
+                <summary> <%=curr[i].last_name + ", " + curr[i].first_name %></summary>
+                <p><b>Institute: </b><%= curr[i].institute %><br>
+                    <b>Email: </b><%= curr[i].email%> <br>
+                    <b>Position: </b><%= curr[i].position%> <br>
+                    <b>Start Date: </b><%= curr[i].start_date%> <br>
+                    <b>End Date: </b><%= curr[i].end_date%></p><br>
+                    <!-- make this button available only if authorized as admin/PI-->
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='/users/<%= curr[i]._id %>'">Manage Account</button>
+
+            </details>
+
         <%}%>
     </div>
     <div id="previous" class="tab-pane fade">
-        <% for (i = 0; i < data.length; i++) {%>
-            <% if(data[i].end_date) {%>
-                <details>
-                    <summary> <%=data[i].last_name + ", " + data[i].first_name %></summary>
-                    <p><b>Institute: </b><%= data[i].institute %><br>
-                        <b>Email: </b><%= data[i].email%> <br>
-                        <b>Position: </b><%= data[i].position%> <br>
-                        <b>Start Date: </b><%= data[i].start_date%> <br>
-                        <b>End Date: </b><%= data[i].end_date%></p><br>
-                </details>
-            <%}%>
+        <% for (i = 0; i < prev.length; i++) {%>
+            <details>
+                <summary> <%=prev[i].last_name + ", " + prev[i].first_name %></summary>
+                <p><b>Institute: </b><%= prev[i].institute %><br>
+                    <b>Email: </b><%= prev[i].email%> <br>
+                    <b>Position: </b><%= prev[i].position%> <br>
+                    <b>Start Date: </b><%= prev[i].start_date%> <br>
+                    <b>End Date: </b><%= prev[i].end_date%></p><br>
+            </details>
         <%}%>
     </div>
   </div>

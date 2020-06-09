@@ -65,7 +65,7 @@ app.use(session({
   // Boilerplate options, see:
   // * https://www.npmjs.com/package/express-session#resave
   // * https://www.npmjs.com/package/express-session#saveuninitialized
-  resave: true,
+  resave: false,
   saveUninitialized: false
 }));
 
@@ -96,7 +96,7 @@ app.use((req,res,next) => {
 
 app.listen(port, () => console.log(`Listening on port ${ port }`))
 app.use('/', landingRouter);
-app.use('/', userRouter);
+app.use('/users', userRouter);
 app.use('/institutes', instituteRouter)
 app.use('/auth', authRouter)
 

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include components/head %> 
+</head>
+<body>
+    <% include components/menu %>
+    <div class="container-fluid bg-3">
+        <br>
+        <div class="row">
+            <div class="col-10">
+                <h4>User Account</h4>
+            </div>
+            <div class="col-2">
+                <button type="button" class="btn btn-default" data-target="#updateModal" data-toggle="modal">Update Contact Info</button>
+            </div>
+        </div>  
+        <hr>
+        <div class="row">
+            <div class="col-sm-3 col-xs-12">
+                <img src="<%=user.picture_url%>" style="width: 100%; max-width:200px;">
+                <h5><%= title %></h5>
+                <h6><%= user.position %> at <%= user.institute %></h6>
+                <h6> Member since: <%= user.start_date.toString().substring(4,15) %></h6>
+            </div>
+            <div class="col-sm-9 col-xs-12">
+                <table>
+                    <tr>
+                        <td style="width:150px">
+                            <strong>XENON Profile</strong>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td><%= user.email %></td>
+                    </tr>
+                    <tr>
+                        <td>Skype</td>
+                        <td><%= user.skype %></td>
+                    </tr>
+                    <tr>
+                        <td>Cell</td>
+                        <td><%= user.cell %></td>
+                    </tr>
+                    <tr>
+                        <td>Percent Xenon</td>
+                        <td><%= user.percent_xenon %>% </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <strong>Accounts</strong>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Github ID</td>
+                        <td><%= user.github %></td>
+                    </tr>
+                    <tr>
+                        <td>LNGS ID</td>
+                        <td><%= user.lngs_ldap_uid %></td>
+                    </tr>
+                    <tr>
+                        <td>My Github</td>
+                        <td>
+                            <a href='<%= user.github_home%>'>Link</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <br>
+        <br>
+        <a href="/">back to home page</a>
+
+        <!-- Modal -->
+        <div id="updateModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form method="post" action="updateContactInfo">
+                            <div class="form-group">
+                                <label class="form-label" for="email">Email</label>
+                                <input class="form-control" type="email" value="<%= user.email %>" name="email">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="skype">Skype</label>
+                                <input class="form-control" type="text" value="<%= user.skype %>" name="skype">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="phone">Phone</label>
+                                <input class="form-control" type="tel" value="<%= user.cell %>" name="cell">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="favorite_color">Favorite Color</label>
+                                <input class="form-control" id="form_color" type="color" name="favorite_color">
+                            </div>
+                            <br>
+                            <button class="btn btn-info" type="submit">Submit</button>
+                            &nbsp;&nbsp;&nbsp;
+                            <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<% include components/script %>
+<script>
+     $(document).ready(function(){
+    	DrawActiveLink("#laccount");
+      var userdoc = JSON.parse('!{JSON.stringify(user)}');      
+      FillAPIInfo(userdoc);
+      if('#{user.favorite_color}' != "not set"){
+        $("#form_color").val("#{user.favorite_color}");
+      }
+    });
+</script>
+</html>

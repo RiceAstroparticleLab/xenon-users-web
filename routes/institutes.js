@@ -3,14 +3,24 @@ var router = express.Router()
 
 /* GET Institutes List page. */
 router.get('/', function(req, res) {
+    // var db = req.test_db
     var db = req.recode_db
     db.collection('users').distinct("institute", (e, docs) => {
-      res.render('institutes', {page:'Home', menuId:'home', "data": docs});
+      var array = []
+      // Remove any '/' from names
+      for (i = 0; i < docs.length; i++) {
+        if (docs[i] != null) {
+          var inst = `${docs[i]}`.replace('/', '-')
+          array.push(inst)
+        }
+      }
+      res.render('institutes', {page:'Home', menuId:'home', "data": array, user: req.user});
     })
   })
 
 /* GET individual institution page. */
 router.get('/:institute', function(req, res) {
+    //var db = req.test_db
     var db = req.recode_db
     var given_inst = req.params.institute
     cur_institute = given_inst
@@ -26,7 +36,7 @@ router.get('/:institute', function(req, res) {
   
   
     // If valid show all users in that institute
-    db.collection('users').find({"institute": given_inst}, {"sort": "last_name"}).toArray((e, docs) => {
+    db.collection('users').find({"institute": {$regex: given_inst, $options: "xsi"}}, {"sort": "last_name"}).toArray((e, docs) => {
       var dict = {};
       // Team Stats
       for (i = 0; i < docs.length; i++) {
@@ -43,12 +53,25 @@ router.get('/:institute', function(req, res) {
       }
   
       console.log(dict)
+
+      var current = []
+      var prev = []
+      for (i = 0; i < docs.length; i++) {
+        if(!docs[i].end_date) {
+          if(docs)
+          current.push(docs[i])
+        } else {
+          prev.push(docs[i])
+        }
+      }
   
       res.render('institute_stats', {page: `${ given_inst }`, 
         menuId: 'home', 
         "PI": pi,
         "dict": dict,
-        "data": docs})
+        "curr": current, 
+        "prev": prev,
+        user: req.user})
     })
   
   })

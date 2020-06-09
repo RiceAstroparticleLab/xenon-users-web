@@ -14,12 +14,12 @@
       <%}%>
     </div>
     <div class="col-sm-4"> 
-      <% for (i = Math.floor(data.length/3) + 1; i < Math.floor(data.length*(2/3)); i++) {%>
+      <% for (i = Math.floor(data.length/3); i < Math.floor(data.length*(2/3)); i++) {%>
           <p><a href="/institutes/<%=data[i]%>"><%=data[i]%></a></p>
       <%}%>
     </div>
     <div class="col-sm-4"> 
-      <% for (i = Math.floor(data.length*(2/3)) + 1; i < data.length; i++) {%>
+      <% for (i = Math.floor(data.length*(2/3)); i < data.length; i++) {%>
           <p><a href="/institutes/<%=data[i]%>"><%=data[i]%></a></p>
       <%}%>   
     </div>

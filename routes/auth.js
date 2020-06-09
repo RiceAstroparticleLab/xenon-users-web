@@ -4,7 +4,7 @@ var passport = require("passport")
 
 // auth login page
 router.get('/login', (req, res) => {
-    res.render('login', {page: 'Login', menuId: 'home'})
+    res.render('login', {page: 'Login', menuId: 'home', user: req.user})
 })
 
 // login using github
@@ -24,14 +24,14 @@ router.get('/password', (req, res) => {
 router.get('/github/callback',
     passport.authenticate('github', { failureRedirect: '/login' }),
    (req, res) => {
-       console.log(`Our new user is ${req.user}`)
-        res.redirect('/')
+        res.redirect('/profile')
 })
 
 
 // auth logout page
 router.get('/logout', (req, res) => {
     req.logout();
+    req.session.destroy();
     res.redirect('/');
 })
 
