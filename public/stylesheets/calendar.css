@@ -1,0 +1,77 @@
+#calendar{
+    height: calc(100vh - 41px) !important;
+    max-height: calc(100vh - 41px) !important;
+
+}
+#calendar_container{
+    height: calc(100% - 40px);
+}
+.fc-header tr td{
+    border-width: 0;
+}
+.fc-header-right{
+    padding-top: 5px !important;
+}
+.fc-title {
+    color: white;
+}
+.calbox{
+    background-color: white;
+    border-width: 0px;
+    border-color: #D5D5D5; /*#5992c2w;*/
+    border-style: solid;
+    width:100%;
+    min-height:500px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    /*box-shadow: 10px 10px 5px #888888;*/
+    padding-top:10px;
+}
+.fc-event{
+    cursor: pointer;
+}
+.cal_ul {
+    display:inline;
+    list-style: none;
+    padding:0;
+    margin:0;
+}
+.cal_li { 
+    padding-left: 1em; 
+    text-indent: -.7em;
+    display:inline;
+}
+#ttip {
+box-shadow: 10px 10px 5px #888888;
+    z-index: 10;
+    min-width:300px;
+    min-height:100px;
+    display: none;
+    position:fixed;
+    background-color:white;
+    padding:10px;    
+    width:450px;
+    border-width:1px;
+    border-color:#BBBBBB;
+    border-style:solid;
+}
+.assigned:before {
+    content: "\0025A0   ";
+    font-size:x-large;
+    color: #0c1178; /* or whatever color you prefer */
+}
+.free:before {
+    content: "\0025A0   ";
+    font-size:x-large;
+    color: #06d6a0; /* or whatever color you prefer */
+}
+.run_coordinator:before {
+    content: "\0025A0   ";
+    font-size:x-large;
+    color: #ef476f; /* or whatever color you prefer */
+}
+.training:before{
+    content: "\0025A0   ";
+    font-size:x-large;
+    color: #ef476f; /* or whatever color you prefer */
+}

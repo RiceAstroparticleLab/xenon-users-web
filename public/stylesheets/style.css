@@ -25,6 +25,21 @@
 color: #2f2f2f !important;;
 }
 
+.det_card{
+  padding: 10px;
+  background-color: white;
+  color: #333333;
+  border: solid 1px #cccccc;
+  height:120px;
+  overflow: clip;
+}
+.det_card_noheight{
+  padding: 10px;
+  background-color: white;
+  color: #333333;
+  border: solid 1px #cccccc;
+}
+
 input {
   width: 100%;
   padding: 12px 20px;

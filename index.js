@@ -12,6 +12,7 @@ const mongoURI = process.env.MONGOLAB_URI
 var xenonnt_db
 var run_db
 var test_db
+var recode_db
 MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
     xenonnt_db = db.db("xenonnt"),
     run_db = db.db("run"),
@@ -31,6 +32,8 @@ var landingRouter = require('./routes/pages');
 var userRouter = require('./routes/users');
 var instituteRouter = require('./routes/institutes')
 var authRouter = require('./routes/auth')
+var shiftRouter = require('./routes/shifts')
+var calendarRouter = require('./routes/calendar')
 
 /* using Express */
 const app = express()
@@ -99,6 +102,8 @@ app.use('/', landingRouter);
 app.use('/users', userRouter);
 app.use('/institutes', instituteRouter)
 app.use('/auth', authRouter)
+app.use('/shifts', shiftRouter)
+app.use('/calendar', calendarRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

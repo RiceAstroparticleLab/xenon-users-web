@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include components/head %>
+    <link rel='stylesheet' href='stylesheets/calendar.css'/>
+    <link rel='stylesheet' href='stylesheets/fullcalendar.min.css'/>
+    <script src='javascripts/jquery.min.js'></script>
+    <script src="javascripts/moment.min.js" type="text/javascript"></script>
+    <script src='javascripts/fullcalendar.js'></script>
+    <!-- <script src='javascripts/fullcalendar.min.js'></script> -->
+    <script src="javascripts/bootstrap-select.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="stylesheets/bootstrap-select.min.css">
+</head>
+<body>
+    <% include components/menu %>
+    <div class="container-fluid bg-3 text-left">
+        <ul class="nav nav-tabs" id="shiftNavTab" role="tablist">
+            <li class="active"><a id="calendar-tab" data-toggle="tab" href="#calendartab" role="tab" aria-controls="calendar" aria-selected="true">Calendar</a></li>
+            <li><a id="overview-tab" data-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="false">Overview</a></li>
+            <li><a id="rules-tab" data-toggle="tab" href="#rules" role="tab" aria-controls="rules" aria-selected="false">Rules</a></li>
+        </ul>
+
+        <div class="tab-content" id="tabContent">
+
+            <div class="tab-pane fade in active" id="calendartab">
+                <br>
+                <div class="row" style="height:100%">
+                    <div class="col-sm-4">
+                        <h4 style="width:100%;background-color:#0c1178;color:white;margin-top:5px;padding:3px;">Institute Leaderboard</h4>
+                    </div>
+                    <div class="col-sm-8">
+                        <ul class="cal_ul pull-right" id="calendar-legend">
+                            <li class="cal_li assigned">Assigned</li> 
+                            <li class="cal_li free">Free</li>
+                            <li class="cal_li training">Training</li>
+                        </ul>
+                        <div id='calendar'></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    $(function() {
+
+        // page is now ready, initialize the calendar...
+
+        $('#calendar').fullCalendar({
+            defaultView: 'month'
+        })
+
+    });
+</script>
+</html>
