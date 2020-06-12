@@ -7,11 +7,11 @@ function ensureAuthenticated(req, res, next) {
     return res.redirect('/login');
 }
 
-/* GET shift page */
-router.get('/', function(req, res) {
-    // Get our user's institute
-    res.render('shifts', { page: 'Shifts', menuId: 'home', title: 'Shifts', user: req.user });
-});
+/* GET home page. */
+router.get('/', function(req, res, next) {
+      res.render('shifts', {page: 'Home', menuId: 'home', user: req.user})
+})
+
 
 router.get('/get_current_shifters', function(req, res){
 	//var db = req.run_db;
@@ -56,9 +56,11 @@ router.get('/get_current_shifters', function(req, res){
 	});
 });
 
+/*
+ * FullCalendar will call this function to populate itself
+ * The arguments are fixed as 'start' and 'end', which are ISO dates 
+ */
 router.get('/get_shifts', ensureAuthenticated, function(req, res){
-    // FullCalendar will call this function to populate itself
-    // The arguments are fixed as 'start' and 'end', which are ISO dates
 	// var db = req.run_db;
 	var db = req.test_db
     var collection = db.collection("shifts");
@@ -67,10 +69,14 @@ router.get('/get_shifts', ensureAuthenticated, function(req, res){
     var start = new Date(q.start);
     var end = new Date(q.end);
 
-    collection.find({"start": {"$gt": start, "$lt": end}}).toArray(
-		    function(e, docs){
+	console.log(`start: ${start}`)
+	console.log(`end: ${end}`)
+
+    collection.find({"start": {"$gt": start, "$lt": end}}).toArray( 
+		function(e, docs){
+			// console.log(`docs: ${docs}`)
 			var ret = [];
-			for(var i = 0; i<docs.length; i+=1){
+			for(var i = 0; i < docs.length; i+=1){
 			    doc = docs[i];
 			    ret.push({
 				"start": doc['start'].toISOString().substr(0, 19),
@@ -83,7 +89,8 @@ router.get('/get_shifts', ensureAuthenticated, function(req, res){
 				"shifter": doc['shifter']
 			    })
 			}
-			return res.send(ret); //JSON.stringify(ret));
+			console.log(`ret: ${ret}`)
+			return res.send(ret); 
 		    });
     
 });
@@ -111,10 +118,9 @@ function getNextDayOfWeek(date, dayOfWeek) {
     resultDate.setDate(date.getDate() + (7 + dayOfWeek - date.getDay()) % 7);
     return resultDate;
 }
-router.post('/add_shifts', ensureAuthenticated, function(req, res){
+router.post('/add_shifts', function(req, res){
 	// var db = req.run_db;
 	var db = req.test_db
-    var collection = db.collection('shifts');
     
     // Get form data
     var start = new Date(Date.UTC(parseInt(req.body.start_date.substr(0, 4)), 
@@ -124,41 +130,39 @@ router.post('/add_shifts', ensureAuthenticated, function(req, res){
                                   parseInt(req.body.end_date.substr(5, 2))-1,
                                   parseInt(req.body.end_date.substr(8, 2))))
 
+	// console.log(`start: ${start}`)
+	// console.log(`end: ${end}`)
 
-    // You can only do this if you're the operations manager. Check permissions
-    if(typeof(req.user.groups) == "undefined" || !req.user.groups.includes("operations"))
-	return res.send(JSON.stringify({"res": "Woah, who do you think you are there buddy?"}));
+    /* You can only do this if you're the operations manager. Check permissions */
+    // if(typeof(req.user.groups) == "undefined" || !req.user.groups.includes("operations"))
+	// return res.send(JSON.stringify({"res": "Woah, who do you think you are there buddy?"}));
     
     var weekday = req.body.shift_change_day;
     var shift_type = req.body.shift_type;
     var credit_multiplier = req.body.credit_multiplier;
 
-    start = getNextDayOfWeek(start, weekday);
-    var docs = [];
-    while(start < end){
-	var end_of_shift = new Date(Date.UTC(start.getFullYear(), start.getMonth(), start.getDate(),
-				    0, 0, 0));
-	end_of_shift.setDate(start.getDate() + 7);
-	end_of_shift.setHours(23, 59, 59, 0);
-
-	var idoc = {
-	    "start": new Date(Date.UTC(start.getFullYear(), start.getMonth(), start.getDate(),
-                                       0, 0, 0)),
-	    "end": end_of_shift,
-	    "type": shift_type,
-	    "available": true,
-	    "credit_multiplier": credit_multiplier,
-	    "institute": "none",
-	    "shifter": "none",
-	    "comment": ""
+	start = getNextDayOfWeek(start, weekday);
+	console.log(`next day of week: ${start}`)
+    var idoc;
+	if(start < end){ // why the while loop originally?
+		idoc = {
+			"start": new Date(start),
+			"end": new Date(end),
+			"type": shift_type,
+			"available": true,
+			"credit_multiplier": credit_multiplier,
+			"institute": "none",
+			"shifter": "none",
+			"comment": ""
+		}
+		// console.log(`idoc: ${idoc}`) 
 	}
-	docs.push(idoc);
-	start.setTime(end_of_shift.getTime());
-    }
-    collection.insert(docs);
+	// console.log(`docs: ${idoc}`)
+    db.collection('shifts').insertOne(idoc);
     return res.sendStatus(200);    
 });
-router.post('/remove_shifts', ensureAuthenticated, function(req, res){
+
+router.post('/remove_shifts', function(req, res){
 	// var db = req.run_db;
 	var db = req.test_db
     var collection = db.collection("shifts");
@@ -167,14 +171,17 @@ router.post('/remove_shifts', ensureAuthenticated, function(req, res){
     var end = new Date(req.body.end_date);
     var type = req.body.shift_type;
 
-    // You can only do this if you're the operations manager. Check permissions
-    if(typeof(req.user.groups) == "undefined" || !req.user.groups.includes("operations"))
-	return res.send(JSON.stringify({"res": "Berechtigung nicht vorgewiesen. Bitte begrÃnden."}));
+	// console.log(`start: ${start}`)
+	// console.log(`end: ${end}`)
+	
+    /* You can only do this if you're the operations manager. Check permissions */
+    // if(typeof(req.user.groups) == "undefined" || !req.user.groups.includes("operations"))
+	// return res.send(JSON.stringify({"res": "Berechtigung nicht vorgewiesen. Bitte begrÃnden."}));
     
-    Query = {"start": {"$gte": start, "$lte": end}};
+    query = {"start": {"$gte": start, "$lte": end}};
     if(type != "all")
-	query['type'] = type;
-    collection.remove(query, {multi: true});
+		query['type'] = type;
+    collection.removeOne(query, {multi: true});
     return res.sendStatus(200);
 });
 

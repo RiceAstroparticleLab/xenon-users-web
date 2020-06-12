@@ -33,7 +33,6 @@ var userRouter = require('./routes/users');
 var instituteRouter = require('./routes/institutes')
 var authRouter = require('./routes/auth')
 var shiftRouter = require('./routes/shifts')
-var calendarRouter = require('./routes/calendar')
 
 /* using Express */
 const app = express()
@@ -103,7 +102,6 @@ app.use('/users', userRouter);
 app.use('/institutes', instituteRouter)
 app.use('/auth', authRouter)
 app.use('/shifts', shiftRouter)
-app.use('/calendar', calendarRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

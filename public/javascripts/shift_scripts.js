@@ -29,28 +29,31 @@ function FillAggregates(tablediv, headerdiv, myinstitute){
     });
 }
 
-function InitializeCalendar(divname, calling_user){
+/* Initializes calendar and all related forms */
+function InitializeCalendar(){
     var colors = {"free": "#06d6a0",
                   "run coordinator": "#0c1178",
                   "taken": "#0c1178",
                   "shifter": "#0c1178",
                   "training": "#ef476f",
-                 "credit": "#ff3300"};
+                  "credit": "#ff3300"};
 
+    // script to sign up for a shift
     $('#sign_up_form').submit(function(e){
-	    e.preventDefault();
-	    $.ajax({
+        e.preventDefault();
+        $.ajax({
             url:'shifts/modify_shift',
             type:'post',
             data:$('#sign_up_form').serialize(),
             success:function(){
                 $("#calendarview").fullCalendar('refetchEvents');		
-		        $("#ttip").css('display', 'none');
-		        $("[data-dismiss=modal]").trigger({ type: "click" });
-
+                $("#ttip").css('display', 'none');
+                $("[data-dismiss=modal]").trigger({ type: "click" });
             }
-	    });
+        });
     });
+
+    // script to add a shift             
     $('#add_shift_form').submit(function(e){
         e.preventDefault();
         $.ajax({
@@ -63,8 +66,10 @@ function InitializeCalendar(divname, calling_user){
             error: function(){
                 alert("Error adding your shifts... sorry? Hey, could it be that you don't have permission?");
             }
-	    });
+        });
     });
+
+    // script to remove a shift
     $('#remove_shift_form').submit(function(e){
         e.preventDefault();
         $.ajax({
@@ -80,106 +85,79 @@ function InitializeCalendar(divname, calling_user){
         });
     });
 
-
-    $('#' + divname).fullCalendar(
-	    {
-	        // defaultView: 'weekList',
-            eventLimit: true,
-	        events: 'shifts/get_shifts', // use the `url` property   
-            color: 'yellow',    // an option! 
-            textColor: 'black',  // an option!  
-	        height: "parent",
-            header: {
-                left: '',
-                center: 'title',
-            },
-            viewRender: function(){
-                // date=$("#"+divname).fullCalendar('getDate');
-                // MakeSidebar("inst_table_body", date.year());
-            },
-            error: function() {
-                alert('there was an error while fetching events!');
-            },
-            eventRender: function(event, element, view){
-
-                element.find('.fc-time').html("");               
-                type = 'free';
-                if(event['available']) type='free';
-		        else type=event.type;
-                if(event.type=='credit') type='credit';
-                element.css('background-color', colors[type]);
-                event.color = colors[type];
-            },
-            eventLimitClick: 'day',
-            eventClick: function(calEvent, jsEvent, view) {
-
-                document.getElementById("shift_modal_title").innerHTML = "Week " + moment(calEvent.start, "MM-DD-YYYY").week() + "<strong> "+calEvent.type+"</strong>";
-                document.getElementById("shift_modal_start").innerHTML =
+    // rendering out the calendar
+    $('#calendar').fullCalendar({
+        // defaultView: 'month',
+        events: 'shifts/get_shifts',
+        eventLimit: true,
+        eventLimitClick: 'day',
+        header: {
+            left: '',
+            center: 'title',
+        },
+        error: function() {
+            alert('there was an error while fetching events!');
+        },
+        eventRender: function(event, element, view){
+            element.find('.fc-time').html("");               
+            type = 'free';
+            if(event['available']) type='free';
+            else type=event.type;
+            if(event.type=='credit') type='credit';
+            element.css('background-color', colors[type]);
+            event.color = colors[type];
+        },
+        eventClick: function(calEvent, jsEvent, view ) { 
+            document.getElementById("shift_modal_title").innerHTML = "Week " + moment(calEvent.start, "MM-DD-YYYY").week() + "<strong> "+calEvent.type+"</strong>";
+            document.getElementById("shift_modal_start").innerHTML =
                     moment(calEvent.start, "MM-DD-YYYY").format("MM-DD-YYYY");
-                document.getElementById("shift_modal_end").innerHTML=
+            document.getElementById("shift_modal_end").innerHTML=
                     moment(calEvent.end, "MM-DD-YYYY").format("MM-DD-YYYY");
-                document.getElementById("shift_modal_institute").innerHTML=calEvent.institute;
-                document.getElementById("shift_modal_user").innerHTML=calEvent.shifter;
-                if(calEvent.available)
-                    document.getElementById("shift_modal_available").innerHTML =
-                    "<strong>Available</strong>";
-                else
-                    document.getElementById("shift_modal_available").innerHTML =
-                    "<strong>Unavailable</strong>";
-                if(calEvent.available){
-                    $('#btn_mark_available').attr("disabled", true);
-                    $('#btn_sign_up').attr("disabled", false);
-                }
-                else{
-		            $('#btn_sign_up').attr("disabled", true);
-		    
-                    // Want to allow people to set as available only if allowed 
-                    console.log(calEvent);
-		            console.log(calling_user);
-                    if( calling_user == calEvent.shifter )
-                        $('#btn_mark_available').attr("disabled", false);
-		            else
-			            $('#btn_mark_available').attr("disabled", true);
-                }
-
-                // Set on click event   
-                $("#btn_sign_up").attr("onclick",
-                                       "SignUp('"+calEvent.type+"', '"
-                                       +calEvent.start+"', '"
-                                       +calEvent.end+"')");
-                $("#btn_mark_available").attr("onclick",
-                                              "MarkAvailable('"+calEvent.type+"', '"
-                                              +calEvent.start+"', '"
-                                              +calEvent.end+"', '"+calEvent.shifter+"', '"+
-                                             calEvent.institute+"')");
-                $("#btn_train").attr("onclick",
-                                     "SignUpTrain('"+calEvent.type+"', '"
-                                     +calEvent.start+"', '"
-                                     +calEvent.end+"')");
-                $("#btn_credit").attr("onclick",
-                                      "SignUpCredit('"+calEvent.type+"', '"
-                                      +calEvent.start+"', '"
-                                      +calEvent.end+"')");
-		        // Put at proper location     
-                var x = (jsEvent.clientX + 20) + 'px',
-                    y = (jsEvent.clientY + 20) + 'px';
-
-                if((jsEvent.clientX+20)+$("#ttip").width() > $(window).width())
-                   x=$(window).width()-$("#ttip").width() + 'px';
-                if((jsEvent.clientY+20)+$("#ttip").height() > $(window).height())
-                   y=$(window).height()-$("#ttip").height() + 'px';
-                $("#ttip").css('top', y);
-                $("#ttip").css('left', x);
-                $("#ttip").css('display', 'block');
+            document.getElementById("shift_modal_institute").innerHTML=calEvent.institute;
+            document.getElementById("shift_modal_user").innerHTML=calEvent.shifter;
+            if(calEvent.available)
+                document.getElementById("shift_modal_available").innerHTML =
+                "<strong>Available</strong>";
+            else
+                document.getElementById("shift_modal_available").innerHTML =
+                "<strong>Unavailable</strong>";
+            if(calEvent.available){
+                $('#btn_mark_available').attr("disabled", true);
+                $('#btn_sign_up').attr("disabled", false);
             }
-        });	    
-	}
+            else{
+		        $('#btn_sign_up').attr("disabled", true);
+		    
+                // Want to allow people to set as available only if allowed 
+                console.log(calEvent);
+		        // console.log(calling_user);
+                // if( calling_user == calEvent.shifter )
+                //     $('#btn_mark_available').attr("disabled", false);
+                // else
+                $('#btn_mark_available').attr("disabled", true);
+            }
 
+            // Put at proper location     
+            var x = (jsEvent.clientX + 20) + 'px',
+                y = (jsEvent.clientY + 20) + 'px';
 
-function CloseTooltip(){
-$(".ttip").css('display', 'none');//removeClass("show");
+            if((jsEvent.clientX+20)+$("#ttip").width() > $(window).width())
+                x=$(window).width()-$("#ttip").width() + 'px';
+            if((jsEvent.clientY+20)+$("#ttip").height() > $(window).height())
+                y=$(window).height()-$("#ttip").height() + 'px';
+            $("#ttip").css('top', y);
+            $("#ttip").css('left', x);
+            $("#ttip").css('display', 'block');
+                
+        }
+
+    })
 }
 
+function CloseTooltip(){
+    $(".ttip").css('display', 'none');
+}
+    
 function SignUp(shiftType, shiftStart, shiftEnd){
 
     $('#id_start_date').val(moment(parseInt(shiftStart)).format("YYYY-MM-DD"));
@@ -197,8 +175,8 @@ function SignUp(shiftType, shiftStart, shiftEnd){
 
 
 }
-
-
+    
+    
 function SignUpTrain(shiftType, shiftStart, shiftEnd){
 
     $('#id_start_date').val(moment(parseInt(shiftStart)).format("YYYY-MM-DD"));
@@ -215,8 +193,8 @@ function SignUpTrain(shiftType, shiftStart, shiftEnd){
 
 
 }
-
-
+    
+    
 function SignUpCredit(shiftType, shiftStart, shiftEnd){
 
     $('#id_start_date').val(moment(parseInt(shiftStart)).format("YYYY-MM-DD"));
@@ -232,8 +210,8 @@ function SignUpCredit(shiftType, shiftStart, shiftEnd){
     $("#id_remove").val(false);
 
 }
-
-
+    
+    
 function MarkAvailable(shiftType, shiftStart, shiftEnd, shifter, institute){
     $('#id_start_date').val(moment(parseInt(shiftStart)).format("YYYY-MM-DD"));
     $("#id_start_date").prop("readonly", true);
@@ -255,12 +233,12 @@ function MarkAvailable(shiftType, shiftStart, shiftEnd, shifter, institute){
     $("#sign_up_form").submit();
 
 }
-
+    
 function EnableShiftSubmit(){
 
     if( $("#id_disclaimer").is(":checked") && $("#id_has_car").is(":checked"))
-	$("#shift_submit_button").prop("disabled", false);
+    $("#shift_submit_button").prop("disabled", false);
     else
-	$("#shift_submit_button").prop("disabled", true);
+    $("#shift_submit_button").prop("disabled", true);
 
 }
