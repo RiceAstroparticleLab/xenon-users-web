@@ -9,6 +9,8 @@
   padding-left: 40px;
   padding-right: 40px;
 }
+
+/* Making the navbar colors */
 .navbar {
   padding-top: 15px;
   padding-bottom: 15px;
@@ -17,12 +19,44 @@
   margin-bottom: 0;
   font-size: 12px;
   letter-spacing: 5px;
+  background-color: #30415d;
+}
+.navbar-nav li a{
+  color: #f5f5f5 !important;
 }
 .navbar-nav  li a:hover {
-  color: #2f2f2f !important;
+  color: #d1d1d1 !important;
 }
+.navbar-nav li a:any-link{
+  background-color: #30415d;
+}
+
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
+  color: #555;
+  background-color: #30415d;
+}
+
+.dropdown-menu {
+  background-color: #2e3746;
+}
+
+/* End of Navbar colors */
+
 .active>a {
 color: #2f2f2f !important;;
+}
+
+.btn-institutes {
+  width: 150px; 
+  border-radius: 50px; 
+  margin: 8px;
+  background-color: #b9c2d1;
+  color: #031424;
+}
+
+.btn-institutes:hover {
+  color: white;
+  background-color: #30415d;
 }
 
 .det_card{
@@ -40,7 +74,7 @@ color: #2f2f2f !important;;
   border: solid 1px #cccccc;
 }
 
-input {
+input:not([type=checkbox]) {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;

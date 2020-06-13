@@ -27,7 +27,7 @@
                 <br>
                 <div class="row" style="height:100%">
                     <div class="col-sm-4">
-                        <h4 style="width:100%;background-color:#0c1178;color:white;margin-top:5px;padding:3px;">Institute Leaderboard</h4>
+                        <h4 style="width:100%;background-color:#30415d;color:white;margin-top:5px;padding:10px; border-radius: 15px 15px 0px 0px">Institute Leaderboard</h4>
                         <table class="table-condensed" style="width:100%">
                             <thead>
                                 <th>Institute</th>
@@ -188,67 +188,66 @@
 
     <!-- Shift Sign Up -->
     <div class="modal fade in" id="signUpModal">   
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content" style="padding: 20px 45px 20px 45px; background-color: #fdfdfd;">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="sign_up_title">Sign up for a shift</h4>
+                    <h3 class="modal-title" id="sign_up_title"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; &nbsp;Sign up for a shift</h3>
                 </div>
-                <span style="font-size:12px;margin-left:15px">
-                    <strong>* required field</strong>
+                <span style="font-size:12px;">
+                    <strong style="color: #e96245">* required field</strong>
                 </span>
-                <form id="sign_up_form" method="POST">
+                <form id="sign_up_form" method="POST" style="margin-top: 0px">
                     <div class="modal-body" style="min-height:200px;overflow-y:auto">           
-                        <br>
-                        <div class="row" style="margin-top:4px">
+                        <div class="row">
                             <div class="col-6">
-                                <strong>Shift Start:</strong>
+                                <strong>Shift Start</strong>
                             </div>
                             <div class="col-6">
                                 <input id="id_start_date" type="date" name="start_date" readonly>
                             </div>
                         </div>
-                        <div class="row" style="margin-top:4px">
+                        <div class="row" style="margin-top:12px">
                             <div class="col-6">
-                                <strong>Shift End:</strong>
+                                <strong>Shift End</strong>
                             </div>
                             <div class="col-6">
                                 <input id="id_end_date" type="date" name="end_date" readonly>
                             </div>
                         </div>
-                        <div class="row" style="margin-top:4px">
+                        <div class="row" style="margin-top:12px">
                             <div class="col-6">
-                                <strong>Shifter:</strong>
+                                <strong>Shifter</strong>
                             </div>
                             <div class="col-6">
                                 <input id="id_shifter" type="text" name="shifter" readonly value="<%= user.daq_id %>">
                             </div>
                         </div>
-                        <div class="row" style="margin-top:4px">
+                        <div class="row" style="margin-top:12px">
                             <div class="col-6">
-                                <strong>Institute:</strong>
+                                <strong>Institute</strong>
                             </div>
                             <div class="col-6">
                                 <input id="id_institute" type="text" name="institute" readonly value="<%= user.institute %>">
                             </div>
                         </div>
-                        <div class="row" style="margin-top:4px">
+                        <div class="row" style="margin-top:12px">
                             <div class="col-6">
                                 <strong>Shift Type</strong>
                             </div>
                             <div class="col-6">
-                                <select class="id_shift_type"name="shift_type"></select>
+                                <select id="id_shift_type" name="shift_type"></select>
                             </div>
                         </div>
-                        <div class="row" style="margin-top:4px">
+                        <div class="row" style="margin-top:12px">
                             <div class="col-6">
-                                <strong>Will you have access to transportation?</strong>
+                                <strong>Will you have access to transportation?</strong><strong style="color: #e96245">*</strong>
                             </div>
                             <div class="col-6">
-                                <input id="id_has_car" type="checkbox" name=has_car onchange="EnableShiftSubmit()">
-                                <span>&nbsp; (check for yes)</span>
+                                <input id="id_has_car" type="checkbox" name=has_car required>
+                                <span>&nbsp;(check for yes)</span>
                             </div>
                         </div>
-                        <div class="row" style="margin-top:4px">
+                        <div class="row" style="margin-top:12px">
                             <div class="col-6">
                                 <strong title="No guarantee this will be seen so if it's important contact the local staff directly">Comment</strong>
                             </div>
@@ -256,7 +255,7 @@
                                 <input id="id_special_comment" type="text" name="comment" max_length=200>
                             </div>
                         </div>
-                        <div class="row" style="margin-top:4px">
+                        <div class="row" style="margin-top:12px">
                             <div class="col-12">
                                 <strong>Disclaimer:</strong> 
                                 <span style="font-size:10pt">By signing up you indicate the following:
@@ -276,15 +275,15 @@
                                 </span>
                             </div>
                             <div class="col-12">
-                                <strong>I have read and agree to the disclaimer: </strong> &nbsp;
-                                <input id="id_disclaimer" type="checkbox" onchange="EnableShiftSubmit()">
+                                <input id="id_disclaimer" type="checkbox" required>
+                                <strong>&nbsp;I have read and agree to the disclaimer</strong><strong style="color: #e96245">*</strong> &nbsp;
                             </div>
                         </div>
                         <input id="id_remove" type="hidden" value="false" name="remove">
                     </div>
                     <div class="modal-footer">
-                        <a class="btn btn-danger" data-dismiss="modal" href="#" style="background-color:#ef476f">Cancel</a>
-                        <button class="btn.btn-success" id="shift_submit_button" disabled="disabled" type="submit" style="background-color:#06d6a0">Submit</button>
+                        <!-- <a class="btn btn-danger" data-dismiss="modal" href="#" style="background-color:#cf6766">Cancel</a> -->
+                        <button id="shift_submit_button" type="submit" style="background-color:#588296; border: #718c99; border-radius: 5px;">Submit</button>
                     </div>
                 </form>
             </div>
@@ -293,23 +292,17 @@
 
     <!-- Shift Tooltip -->
     <div class="ttip" id="ttip">
-       <div class="row" style="width:400px;margin-left:10px">
-            <button class="close" type="button" onclick="CloseTooltip()" aria-hidden="true" style="font-size:30pt">&#x00D7;&nbsp;&nbsp;</button>
+       <div class="row" style="width:440px;margin-left:10px; padding-bottom: 5px; padding-top: 3px;">
+            <button class="close pull-right" type="button" onclick="CloseTooltip()" aria-hidden="true" style="font-size:25pt; display: inline">&#x00D7;&nbsp;&nbsp;</button>
             <h4 class="modal-title" id="shift_modal_title">Shift Detail</h4>
         </div>
-        <hr style="margin:2px">
-        <div class="row">
+        <hr style="margin:5px">
+        <div class="row" style="padding-top: 10px; padding-bottom: 10px; margin-left: 3px; margin-right: 5px">
             <div class="col-xs-4 col-sm-3">
                 <strong>Start:</strong>
             </div>
             <div class="col-xs-8 col-sm-3">
                 <span id="shift_modal_start"></span>
-            </div>
-            <div class="col-xs-4 col-sm-3">
-                <strong>End:</strong>
-            </div>
-            <div class="col-xs-8 col-sm-3">
-                <span id="shift_modal_end"></span>
             </div>
             <div class="col-xs-4 col-sm-3">
                 <strong>Institute:</strong>
@@ -318,26 +311,31 @@
                 <span id="shift_modal_institute"></span>
             </div>
             <div class="col-xs-4 col-sm-3">
+                <strong>End:</strong>
+            </div>
+            <div class="col-xs-8 col-sm-3">
+                <span id="shift_modal_end"></span>
+            </div>
+            <div class="col-xs-4 col-sm-3">
                 <strong>Shifter:</strong>
             </div>
             <div class="col-xs-8 col-sm-3">
                 <span id="shift_modal_user"></span>
             </div>
             <div class="col-xs-4 col-sm-3">
-                <strong>Available:</strong>
+                <strong>Availability:</strong>
             </div>
             <div class="col-xs-8 col-sm-3">
                 <span id="shift_modal_available"></span>
             </div>
         </div>
-        <hr>
         <div class="row">
-            <div class="col-12">
-                <button class="btn btn-info" id="btn_sign_up">Sign Up</button>
+            <div class="col-12" style="padding-left: 30px; padding-bottom: 13px; padding-top: 10px">
+                <button class="btn btn-primary" id="btn_sign_up">Sign Up</button>
                 <span>&nbsp;</span>
                 <button class="btn btn-default" id="btn_mark_available">Mark Available</button>
                 <span>&nbsp;</span>
-                <button class="btn btn-warning" id="btn_train" hidden>Sign up for Training</button>
+                <button class="btn btn-info" id="btn_train">Sign up for Training</button>
             </div>
         </div>
     </div>
@@ -345,12 +343,10 @@
 </body>
 <script type="text/javascript">
     $(function() {
-
         // page is now ready, initialize the calendar...
-        InitializeCalendar();
+        InitializeCalendar("<%= user.daq_id %>");
         // initialize the table
         FillAggregates("#aggregate_table_body", "#table_head_this_year", "<%= user.institute %>");
-
     });
 </script>
 </html>

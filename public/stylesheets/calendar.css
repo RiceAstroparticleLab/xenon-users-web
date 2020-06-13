@@ -42,7 +42,7 @@
     display:inline;
 }
 #ttip {
-box-shadow: 10px 10px 5px #888888;
+    box-shadow: 5px 5px 2.5px #888888; 
     z-index: 10;
     min-width:300px;
     min-height:100px;
@@ -54,24 +54,31 @@ box-shadow: 10px 10px 5px #888888;
     border-width:1px;
     border-color:#BBBBBB;
     border-style:solid;
+    border-radius: 10px;
+}
+
+.close {
+    position: absolute;
+    top: 0px;
+    right: -5px;
 }
 .assigned:before {
     content: "\0025A0   ";
     font-size:x-large;
-    color: #0c1178; /* or whatever color you prefer */
+    color: #23395d; /* or whatever color you prefer */
 }
 .free:before {
     content: "\0025A0   ";
     font-size:x-large;
-    color: #06d6a0; /* or whatever color you prefer */
+    color: #4f97a3; /* or whatever color you prefer */
 }
 .run_coordinator:before {
     content: "\0025A0   ";
     font-size:x-large;
-    color: #ef476f; /* or whatever color you prefer */
+    color: #cf6766; /* or whatever color you prefer */
 }
 .training:before{
     content: "\0025A0   ";
     font-size:x-large;
-    color: #ef476f; /* or whatever color you prefer */
+    color: #cf6766; /* or whatever color you prefer */
 }

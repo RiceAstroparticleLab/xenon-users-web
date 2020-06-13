@@ -12,7 +12,7 @@ function FillAggregates(tablediv, headerdiv, myinstitute){
             if(i==0)
                 html+= " title='winner winner chicken dinner'";
             if(data[i]['_id'].includes(myinstitute))
-                html+= " style='background-color:#ef476f;color:white'";
+                html+= " style='background-color:#cf6766;color:white'";
             html+= "><td>" + data[i]['_id'] + "</td><td>" + data[i]['total'].toString() + "</td>";
             total+=data[i]['total'];
             var this_year = 0;
@@ -30,13 +30,13 @@ function FillAggregates(tablediv, headerdiv, myinstitute){
 }
 
 /* Initializes calendar and all related forms */
-function InitializeCalendar(){
-    var colors = {"free": "#06d6a0",
-                  "run coordinator": "#0c1178",
-                  "taken": "#0c1178",
-                  "shifter": "#0c1178",
-                  "training": "#ef476f",
-                  "credit": "#ff3300"};
+function InitializeCalendar(calling_user){
+    var colors = {"free": "#4f97a3",
+                  "run coordinator": "#23395d",
+                  "taken": "#23395d",
+                  "shifter": "#23395d",
+                  "training": "#cf6766",
+                  "credit": "#dc4139"};
 
     // script to sign up for a shift
     $('#sign_up_form').submit(function(e){
@@ -48,7 +48,7 @@ function InitializeCalendar(){
             success:function(){
                 $("#calendarview").fullCalendar('refetchEvents');		
                 $("#ttip").css('display', 'none');
-                $("[data-dismiss=modal]").trigger({ type: "click" });
+                $("#signUpModal").modal('toggle');
             }
         });
     });
@@ -105,6 +105,7 @@ function InitializeCalendar(){
             else type=event.type;
             if(event.type=='credit') type='credit';
             element.css('background-color', colors[type]);
+            element.css('border-color', colors[type]);
             event.color = colors[type];
         },
         eventClick: function(calEvent, jsEvent, view ) { 
@@ -130,12 +131,23 @@ function InitializeCalendar(){
 		    
                 // Want to allow people to set as available only if allowed 
                 console.log(calEvent);
-		        // console.log(calling_user);
-                // if( calling_user == calEvent.shifter )
-                //     $('#btn_mark_available').attr("disabled", false);
-                // else
-                $('#btn_mark_available').attr("disabled", true);
+		        console.log(`calling_user: ${calling_user} `);
+                if( calling_user == calEvent.shifter )
+                    $('#btn_mark_available').attr("disabled", false);
+                else
+                    $('#btn_mark_available').attr("disabled", true);
             }
+
+            // Set on click event   
+            $("#btn_sign_up").attr("onclick",
+                            "SignUp('"+calEvent.type+"', '"
+                            +calEvent.start+"', '"
+                            +calEvent.end+"')");
+            $("#btn_mark_available").attr("onclick",
+                                    "MarkAvailable('"+calEvent.type+"', '"
+                                    +calEvent.start+"', '"
+                                    +calEvent.end+"', '"+calEvent.shifter+"', '"+
+                                    calEvent.institute+"')");
 
             // Put at proper location     
             var x = (jsEvent.clientX + 20) + 'px',
@@ -230,15 +242,6 @@ function MarkAvailable(shiftType, shiftStart, shiftEnd, shifter, institute){
     document.getElementById("id_shift_type").innerHTML=ret;
     document.getElementById("id_remove").checked = true;
     $("#id_remove").val(true);
-    $("#sign_up_form").submit();
-
-}
-    
-function EnableShiftSubmit(){
-
-    if( $("#id_disclaimer").is(":checked") && $("#id_has_car").is(":checked"))
-    $("#shift_submit_button").prop("disabled", false);
-    else
-    $("#shift_submit_button").prop("disabled", true);
+    $("#shift_submit_button").submit();
 
 }

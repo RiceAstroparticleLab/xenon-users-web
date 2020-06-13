@@ -6,26 +6,18 @@
 <body>
 <% include components/menu %>
 <div class="container-fluid bg-3 text-center">    
-  <h3>Institutes</h3><br>
+  <h2 style="color: #031424">Institutes</h2><br>
   <div class="row">
-    <div class="col-sm-4">
-      <% for (i = 0; i < Math.floor(data.length/3); i++) {%>
-          <p><a href="/institutes/<%=data[i]%>"><%=data[i]%></a></p>
+    <div class="col-sm-12">
+      <% for (i = 0; i < data.length; i++) {%>
+          <a class="btn btn-institutes" href="/institutes/<%=data[i]%>"><%=data[i]%></a>
+          &nbsp; &nbsp; &nbsp; &nbsp;
       <%}%>
-    </div>
-    <div class="col-sm-4"> 
-      <% for (i = Math.floor(data.length/3); i < Math.floor(data.length*(2/3)); i++) {%>
-          <p><a href="/institutes/<%=data[i]%>"><%=data[i]%></a></p>
-      <%}%>
-    </div>
-    <div class="col-sm-4"> 
-      <% for (i = Math.floor(data.length*(2/3)); i < data.length; i++) {%>
-          <p><a href="/institutes/<%=data[i]%>"><%=data[i]%></a></p>
-      <%}%>   
     </div>
   </div>
+  <hr>
+  <br>
   <h4>For full member directory visit <a href="/fulldirectory">/fulldirectory</a></h4>
 </div>
 </body>
-<% include components/script %>
 </html>

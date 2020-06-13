@@ -165,83 +165,87 @@ router.post('/add_shifts', function(req, res){
 router.post('/remove_shifts', function(req, res){
 	// var db = req.run_db;
 	var db = req.test_db
-    var collection = db.collection("shifts");
+      var collection = db.collection("shifts");
     
-    var start = new Date(req.body.start_date);
-    var end = new Date(req.body.end_date);
-    var type = req.body.shift_type;
+       var start = new Date(req.body.start_date);
+       var end = new Date(req.body.end_date);
+       var type = req.body.shift_type;
 
 	// console.log(`start: ${start}`)
 	// console.log(`end: ${end}`)
 	
-    /* You can only do this if you're the operations manager. Check permissions */
-    // if(typeof(req.user.groups) == "undefined" || !req.user.groups.includes("operations"))
+       /* You can only do this if you're the operations manager. Check permissions */
+      // if(typeof(req.user.groups) == "undefined" || !req.user.groups.includes("operations"))
 	// return res.send(JSON.stringify({"res": "Berechtigung nicht vorgewiesen. Bitte begrÃnden."}));
     
-    query = {"start": {"$gte": start, "$lte": end}};
-    if(type != "all")
+      query = {"start": {"$gte": start, "$lte": end}};
+      if(type != "all")
 		query['type'] = type;
-    collection.removeOne(query, {multi: true});
-    return res.sendStatus(200);
+      collection.removeOne(query, {multi: true});
+      return res.sendStatus(200);
 });
 
 router.post('/modify_shift', ensureAuthenticated, function(req, res){
 
 	// var db = req.run_db;
-	var db = req.test_db
+      var db = req.test_db
 
-    var collection = db.collection("shifts");
+      var collection = db.collection("shifts");
 
-    var start = new Date(req.body.start_date);
-    var end = new Date(req.body.end_date);
-    start.setDate(start.getDate() - 1);
-    end.setDate(end.getDate() + 1);
-    var doc = {
-	'start': start,
-	'end': end,
-	'shifter': req.body.shifter,
-	'shift_type': req.body.shift_type,
-	'institute': req.body.institute,
-	'comment': req.body.comment,
-	'remove': req.body.remove
-    }
+      var start = new Date(req.body.start_date);
+      var end = new Date(req.body.end_date);
+      start.setDate(start.getDate() + 1);
+      end.setDate(end.getDate() + 1);
+      var doc = {
+            'start': start,
+            'end': end,
+            'shifter': req.body.shifter,
+            'shift_type': req.body.shift_type,
+            'institute': req.body.institute,
+            'comment': req.body.comment,
+            'remove': req.body.remove
+      }
     
-    console.log(doc);
-    // Update the shift with this user
-    if(doc['remove'] == 'false'){
-	console.log("ADD NEW");
-	collection.update(
-	    { "start": { "$gt": doc['start']}, 
-	      "end": { "$lt": doc['end']},
-	      "available": true,
-	      "type": doc['shift_type']
-	    },
-	    {
-		"$set": {
-		    "shifter": doc['shifter'],
-		    "institute": doc['institute'],
-		    "comment": doc['comment'],
-		    "available": false
-		}
-	    }, {multi: false}, function(){ return res.sendStatus(200);});
-    }
-    // Remove the user from the shift
-    else
-	collection.update(
-	        { "start": { "$gt": doc['start']},
-		  "end": { "$lt": doc['end']},
-		  "available": false,
-		  "type":doc['shift_type'],
-		  "shifter": doc['shifter']
-		},
+      console.log(doc);
+      // Update the shift with this user
+      if(doc['remove'] == 'false'){
+            console.log("ADD NEW");
+            collection.updateOne(
+            { "start": doc['start'], 
+                  "end": doc['end'],
+                  "available": true,
+                  "type": doc['shift_type']
+            },
             {
-                "$set": {
-                    "shifter": "none",
-                    "institute": "none",
-                    "comment": '',
-                    "available": true
-                }
-            }, {multi: false}, function(){ return res.sendStatus(200);})
+                  "$set": {
+                  "shifter": doc['shifter'],
+                  "institute": doc['institute'],
+                  "comment": doc['comment'],
+                  "available": false
+                  }
+            }, {multi: false}, function(){ 
+                  res.sendStatus(200);
+            });
+      }
+    // Remove the user from the shift
+      else
+            collection.update(
+                  { "start": doc['start'],
+                  "end": doc['end'],
+                  "available": false,
+                  "type":doc['shift_type'],
+                  "shifter": doc['shifter']
+                  },
+                  {
+                  "$set": {
+                        "shifter": "none",
+                        "institute": "none",
+                        "comment": '',
+                        "available": true
+                  }
+                  }, {multi: false}, function(){ 
+                        res.sendStatus(200);
+                  })
     
 
 });
