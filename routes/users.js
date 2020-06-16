@@ -5,8 +5,8 @@ var ObjectId = require('mongodb').ObjectId;
 // authentication
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
-    return res.redirect('/login');
-}  
+    return res.redirect('/auth/login');
+}
 
 function ensureAdmin(req, res, next) {
     if(req.isAuthenticated()) {

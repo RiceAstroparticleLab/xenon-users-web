@@ -2,14 +2,12 @@ var express = require('express')
 var router = express.Router()
 
 function ensureAuthenticated(req, res, next) {
-  if(req.isAuthenticated()) {
-    return next();
-  }
-  return res.redirect('/auth/login')
+  if (req.isAuthenticated()) { return next(); }
+  return res.redirect('/auth/login');
 }
 
 // /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', ensureAuthenticated, function(req, res, next) {
   console.log(req.session)
     res.render('home', {page: 'Home', menuId: 'home', user: req.user})
 })
@@ -21,7 +19,7 @@ console.log(`Today is ${Date(today)}. One Year ago today was ${oneYearAgo.toStri
 var cur_institute
 
 /* GET Userlist page. */
-router.get('/fulldirectory', function(req, res) {
+router.get('/fulldirectory', ensureAuthenticated, function(req, res) {
   var db = req.test_db
   var current = []
   var prev = []
@@ -39,7 +37,7 @@ router.get('/fulldirectory', function(req, res) {
 })
 
 /* GET List of Authors page. */
-router.get('/authors', function(req, res) {
+router.get('/authors', ensureAuthenticated, function(req, res) {
   var db = req.test_db
   var current = []
   var prev = []
@@ -55,11 +53,6 @@ router.get('/authors', function(req, res) {
     res.render('fulldirectory', {page: 'Author List', menuId: 'home', "curr": current, "prev": prev, user: req.user})
   })
 })
-
-/* GET New User page. */
-router.get('/newuser', function(req, res) {
-  res.render('newuser', { page: 'New User', cur_institute: `${cur_institute}`, menuId: 'home', title: 'Add New User', user: req.user});
-});
 
 // Dealing with profiles
 router.get('/profile', ensureAuthenticated, function(req, res){

@@ -53,136 +53,141 @@
                 <br>
                 <span>Use the following forms to add/remove shifts: </span>
                 <br>
-                <div class="col col-sm-12" style="border-width:1px;border-style:solid;border-color:#aaa; margin-top: 10px">
-                    <h4>Add Empty Shifts</h4>
-                    <hr>
-                    <p>Use this form to add new shifts to the calendar for people to sign up to.</p> 
-                    <form id="add_shift_form" method="POST">
-                        <div class="row" style="padding-left:15px">
-                            <div class="col-sm-6" style="margin-top:5px">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <strong>First Date</strong> 
-                                    </div>
-                                    <div class="col-6">
-                                        <input name="start_date" type="date" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6" style="margin-top:5px">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <strong>Last Date</strong>  
-                                    </div>
-                                    <div class="col-6">
-                                        <input name="end_date" type="date" required>
+                <br>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 style="color:white;">Add Empty Shifts</h4>
+                    </div>
+                    <div class="panel-body">
+                        <p>Use this form to add new shifts to the calendar for people to sign up to.</p> 
+                        <form id="add_shift_form" method="POST">
+                            <div class="row" style="padding-left:15px">
+                                <div class="col-sm-6" style="margin-top:5px;">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <strong>First Date</strong> 
+                                        </div>
+                                        <div class="col-6">
+                                            <input name="start_date" type="date" required>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6" style="margin-top:5px">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <strong>Shift Change Day</strong>
-                                    </div>
-                                    <div class="col-6">
-                                        <select name="shift_change_day">
-                                            <option value=0>Sunday</option>
-                                            <option value=1>Monday</option>
-                                            <option value=2>Tuesday</option>
-                                            <option value=3>Wednesday</option>
-                                            <option value=4>Thursday</option>
-                                            <option value=5>Friday</option>
-                                            <option value=6>Saturday</option>
-                                        </select>
+                                <div class="col-sm-6" style="margin-top:5px">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <strong>Last Date</strong>  
+                                        </div>
+                                        <div class="col-6">
+                                            <input name="end_date" type="date" required>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6" style="margin-top:5px">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <strong>Shift Type</strong>
-                                    </div>
-                                    <div class="col-6">
-                                        <select name="shift_type">
-                                            <option value="shifter">Shifter</option>
-                                            <option value="run coordinator">Run Coordinator</option>
-                                            <option value="distillation">Distillation</option>
-                                            <option value="data quality">Data Quality</option>
-                                        </select>
+                                <div class="col-sm-6" style="margin-top:5px">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <strong title="How much is this shift work in relation to one week of 'normal' shifting">Credit Multiplier</strong>
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="number" name="credit_muiltiplier" value=1.0 required>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6" style="margin-top:5px">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <strong title="How much is this shift work in relation to one week of 'normal' shifting">Credit Multiplier</strong>
-                                    </div>
-                                    <div class="col-6">
-                                        <input type="number" name="credit_muiltiplier" value=1.0 required>
+                                <div class="col-sm-6" style="margin-top:5px;">
+                                    <div class="row" style="margin-left: 1px;">
+                                        <div class="col-6" >
+                                            <strong>Shift Type</strong>
+                                        </div>
+                                        <div class="col-6">
+                                            <select name="shift_type">
+                                                <option value="shifter">Shifter</option>
+                                                <option value="run coordinator">Run Coordinator</option>
+                                                <option value="distillation">Distillation</option>
+                                                <option value="data quality">Data Quality</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="col-sm-6" style="margin-top:5px" >
+                                    <button class="btn btn-secondary" type="submit" style="background-color:#cf6766;color:white;">Submit</button>
+                                </div>
                             </div>
-                            <div class="col-sm-6" style="margin-top:5px">
-                                <button class="btn btn-secondary" type="submit">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-                    <br> 
+                        </form>
+                    </div>
                 </div>
-                <div class="col col-sm-12" style="border-width:1px;border-style:solid;border-color:#aaa;margin-top:10px">
-                    <br>
-                    <h4>Remove Empty Shifts</h4>
-                    <hr>
-                    <p>Use this form to remove empty shifts, for example if you mess up with the above form. 
-                        No worries, this will NOT remove shifts people already signed up for. If you want to 
-                        do that you have to use the calendar to mark the shift as available and then run this again.</p>
-                    <form id="remove_shift_form" method="POST">
-                        <div class="row" style="padding-left:15px">
-                            <div class="col-xs-12 col-sm-6" style="margin-top:5px">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <strong>Remove From Date</strong>
-                                    </div>
-                                    <div class="col-6">
-                                        <input name="start_date" type="date" required="required">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-6" style="margin-top:5px">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <strong>Remove To Date</strong>
-                                    </div>
-                                    <div class="col-6">
-                                        <input name="end_date" type="date" required="required">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 style="color:white;">Remove Empty Shifts</h4>
+                    </div>
+                    <div class="panel-body">
+                        <p>Use this form to remove empty shifts. <br>
+                            Keep in mind, this will not remove shifts people already signed up for.<br>
+                            If you want to do that, you have to use the calendar to mark the shift as available and then run this again.</p>
+                        <form id="remove_shift_form" method="POST"> 
+                            <div class="row" style="padding-left:15px;">
+                                <div class="col-xs-12 col-sm-6" style="margin-top:5px">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <strong>Remove From Date</strong>
+                                        </div>
+                                        <div class="col-6">
+                                            <input name="start_date" type="date" required="required">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-xs-12 col-sm-6" style="margin-top:5px">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <strong>Shift Type</strong>
-                                    </div>
-                                    <div class="col-6">
-                                        <select name="shift_type">
-                                            <option value="all">All</option> 
-                                            <option value="shifter">Shifter</option>
-                                            <option value="run coordinator">Run Coordinator</option>
-                                            <option value="distillation">Distillation</option>
-                                            <option value="data quality">Data Quality</option>
-                                        </select>
+                                <div class="col-xs-12 col-sm-6" style="margin-top:5px">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <strong>Remove To Date</strong>
+                                        </div>
+                                        <div class="col-6">
+                                            <input name="end_date" type="date" required="required">
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="col-xs-12 col-sm-6" style="margin-top:5px">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <strong>Shift Type</strong>
+                                        </div>
+                                        <div class="col-6">
+                                            <select name="shift_type">
+                                                <option value="all">All</option> 
+                                                <option value="shifter">Shifter</option>
+                                                <option value="run coordinator">Run Coordinator</option>
+                                                <option value="distillation">Distillation</option>
+                                                <option value="data quality">Data Quality</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 pull-right" style="margin-top:5px">
+                                    <button class="btn btn-secondary" type="submit" style="background-color:#cf6766;color:white;">Submit</button>
+                                </div>
                             </div>
-                            <div class="col-xs-12 col-sm-6 pull-right" style="margin-top:5px">
-                                <button class="btn btn-secondary" type="submit">Submit</button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                     <br>
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- Mark Available Tab -->
+    <div class="modal fade in" id="markAvailableModal">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content" style="padding: 20px 45px 20px 45px; background-color: #fdfdfd;">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="confirm-delete">Confirm Action</h3>
+                </div>
+                <div class="modal-body" style="overflow-y:auto">
+                    <p> Are you sure you want to mark this shift available? <br>
+                        If you change your mind, will have to sign up for the shift again.</p>
+                    <hr>
+                    <button class="btn btn-default" data-dismiss="modal" href="#">Cancel</button>
+                    <button id="submit_m_avail" class="btn btn-danger">Mark Available</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -283,7 +288,7 @@
                     </div>
                     <div class="modal-footer">
                         <!-- <a class="btn btn-danger" data-dismiss="modal" href="#" style="background-color:#cf6766">Cancel</a> -->
-                        <button id="shift_submit_button" type="submit" style="background-color:#588296; border: #718c99; border-radius: 5px;">Submit</button>
+                        <button id="shift_submit_button" type="submit" style="background-color:#588296;border:#718c99;border-radius:5px;width:100%;padding:16px 32px;color:white;">Submit</button>
                     </div>
                 </form>
             </div>
@@ -333,9 +338,10 @@
             <div class="col-12" style="padding-left: 30px; padding-bottom: 13px; padding-top: 10px">
                 <button class="btn btn-primary" id="btn_sign_up">Sign Up</button>
                 <span>&nbsp;</span>
-                <button class="btn btn-default" id="btn_mark_available">Mark Available</button>
+                <button class="btn btn-default" id="btn_mark_available" data-target="#markAvailableModal">Mark Available</button>
                 <span>&nbsp;</span>
-                <button class="btn btn-info" id="btn_train">Sign up for Training</button>
+                <!-- Add this button back when i know what it does lol -->
+                <!-- <button class="btn btn-info" id="btn_train">Sign up for Training</button> -->
             </div>
         </div>
     </div>

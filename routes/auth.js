@@ -12,17 +12,20 @@ router.get('/github',
         passport.authenticate('github', { scope: [ 'user:email' ] }), 
         (req, res) => {
             // The request gets redirected to github for authentication
-            // so this func is not called
+            // so this function is not called
 })
 
-//login using local
-router.get('/password', (req, res) => {
-    res.send("Logging in with password")
-})
+// local authentication
+router.post('/password', 
+  passport.authenticate('local', {failureRedirect: './login'}),
+  (req, res) => {
+      res.redirect('/')
+  }
+);
 
 // callback link
 router.get('/github/callback',
-    passport.authenticate('github', { failureRedirect: '/login' }),
+    passport.authenticate('github', { failureRedirect: '/auth/login' }),
    (req, res) => {
         res.redirect('/profile')
 })

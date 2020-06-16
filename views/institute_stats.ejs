@@ -61,7 +61,7 @@
         <div class="col-sm-4">
           <!-- make this button available only if authorized as admin/PI-->
             <h3>Members</h3>
-            <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='/newuser'">Add Member</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.href='/institutes/<%= page %>/newuser'">Add Member</button>
           <% include components/directory %>
         </div>
         <div class="col-sm-1"></div>

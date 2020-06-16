@@ -76,4 +76,10 @@ router.get('/:institute', function(req, res) {
   
   })
 
+/* GET New User page. */
+router.get('/:institute/newuser', function(req, res) {
+  var cur_institute = req.params.institute
+  res.render('newuser', { page: 'New User', cur_institute: `${cur_institute}`, menuId: 'home', title: 'Add New User', user: req.user});
+});
+
   module.exports = router

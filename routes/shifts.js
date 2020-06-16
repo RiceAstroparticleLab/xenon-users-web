@@ -4,16 +4,16 @@ var router = express.Router()
 
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
-    return res.redirect('/login');
+    return res.redirect('/auth/login');
 }
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', ensureAuthenticated, function(req, res, next) {
       res.render('shifts', {page: 'Home', menuId: 'home', user: req.user})
 })
 
 
-router.get('/get_current_shifters', function(req, res){
+router.get('/get_current_shifters', ensureAuthenticated, function(req, res){
 	//var db = req.run_db;
 	var db = req.test_db
 
@@ -118,32 +118,32 @@ function getNextDayOfWeek(date, dayOfWeek) {
     resultDate.setDate(date.getDate() + (7 + dayOfWeek - date.getDay()) % 7);
     return resultDate;
 }
-router.post('/add_shifts', function(req, res){
+router.post('/add_shifts', ensureAuthenticated, function(req, res){
 	// var db = req.run_db;
 	var db = req.test_db
     
-    // Get form data
-    var start = new Date(Date.UTC(parseInt(req.body.start_date.substr(0, 4)), 
+      // Get form data
+      var start = new Date(Date.UTC(parseInt(req.body.start_date.substr(0, 4)), 
 				  parseInt(req.body.start_date.substr(5, 2))-1,
 				  parseInt(req.body.start_date.substr(8, 2))));
-    var end = new Date(Date.UTC(parseInt(req.body.end_date.substr(0, 4)),
+      var end = new Date(Date.UTC(parseInt(req.body.end_date.substr(0, 4)),
                                   parseInt(req.body.end_date.substr(5, 2))-1,
                                   parseInt(req.body.end_date.substr(8, 2))))
 
 	// console.log(`start: ${start}`)
 	// console.log(`end: ${end}`)
 
-    /* You can only do this if you're the operations manager. Check permissions */
-    // if(typeof(req.user.groups) == "undefined" || !req.user.groups.includes("operations"))
+      /* You can only do this if you're the operations manager. Check permissions */
+      // if(typeof(req.user.groups) == "undefined" || !req.user.groups.includes("operations"))
 	// return res.send(JSON.stringify({"res": "Woah, who do you think you are there buddy?"}));
     
-    var weekday = req.body.shift_change_day;
-    var shift_type = req.body.shift_type;
-    var credit_multiplier = req.body.credit_multiplier;
+      // var weekday = req.body.shift_change_day;
+      var shift_type = req.body.shift_type;
+      var credit_multiplier = req.body.credit_multiplier;
 
-	start = getNextDayOfWeek(start, weekday);
-	console.log(`next day of week: ${start}`)
-    var idoc;
+	// start = getNextDayOfWeek(start, weekday);
+	console.log(`day of week: ${start}`)
+      var idoc;
 	if(start < end){ // why the while loop originally?
 		idoc = {
 			"start": new Date(start),
@@ -162,7 +162,7 @@ router.post('/add_shifts', function(req, res){
     return res.sendStatus(200);    
 });
 
-router.post('/remove_shifts', function(req, res){
+router.post('/remove_shifts', ensureAuthenticated, function(req, res){
 	// var db = req.run_db;
 	var db = req.test_db
       var collection = db.collection("shifts");
@@ -223,29 +223,34 @@ router.post('/modify_shift', ensureAuthenticated, function(req, res){
                   "comment": doc['comment'],
                   "available": false
                   }
-            }, {multi: false}, function(){ 
-                  res.sendStatus(200);
-            });
+            }, {multi: false})
       }
-    // Remove the user from the shift
       else
-            collection.update(
-                  { "start": doc['start'],
-                  "end": doc['end'],
-                  "available": false,
-                  "type":doc['shift_type'],
-                  "shifter": doc['shifter']
-                  },
-                  {
-                  "$set": {
-                        "shifter": "none",
-                        "institute": "none",
-                        "comment": '',
-                        "available": true
-                  }
-                  }, {multi: false}, function(){ 
-                        res.sendStatus(200);
-                  })
+            // Remove the user from the shift
+            console.log("MARK AVAILABLE:")
+            console.log(doc)
+            try{
+                  collection.updateOne(
+                        { "start": doc['start'],
+                        "end": doc['end'],
+                        "available": false,
+                        "type":doc['shift_type'],
+                        "shifter": doc['shifter']
+                        },
+                        {
+                        "$set": {
+                              "shifter": "none",
+                              "institute": "none",
+                              "comment": '',
+                              "available": true
+                        }
+                        }, {multi: false}, function(){ 
+                              res.sendStatus(200);
+                        })
+            } catch (e) {
+                  console.log(e)
+            }
+            
     
 
 });

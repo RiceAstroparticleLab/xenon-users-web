@@ -48,7 +48,7 @@ function InitializeCalendar(calling_user){
             success:function(){
                 $("#calendarview").fullCalendar('refetchEvents');		
                 $("#ttip").css('display', 'none');
-                $("#signUpModal").modal('toggle');
+                $("#signUpModal").modal('hide');
             }
         });
     });
@@ -61,7 +61,7 @@ function InitializeCalendar(calling_user){
             type: 'post',
             data: $('#add_shift_form').serialize(),
             success: function(){
-                alert("Added your shifts! Check out the calendar page.");
+                alert("Added your shifts! Please refresh and check out the calendar page.");
             },
             error: function(){
                 alert("Error adding your shifts... sorry? Hey, could it be that you don't have permission?");
@@ -77,7 +77,7 @@ function InitializeCalendar(calling_user){
             type: 'post',
             data: $('#remove_shift_form').serialize(),
             success: function(){
-                alert("Removed the specified shifts! Check out the calendar page.");
+                alert("Removed the specified shifts! Please refresh and check out the calendar page.");
             },
             error: function(){
                 alert("Error removing your shifts... sorry? Hey, could it be that you don't have permission?");
@@ -89,6 +89,7 @@ function InitializeCalendar(calling_user){
     $('#calendar').fullCalendar({
         // defaultView: 'month',
         events: 'shifts/get_shifts',
+        timezone: 'UTC',
         eventLimit: true,
         eventLimitClick: 'day',
         header: {
@@ -143,11 +144,10 @@ function InitializeCalendar(calling_user){
                             "SignUp('"+calEvent.type+"', '"
                             +calEvent.start+"', '"
                             +calEvent.end+"')");
-            $("#btn_mark_available").attr("onclick",
-                                    "MarkAvailable('"+calEvent.type+"', '"
-                                    +calEvent.start+"', '"
-                                    +calEvent.end+"', '"+calEvent.shifter+"', '"+
-                                    calEvent.institute+"')");
+            $("#btn_mark_available").attr("onclick", "MarkAvailable('"+calEvent.type+"', '"
+            +calEvent.start+"', '"
+            +calEvent.end+"', '"+calEvent.shifter+"', '"+
+            calEvent.institute+"')");
 
             // Put at proper location     
             var x = (jsEvent.clientX + 20) + 'px',
@@ -225,23 +225,26 @@ function SignUpCredit(shiftType, shiftStart, shiftEnd){
     
     
 function MarkAvailable(shiftType, shiftStart, shiftEnd, shifter, institute){
-    $('#id_start_date').val(moment(parseInt(shiftStart)).format("YYYY-MM-DD"));
-    $("#id_start_date").prop("readonly", true);
-    $('#id_end_date').val(moment(parseInt(shiftEnd)).format("YYYY-MM-DD"));
-    $("#id_end_date").prop("readonly", true);
-    $("#id_institute").val(institute);
+    $('#markAvailableModal').modal('show')
+    $('#submit_m_avail').click(function() {
+        $('#id_start_date').val(moment(parseInt(shiftStart)).format("YYYY-MM-DD"));
+        $("#id_start_date").prop("readonly", true);
+        $('#id_end_date').val(moment(parseInt(shiftEnd)).format("YYYY-MM-DD"));
+        $("#id_end_date").prop("readonly", true);
+        $("#id_institute").val(institute);
 
-    $("#id_user").val(shifter);
-    console.log($("#id_institute").val());
-    console.log($("#id_user").val());
-    console.log(shifter);
+        $("#id_user").val(shifter);
+        console.log($("#id_institute").val());
+        console.log($("#id_user").val());
+        console.log(shifter);
 
-    ret = "";
-    ret+="<option value='"+shiftType+"'>"+shiftType+"</option>";
-    ret+="<option value='training'>training</option>";
-    document.getElementById("id_shift_type").innerHTML=ret;
-    document.getElementById("id_remove").checked = true;
-    $("#id_remove").val(true);
-    $("#shift_submit_button").submit();
-
+        ret = "";
+        ret+="<option value='"+shiftType+"'>"+shiftType+"</option>";
+        ret+="<option value='training'>training</option>";
+        document.getElementById("id_shift_type").innerHTML=ret;
+        document.getElementById("id_remove").checked = true;
+        $("#id_remove").val(true);
+        $("#sign_up_form").submit();
+        $('#markAvailableModal').modal('hide')
+    })
 }

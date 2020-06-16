@@ -5,6 +5,11 @@ var GitHubStrategy = require('passport-github2').Strategy;
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_SECRET_KEY;
 var CALLBACK_URL = process.env.CALLBACK_URL;
+var CALLBACK_LOCAL_URL = process.env.CALLBACK_LOCAL_URL;
+
+// LocalStrategy
+var LocalStrategy = require('passport-local').Strategy;
+const GENERAL_LOGIN_PW = process.env.GENERAL_LOGIN_PW;
 
 // connecting MONGO
 const MongoClient = require('mongodb').MongoClient
@@ -26,10 +31,11 @@ passport.deserializeUser(function(obj, done) {
     done(null, obj);
 });
 
+// Login with github
 passport.use(new GitHubStrategy({
     clientID: GITHUB_CLIENT_ID,
     clientSecret: GITHUB_CLIENT_SECRET,
-    callbackURL: CALLBACK_URL,
+    callbackURL: CALLBACK_URL || CALLBACK_LOCAL_URL,
     scope: ["user:email", "user:name", "user:login", "user:id"]
   }, 
   function (accessToken, refreshToken, profile, done) {
@@ -47,4 +53,22 @@ passport.use(new GitHubStrategy({
     });
 }));
 
-// TAKE A LOOK AT LOCAL AUTH 
+// Login with Local username/pw
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+      console.log(`** USERNAME`)
+        use_db.collection('users').find({"email": username}).toArray((e, docs) => {
+            if (e) {return done(e)}
+            if(docs.length===0) {
+                console.log(`Couldn't find user ${username} in DB`);
+                return done(null, false, { message: "Couldn't find user in DB" });
+            }
+            if (`${password}` != GENERAL_LOGIN_PW) {
+                console.log(`${username} typed in the wrong password`)
+                return done(null, false, { message: "Wrong password"});
+            }
+            console.log("Correct user and password")
+            return done(null, docs[0])
+      })
+  }
+))

@@ -75,17 +75,21 @@ color: #2f2f2f !important;;
 }
 
 input:not([type=checkbox]) {
-  width: 100%;
+  width: 90%;
   padding: 12px 20px;
-  margin: 8px 0;
+  margin: 8px;
   box-sizing: border-box;
+  border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: lightgray;
 }
 
 input[type=submit] {
-  background-color: #4c4c4c;
+  background-color: #8eaebd;
   border: none;
   color: white;
-  padding: 16px 32px;
+  padding: 16px 16px;
   text-decoration: none;
   margin: 4px 2px;
   cursor: pointer;
@@ -113,4 +117,8 @@ details[open] {
 details[open] summary {
   border-bottom: 1px solid #aaa;
   margin-bottom: .5em;
+}
+
+.panel-default > .panel-heading {
+  background-color:#8eaebd; 
 }
