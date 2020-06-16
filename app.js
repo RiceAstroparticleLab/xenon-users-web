@@ -17,13 +17,13 @@ MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
     xenonnt_db = db.db("xenonnt"),
     run_db = db.db("run"),
     recode_db = db.db("recode")
-    console.log(`mongoDB is connected to ${mongoURI}`),
+    console.log(`mongoDB is connected to remote mongo`),
     err => {console.log(err)}
 })
 
 MongoClient.connect(process.env.MONGO_LOCAL_URI, {useUnifiedTopology: true}, (err, db) => {
     test_db = db.db('test'),
-    console.log(`mongoDB is connected to ${process.env.MONGO_LOCAL_URI}`),
+    console.log(`mongoDB is connected to local mongo`),
     err => {console.log(err)}
 })
 

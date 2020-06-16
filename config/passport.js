@@ -20,7 +20,7 @@ MongoClient.connect(local_uri, {useUnifiedTopology: true}, (err, db) => {
     err => {console.log(err)}
 })
 
-console.log("Runs db in user auth " + local_uri);
+console.log("Runs db in user auth ");
 
 // Should I use mongoose for serialization??
 // Here the complete acct is serialized/deserialized
