@@ -23,7 +23,7 @@ router.get('/', function(req, res) {
 /* GET individual institution page. */
 router.get('/:institute', function(req, res) {
     //var db = req.test_db
-    var db = req.recode_db
+    var db = req.test_db
     var given_inst = req.params.institute
     cur_institute = given_inst
     console.log(`Institute: ${given_inst}`)

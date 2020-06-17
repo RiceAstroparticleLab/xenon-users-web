@@ -83,6 +83,7 @@ input:not([type=checkbox]) {
   border-width: 1px;
   border-style: solid;
   border-color: lightgray;
+  
 }
 
 input[type=submit] {

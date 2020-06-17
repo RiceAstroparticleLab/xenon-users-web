@@ -60,7 +60,6 @@ router.post('/:userid/updateContactInfoAdmin', (req, res) => {
     var db = req.test_db
     var user_id = new ObjectId(req.params.userid)
     var instituteName = req.body.Institute;
-    var mlists = req.body.mlist1 || req.body.mlist2 || req.body.mlist3;
     console.log(req.body.StartDate)
     
     db.collection('users').findOneAndUpdate(
@@ -74,9 +73,9 @@ router.post('/:userid/updateContactInfoAdmin', (req, res) => {
                 "position": req.body.Position,
                 "time": req.body.Time,
                 "tasks": req.body.Tasks,
-                "mailing_lists": mlists,
+                "mailing_lists": [req.body.mlist1, req.body.mlist2, req.body.mlist3],
                 "start_date": new Date(`${req.body.StartDate}`),
-                "end_date": req.body.EndDate,
+                "end_date": new Date(req.body.EndDate),
                 "percent_xenon": req.body.pxenon
             }
     },
@@ -103,8 +102,7 @@ router.post('/adduser', (req, res) => {
     var instituteName = req.body.Institute;
     var time = req.body.Time;
     var tasks = req.body.Tasks;
-    var mlists = req.body.mlist1 || req.body.mlist2 || req.body.mlist3;
-    var start = req.body.StartDate;
+    var start = new Date(req.body.StartDate);
     try {
         db.collection('users').insertOne({
             "first_name": firstName,
@@ -112,10 +110,11 @@ router.post('/adduser', (req, res) => {
             "email": userEmail,
             "institute": instituteName,
             "position": position,
-            "time": time,
+            "percent_xenon": time,
             "tasks": tasks,
-            "mailing_lists": mlists,
-            "start_date": start,
+            "mailing_lists": [req.body.mlist1, req.body.mlist2, req.body.mlist3],
+            "mail_list_added": false,
+            "start_date": start
         })
         console.log(`success. Added ${firstName} ${lastName}`)
         res.redirect(`/institutes/${instituteName}`)
