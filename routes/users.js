@@ -47,11 +47,11 @@ router.post('/updateContactInfo', ensureAuthenticated, (req, res) => {
         idoc["favorite_color"] = req.body.favorite_color;
 	    req.user.favorite_color = req.body.favorite_color;
     }
-    db.collection('users').update({"first_name": req.user.first_name,
+    db.collection('users').updateOne({"first_name": req.user.first_name,
 		       "last_name": req.user.last_name},
 		      {"$set": idoc});
-    console.log(req.user);
-    console.log(idoc);    
+    // console.log(req.user);
+    // console.log(idoc);    
     return(res.redirect('/profile'));
 }); 
 
