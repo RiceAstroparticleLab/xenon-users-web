@@ -16,14 +16,14 @@ const MongoClient = require('mongodb').MongoClient
 var local_uri = process.env.MONGO_LOCAL_URI
 var use_db
 MongoClient.connect(local_uri, {useUnifiedTopology: true}, (err, db) => {
-    use_db = db.db('test'),
+    use_db = db.db('xenon'),
     err => {console.log(err)}
 })
 
 console.log("Runs db in user auth ");
 
 // Should I use mongoose for serialization??
-// Here the complete acct is serialized/deserialized
+// Here the complete acct is serialized/deserialized not just user ID
 passport.serializeUser(function(user, done) {
     done(null, user);
 });

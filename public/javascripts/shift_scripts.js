@@ -9,8 +9,6 @@ function FillAggregates(tablediv, headerdiv, myinstitute){
 	    $(headerdiv).html("Shifts " + yr.toString());
         for(var i=0; i<data.length; i+=1){
             html += "<tr";
-            if(i==0)
-                html+= " title='winner winner chicken dinner'";
             if(data[i]['_id'].includes(myinstitute))
                 html+= " style='background-color:#cf6766;color:white'";
             html+= "><td>" + data[i]['_id'] + "</td><td>" + data[i]['total'].toString() + "</td>";
@@ -93,8 +91,9 @@ function InitializeCalendar(calling_user){
         eventLimit: true,
         eventLimitClick: 'day',
         header: {
-            left: '',
+            left: 'prev,next today',
             center: 'title',
+            right: 'month,basicWeek'
         },
         error: function() {
             alert('there was an error while fetching events!');

@@ -22,7 +22,7 @@ MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
 })
 
 MongoClient.connect(process.env.MONGO_LOCAL_URI, {useUnifiedTopology: true}, (err, db) => {
-    test_db = db.db('test'),
+    test_db = db.db('xenon'),
     console.log(`mongoDB is connected to local mongo`),
     err => {console.log(err)}
 })

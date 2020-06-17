@@ -7,13 +7,15 @@ router.get('/', function(req, res) {
     var db = req.recode_db
     db.collection('users').distinct("institute", (e, docs) => {
       var array = []
-      // Remove any '/' from names
+      // Hard code some exceptions
       for (i = 0; i < docs.length; i++) {
-        if (docs[i] != null) {
-          var inst = `${docs[i]}`.replace('/', '-')
-          array.push(inst)
+        if (docs[i] === "Bern/Freiburg" || docs[i] === null || docs[i] === "Munster" || docs[i] === "Other") {
+          console.log(`Institute not inserted: ${docs[i]}`)
+        } else {
+          array.push(docs[i])
         }
       }
+      console.log(array)
       res.render('institutes', {page:'Home', menuId:'home', "data": array, user: req.user});
     })
   })
@@ -29,19 +31,27 @@ router.get('/:institute', function(req, res) {
     //Look up institution if not a valid institute, send error
   
     // Stats for this institute
-    var pi
-    db.collection('users').find({"institute": given_inst, "position": "PI"}).toArray((e, result) => {
-      pi = result
-    })
-  
+    var find_institute
+    // Hard code Muenster/Munster and Bern-Freiburg/Freiburg because they 
+    // are the same institutes but come up under different names on the db
+    if (given_inst === "Freiburg") {
+      find_institute = db.collection('users').find({$or: [{"institute": given_inst}, {"institute": "Bern/Freiburg"}]}, {"sort": "last_name"})
+    } else if (given_inst === "Muenster") {
+      find_institute = db.collection('users').find({$or: [{"institute": given_inst}, {"institute": "Munster"}]}, {"sort": "last_name"})
+    } else {
+      find_institute = db.collection('users').find({"institute": given_inst}, {"sort": "last_name"})
+    }
   
     // If valid show all users in that institute
-    db.collection('users').find({"institute": {$regex: given_inst, $options: "xsi"}}, {"sort": "last_name"}).toArray((e, docs) => {
+    find_institute.toArray((e, docs) => {
       var dict = {};
+      var pi = [];
       // Team Stats
       for (i = 0; i < docs.length; i++) {
         var position_str = `${docs[i].position}`
-        if (position_str != "PI") {
+        if (position_str === "PI") {
+          pi.push(docs[i])
+        } else {
           position_str = position_str.toLowerCase()
           position_str = position_str[0].toUpperCase() + position_str.slice(1)
           if(dict[`${position_str}`]) {
@@ -51,7 +61,8 @@ router.get('/:institute', function(req, res) {
           }
         }
       }
-  
+      
+      console.log(pi)
       console.log(dict)
 
       var current = []
