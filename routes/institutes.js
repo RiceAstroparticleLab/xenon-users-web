@@ -3,22 +3,24 @@ var router = express.Router()
 
 /* GET Institutes List page. */
 router.get('/', function(req, res) {
-    // var db = req.test_db
-    var db = req.recode_db
-    db.collection('users').distinct("institute", (e, docs) => {
-      var array = []
-      // Hard code some exceptions
-      for (i = 0; i < docs.length; i++) {
-        if (docs[i] === "Bern/Freiburg" || docs[i] === null || docs[i] === "Munster" || docs[i] === "Other") {
-          console.log(`Institute not inserted: ${docs[i]}`)
-        } else {
-          array.push(docs[i])
-        }
+  // var db = req.test_db
+  var db = recode_db
+  var array = []
+  
+  db.collection('users').distinct("institute", (e, docs) => {
+    // Hard code some exceptions
+    for (i = 0; i < docs.length; i++) {
+      if (docs[i] === "Bern/Freiburg" || docs[i] === null || docs[i] === "Munster" || docs[i] === "Other" || docs[i] === "UCSD" || docs[i] === "Chicago" || docs[i] === "LNGS") {
+        // console.log(`Institute not inserted: ${docs[i]}`)
+      } else {
+        //console.log(docs[i])
+        array.push(docs[i])
       }
-      console.log(array)
-      res.render('institutes', {page:'Home', menuId:'home', "data": array, user: req.user});
-    })
+    }
+    // console.log(`GET array: ${array}`);
+    res.render('institutes', {page:'Home', menuId:'home', "data": array, user: req.user});
   })
+})
 
 /* GET individual institution page. */
 router.get('/:institute', function(req, res) {
@@ -28,16 +30,20 @@ router.get('/:institute', function(req, res) {
     cur_institute = given_inst
     console.log(`Institute: ${given_inst}`)
   
-    //Look up institution if not a valid institute, send error
-  
     // Stats for this institute
     var find_institute
-    // Hard code Muenster/Munster and Bern-Freiburg/Freiburg because they 
+    // Hard code Muenster/Munster, UCSD/UC San Diego, Uchicago/Chicago, and Bern-Freiburg/Freiburg because they 
     // are the same institutes but come up under different names on the db
     if (given_inst === "Freiburg") {
       find_institute = db.collection('users').find({$or: [{"institute": given_inst}, {"institute": "Bern/Freiburg"}]}, {"sort": "last_name"})
     } else if (given_inst === "Muenster") {
       find_institute = db.collection('users').find({$or: [{"institute": given_inst}, {"institute": "Munster"}]}, {"sort": "last_name"})
+    } else if (given_inst === "UC San Diego") {
+      find_institute = db.collection('users').find({$or: [{"institute": given_inst}, {"institute": "UCSD"}]}, {"sort": "last_name"})
+    } else if (given_inst === "UChicago") {
+      find_institute = db.collection('users').find({$or: [{"institute": given_inst}, {"institute": "Chicago"}]}, {"sort": "last_name"})
+    } else if (given_inst === "LNGS-GSSI") {
+      find_institute = db.collection('users').find({$or: [{"institute": given_inst}, {"institute": "LNGS"}]}, {"sort": "last_name"})
     } else {
       find_institute = db.collection('users').find({"institute": given_inst}, {"sort": "last_name"})
     }

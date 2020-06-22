@@ -11,7 +11,8 @@
             <p><b>Institute: </b><%= curr[i].institute %><br>
                 <b>Email: </b><%= curr[i].email%> <br>
                 <b>Position: </b><%= curr[i].position%> <br>
-                <b>Start Date: </b><%= curr[i].start_date.toString().substring(4,15) %><br>
+
+                <b>Start Date: </b><%= curr[i].start_date%><br>
                 <b>End Date: </b><%= curr[i].end_date%></p><br>
                 <!-- make this button available only if authorized as admin/PI-->
                 <button id="btn-ManageAcct" type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#updateUserModal" data-id="<%= JSON.stringify(curr[i]) %>" >Manage Account</button>

@@ -19,7 +19,7 @@ router.get('/github',
 router.post('/password', 
   passport.authenticate('local', {failureRedirect: './login'}),
   (req, res) => {
-      res.redirect('/')
+      res.redirect('/profile')
   }
 );
 

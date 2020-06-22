@@ -12,7 +12,7 @@ const mongoURI = process.env.MONGOLAB_URI
 var xenonnt_db
 var run_db
 var test_db
-var recode_db
+global.recode_db
 MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
     xenonnt_db = db.db("xenonnt"),
     run_db = db.db("run"),

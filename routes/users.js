@@ -8,26 +8,6 @@ function ensureAuthenticated(req, res, next) {
     return res.redirect('/auth/login');
 }
 
-function ensureAdmin(req, res, next) {
-    if(req.isAuthenticated()) {
-        if(req.user.position == "PI") { return next();}
-    }
-    return res.redirect('/login')
-}
-
- /* GET individual user pages to be accessed by the admin. */
- router.get('/:user', function(req, res) {
-    var user_id = new ObjectId(req.params.user)
-    var db = req.test_db
-    db.collection('users').find({_id: user_id}).toArray((e, docs) => {
-        var user = docs[0]
-        var date = new Date(user.start_date)
-        date = date.toISOString().substring(0, 10)
-        console.log(date)
-        res.render('updateuser', { page: 'Update User', menuId: 'home', title: 'Update User', user: docs[0], start: date});
-    })
-})
-
 router.post('/updateContactInfo', ensureAuthenticated, (req, res) => {
     var db = req.test_db;
     var idoc = {};
@@ -61,6 +41,11 @@ router.post('/:userid/updateContactInfoAdmin', (req, res) => {
     var user_id = new ObjectId(req.params.userid)
     var instituteName = req.body.Institute;
     console.log(req.body.StartDate)
+
+    var enddate = req.body.EndDate
+    if(req.body.EndDate != "") {
+        enddate = new Date(req.body.EndDate)
+    }
     
     db.collection('users').findOneAndUpdate(
         {"_id": user_id}, 
@@ -71,12 +56,11 @@ router.post('/:userid/updateContactInfoAdmin', (req, res) => {
                 "email": req.body.Email,
                 "institute": instituteName,
                 "position": req.body.Position,
-                "time": req.body.Time,
+                "percent_xenon": req.body.Time,
                 "tasks": req.body.Tasks,
                 "mailing_lists": [req.body.mlist1, req.body.mlist2, req.body.mlist3],
                 "start_date": new Date(`${req.body.StartDate}`),
-                "end_date": new Date(req.body.EndDate),
-                "percent_xenon": req.body.pxenon
+                "end_date": enddate,
             }
     },
     (e, update) => {

@@ -37,6 +37,7 @@
 }
 
 .dropdown-menu {
+  letter-spacing: 1px;
   background-color: #2e3746;
 }
 
@@ -74,7 +75,7 @@ color: #2f2f2f !important;;
   border: solid 1px #cccccc;
 }
 
-input:not([type=checkbox]) {
+input:not([type=checkbox], [type=search]) {
   width: 90%;
   padding: 12px 20px;
   margin: 8px;

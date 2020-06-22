@@ -23,6 +23,20 @@ router.get('/fulldirectory', ensureAuthenticated, function(req, res) {
   var db = req.test_db
   var current = []
   var prev = []
+  var institutes = []
+
+  db.collection('users').distinct("institute", (e, docs) => {
+    // Hard code some exceptions
+    for (i = 0; i < docs.length; i++) {
+      if (docs[i] === "Bern/Freiburg" || docs[i] === null || docs[i] === "Munster" || docs[i] === "Other") {
+        console.log(`Institute not inserted: ${docs[i]}`)
+      } else {
+        //console.log(docs[i])
+        institutes.push(docs[i])
+      }
+    }
+  })
+
   db.collection('users').find({}, {"sort": "last_name"}).toArray((e,docs) => {
     for (i = 0; i < docs.length; i++) {
       if(!docs[i].end_date) {
@@ -32,9 +46,21 @@ router.get('/fulldirectory', ensureAuthenticated, function(req, res) {
         prev.push(docs[i])
       }
     }
-    res.render('fulldirectory', {page: 'Full Directory', menuId: 'home', "curr": current, "prev": prev, user: req.user})
+    res.render('fulldirectory', {page: 'Full Directory', menuId: 'home', "curr": current, "prev": prev, "institutes": institutes, user: req.user})
   })
 })
+
+router.post("/table_info", ensureAuthenticated, function(req, res){
+	//var db = req.run_db;
+	var db = req.test_db
+  // Hard code Muenster/Munster and Bern-Freiburg/Freiburg because they 
+  // are the same institutes but come up under different names on the db
+  // If valid show all users in that institute
+  db.collection('users').find({"end_date": {$exists: false}}, {"sort": "institute"}).toArray(function(err, result) {
+		  res.send(JSON.stringify({"data": result}));
+  })
+    
+});
 
 /* GET List of Authors page. */
 router.get('/authors', ensureAuthenticated, function(req, res) {
