@@ -100,8 +100,21 @@
 
               <div class="row" style="margin-top:12px">
                 <label for="position" style="padding-left:30px">Position</label><br>
-                <div style="text-align:center;">
-                  <input id="position" type="text" name="Position" />
+                <div style="padding-left:30px">
+                  <select name="position" id="position">
+                    <option selected disabled hidden>Please select</option>
+                    <option value="Engineer">Engineer</option>
+                    <option value="Master Student">Master Student</option>
+                    <option value="Non-permanent Sci.">Non-permanent Scientist</option>
+                    <option value="Other Student">Other Student</option>
+                    <option value="Permanent Scientist">Permanent Scientist</option>
+                    <option value="PhD Stident">PhD Student</option>
+                    <option value="PI">PI</option>
+                    <option value="Postdoc">Postdoc</option>
+                    <option value="Staff">Staff</option>
+                    <option value="Thesis Student">Thesis Student</option>
+                    <option value="Xenon Student">XENON Student</option>
+                  </select>
                 </div>
               </div>
 
@@ -128,20 +141,14 @@
 
               <div class="row" style="margin-top:12px;padding-left:30px">
                 <label for="mlists">Mailing Lists</label><br>
-                <div class="inline-field">
-                  <label><input type="checkbox" id="mlist1" name="mlist1" value="Calibration"> Calibration</label>
-                </div>
-                <div class="inline-field">
-                  <input type="checkbox" id="mlist2" name="mlist2" value="Analysis"> <label for="mlist2"> Analysis</label>
-                </div>
-                <td>
-                <input type="checkbox" id="mlist3" name="mlist3" value="TPC">
-                TPC<br>
-                </td>
+                  <input type="checkbox" id="mlist1" name="mlist1" value="Calibration">&nbsp;&nbsp;&nbsp;Calibration<br>
+                  <input type="checkbox" id="mlist2" name="mlist2" value="Analysis">&nbsp;&nbsp;&nbsp;Analysis<br>
+                  <input type="checkbox" id="mlist3" name="mlist3" value="TPC">&nbsp;&nbsp;&nbsp;TPC<br>
               </div>
 
               <div class="row" style="margin-top:12px">
                 <label for="sdate" style="padding-left:30px">Start Date</label><br>
+                <p style="padding-left:30px">*Desktop Safari users: use format YYYY-MM-DD</p>
                 <div style="text-align:center;">
                   <input id="sdate" type="date" name="StartDate" />
                 </div>
@@ -190,8 +197,21 @@
       
                     <div class="row" style="margin-top:12px">
                       <label for="position" style="padding-left:30px">Position</label><br>
-                      <div style="text-align:center;">
-                        <input id="position" type="text" name="Position" />
+                      <div style="padding-left:30px">
+                        <select name="position" id="position">
+                          <option id="selected" selected disabled hidden>Please select</option>
+                          <option value="Engineer">Engineer</option>
+                          <option value="Master Student">Master Student</option>
+                          <option value="Non-permanent Sci.">Non-permanent Scientist</option>
+                          <option value="Other Student">Other Student</option>
+                          <option value="Permanent Scientist">Permanent Scientist</option>
+                          <option value="PhD Student">PhD Student</option>
+                          <option value="PI">PI</option>
+                          <option value="Postdoc">Postdoc</option>
+                          <option value="Staff">Staff</option>
+                          <option value="Thesis Student">Thesis Student</option>
+                          <option value="XENON Student">XENON Student</option>
+                        </select>
                       </div>
                     </div>
       
@@ -218,20 +238,14 @@
       
                     <div class="row" style="margin-top:12px;padding-left:30px">
                       <label for="mlists">Mailing Lists</label><br>
-                      <div class="inline-field">
-                        <label><input type="checkbox" id="mlist1" name="mlist1" value="Calibration"> Calibration</label>
-                      </div>
-                      <div class="inline-field">
-                        <input type="checkbox" id="mlist2" name="mlist2" value="Analysis"> <label for="mlist2"> Analysis</label>
-                      </div>
-                      <td>
-                      <input type="checkbox" id="mlist3" name="mlist3" value="TPC">
-                      TPC<br>
-                      </td>
+                        <input type="checkbox" id="mlist1" name="mlist1" value="Calibration">&nbsp;&nbsp;&nbsp;Calibration<br>
+                        <input type="checkbox" id="mlist2" name="mlist2" value="Analysis">&nbsp;&nbsp;&nbsp;Analysis<br>
+                        <input type="checkbox" id="mlist3" name="mlist3" value="TPC">&nbsp;&nbsp;&nbsp;TPC<br>
                     </div>
       
                     <div class="row" style="margin-top:12px">
                       <label for="sdate" style="padding-left:30px">Start Date</label><br>
+                      <p style="padding-left:30px">*Desktop Safari users: use format YYYY-MM-DD</p>
                       <div style="text-align:center;">
                         <input id="sdate" type="date" name="StartDate" />
                       </div>
@@ -239,6 +253,7 @@
       
                     <div class="row" style="margin-top:12px">
                       <label for="edate" style="padding-left:30px">End Date</label><br>
+                      <p style="padding-left:30px">*Desktop Safari users: use format YYYY-MM-DD</p>
                       <div style="text-align:center;">
                         <input id="edate" type="date" name="EndDate" />
                       </div>
