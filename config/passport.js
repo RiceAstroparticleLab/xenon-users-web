@@ -4,7 +4,7 @@ var passport = require('passport');
 var GitHubStrategy = require('passport-github2').Strategy;
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_SECRET_KEY;
-var CALLBACK_URL = process.env.CALLBACK_URL;
+const CALLBACK_URL = process.env.CALLBACK_URL;
 var CALLBACK_LOCAL_URL = process.env.CALLBACK_LOCAL_URL;
 
 // LocalStrategy
@@ -33,12 +33,13 @@ passport.deserializeUser(function(obj, done) {
 
 // Login with github
 passport.use(new GitHubStrategy({
-    clientID: GITHUB_CLIENT_ID,
-    clientSecret: GITHUB_CLIENT_SECRET,
-    callbackURL: CALLBACK_URL || CALLBACK_LOCAL_URL,
-    scope: ["user:email", "user:name", "user:login", "user:id"]
+    clientID: process.env.TEST_CLIENT_ID, // GITHUB_CLIENT_ID
+    clientSecret: process.env.TEST_SECRET_KEY, // GITHUB_CLIENT_SECRET
+    callbackURL: process.env.TEST_CALLBACK_URL, //CALLBACK_URL
+    scope: ["read:user", "read:org"]
   }, 
   function (accessToken, refreshToken, profile, done) {
+      // console.log(profile._json)
 
     // asynchronous verification 
     process.nextTick(() => {
@@ -46,9 +47,17 @@ passport.use(new GitHubStrategy({
                             if(docs.length===0){
                                 console.log("Couldn't find user in run DB, un "+profile._json.login);
                                 return done(null, false, "Couldn't find user in DB");
+                            } else {
+                                use_db.collection('users').findOneAndUpdate({"github": profile._json.login},
+                                                    {"$set": { "picture_url": profile._json.avatar_url,
+                                                               "github_home": profile.html_url,
+                                                               "token": accessToken},
+                                                    }, {returnOriginal: false}, (e, update) => {
+                                                        // console.log(update.value)
+                                                        return done(null, update.value, "Verification success");
+                                                    })
+                                // console.log(result)
                             }
-                            console.log("profile: " + JSON.stringify(docs[0]));
-            return done(null, docs[0], "Verification success");
         });
     });
 }));

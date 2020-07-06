@@ -27,6 +27,50 @@ function FillAggregates(tablediv, headerdiv, myinstitute){
     });
 }
 
+function ShiftRules(tablediv) {
+    $('#shift_rules_form').submit(function(e){
+        e.preventDefault()
+        $.ajax({
+            url: 'shifts/get_rules',
+            type: 'post',
+            data: $('#shift_rules_form').serialize(),
+            success: function(jsonData) {
+                var data
+                data = jsonData[0]
+                html = ""
+                if (typeof data != "undefined") {
+                    console.log(`JSON: ${JSON.stringify(data)}`)
+                    var institutes = Object.keys(data['shifts'])
+                    console.log(institutes)
+
+                    html+= "<tr><td>Institute</td>"
+                    // test = institute[0]
+                    for (const [key, value] of Object.entries(data['shifts']['Zurich'])) {
+                        html+= "<td>" + key + "</td>"
+                    }
+                    html += "</tr>"
+
+                    for (var i in institutes) {
+                        var institute = institutes[i]
+                        var shifts = Object.keys(data['shifts'][institute])
+                        html+="<tr>"
+                        html+="<td>" + institute + "</td>"
+                        for (var j in shifts) {
+                            var shift = shifts[j]
+                            html+="<td>" + data['shifts'][institute][shift] + "</td>"
+                        }
+                        html+="</tr>"
+                    }
+                } else {
+                    html += "<h5 style='color:#d21404'>No data for the selected year.</h5>"
+                }
+                console.log(`HTML: ${html}`)
+                $(tablediv).html(html)
+            }
+        })
+    })
+}
+
 /* Initializes calendar and all related forms */
 function InitializeCalendar(calling_user){
     var colors = {"free": "#4f97a3",

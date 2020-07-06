@@ -41,7 +41,7 @@
     <div class="container-fluid bg-3 text-left">  
       <div class ="row">
         <div class="col-sm-1"></div>
-        <div class="col-lg-6">
+        <div class="col-sm-6">
           <h1><%= page %></h1>
           <h3><%=page%> XENON team at a glance </h3>
           <hr style="margin-top: 5px;">
@@ -58,7 +58,9 @@
             <h3>Members</h3>
             <!-- make this button available only if authorized as admin/PI-->
             <!-- Button triggers newUserModal -->
-            <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#newUserModal" style="float:right;margin-top:20px">Add Member</button>
+            <% if ((user.position == "PI" && user.institute == page) || (user.groups != "undefined")) {%>
+              <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#newUserModal" style="float:right;margin-top:20px">Add Member</button>
+            <%}%>  
           <% include components/directory %>
         </div>
         <div class="col-sm-1"></div>
@@ -156,8 +158,8 @@
     </div>
 
     <!-- Update User Modal -->
-    <div id="updateUserModal" class="modal fade" role="dialog">
-      <div class="modal-dialog">
+    <div id="updateUserModal" class="modal fade" role="dialog" tabindex="-1">
+      <div class="modal-dialog" role="document">
 
           <div class="modal-content" style="padding: 20px 35px 20px 35px; background-color: #fdfdfd;">
               <div class="modal-header" style="padding-left:30px">

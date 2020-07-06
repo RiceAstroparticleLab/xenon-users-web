@@ -107,10 +107,23 @@ router.get("/total_shift_aggregates", ensureAuthenticated, function(req, res){
 		  "years": {$push: {"year": "$_id.yr", "count": "$count"}}}},
         {$sort: {"total": -1}}]).toArray( 
 			 function(err, result){
-			     res.send(result);
+                //console.log(result)
+			    res.send(result);
 			 });
     
 });
+
+router.post("/get_rules", ensureAuthenticated, function(req,res){
+    //get form data
+    var year = req.body.years
+    console.log(typeof year)
+
+    var db = req.test_db
+    db.collection('shift_ruls').find({"year": year}, {"$sort": {"institute": 1}}).toArray((err,result) => {
+        // console.log(result)
+        res.status(200).send(result)
+    })
+})
 
 function getNextDayOfWeek(date, dayOfWeek) {
     // day of week 0 (Mon) to 6 (Sun)

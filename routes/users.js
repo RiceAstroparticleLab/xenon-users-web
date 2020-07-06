@@ -35,7 +35,7 @@ router.post('/updateContactInfo', ensureAuthenticated, (req, res) => {
     return(res.redirect('/profile'));
 }); 
 
-router.post('/:userid/updateContactInfoAdmin', (req, res) => {
+router.post('/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, res) => {
     // Get our form values. These rely on the "name" attributes
     var db = req.test_db
     var user_id = new ObjectId(req.params.userid)
@@ -75,7 +75,7 @@ router.post('/:userid/updateContactInfoAdmin', (req, res) => {
 // First name, last name, username, email, github (_+authentication)
 // in edit: cell, 
 // admin: % xenon, start date, end date, position, institute
-router.post('/adduser', (req, res) => {
+router.post('/adduser', ensureAuthenticated, (req, res) => {
     var db = req.test_db
 
     // Get our form values. These rely on the "name" attributes

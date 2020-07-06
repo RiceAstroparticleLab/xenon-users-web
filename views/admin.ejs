@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    .dash-panel > .panel-heading{
+        background-color:#8eaebd; 
+        height: 165px;
+        color: white;
+    }
+    .dash-panel > .panel-body{
+        padding: 15px;
+        border: 1px solid lightgray;
+        border-top: none;
+        border-radius: 0px 0px 4px 4px;
+    }
+</style>
+<head>
+    <% include components/head %> 
+</head>
+<body>
+    <% include components/menu %>
+    <div class="row" style="height:100%;overflow:hidden;">
+        <div class="col-sm-3 sidebar">
+            <ul class="nav nav-pills sidebar-pill nav-stacked">
+                <li class="active"><a data-toggle="pill" href="#github"><i class="fab fa-github pr-1"></i>&nbsp;&nbsp;&nbsp;GitHub</a></li>
+                <li><a data-toggle="pill" href="#lngs"><i class="fas fa-envelope-open"></i>&nbsp;&nbsp;&nbsp;Mailing Lists</a></li>
+                <li><a data-toggle="pill" href="#lngs"><i class="fas fa-bars"></i>&nbsp;&nbsp;&nbsp;LNGS</a></li>
+                <li><a data-toggle="pill" href="#slack"><i class="fab fa-slack"></i>&nbsp;&nbsp;&nbsp;Slack</a></li>
+            </ul>
+        </div>
+
+        <div class="col-sm-9" style="padding-top:20px;padding-right:55px;padding-left:40px">
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="github">
+                    <h3 style="letter-spacing:4px;font-weight:400;display:inline-block;margin:0px;padding-top:14px;">DASHBOARD</h3>
+                    <button class="btn btn-coral pull-right"><i class="fas fa-sync-alt"></i>&nbsp;&nbsp;&nbsp;Refresh</button>
+                    <div class="row" style="padding-top:30px">
+                        <div class="col-md-4">
+                            <div class="panel dash-panel">
+                                <div class="panel-heading">
+                                <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;"><%= remove.length %></h1>
+                                <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">REMOVE FROM GITHUB</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <% for (i=0; i < remove.length; i++) {%>
+                                        <%= remove[i][0].first_name %> <%= remove[i][0].last_name %><br>
+                                    <%}%>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="panel dash-panel">
+                                <div class="panel-heading">
+                                    <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;">0</h1>
+                                    <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">ADD TO GITHUB</h3>
+                                </div>
+                                <div class="panel-body">
+                                No users for now
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                        <div class="panel dash-panel">
+                                <div class="panel-heading">
+                                <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;"><%= add_db.length %></h1>
+                                <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">ADD TO DB</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <% for (i=0; i < add_db.length; i++) {%>
+                                        <%= add_db[i].toString().replace(/,/g, " "); %><br>
+                                    <%}%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="lngs">
+                    <h3 style="letter-spacing:4px;font-weight:400;padding:10px 0 0 15px;">DASHBOARD:LNGS</h3>
+                </div>
+                <div class="tab-pane fade" id="slack">
+                    <h3 style="letter-spacing:4px;font-weight:400;padding:10px 0 0 15px;">DASHBOARD:SLACK</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

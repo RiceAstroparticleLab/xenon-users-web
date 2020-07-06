@@ -1,10 +1,15 @@
 var express = require("express")
 var router = express.Router()
 
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  return res.redirect('/auth/login');
+}
+
 /* GET Institutes List page. */
-router.get('/', function(req, res) {
+router.get('/', ensureAuthenticated, function(req, res) {
   // var db = req.test_db
-  var db = recode_db
+  var db = req.recode_db
   var array = []
   
   db.collection('users').distinct("institute", (e, docs) => {
@@ -18,12 +23,12 @@ router.get('/', function(req, res) {
       }
     }
     // console.log(`GET array: ${array}`);
-    res.render('institutes', {page:'Home', menuId:'home', "data": array, user: req.user});
+    res.render('institutes', {page:'Institutes', menuId:'home', "data": array, user: req.user});
   })
 })
 
 /* GET individual institution page. */
-router.get('/:institute', function(req, res) {
+router.get('/:institute', ensureAuthenticated, function(req, res) {
     //var db = req.test_db
     var db = req.test_db
     var given_inst = req.params.institute
@@ -94,7 +99,7 @@ router.get('/:institute', function(req, res) {
   })
 
 /* GET New User page. */
-router.get('/:institute/newuser', function(req, res) {
+router.get('/:institute/newuser', ensureAuthenticated, function(req, res) {
   var cur_institute = req.params.institute
   res.render('newuser', { page: 'New User', cur_institute: `${cur_institute}`, menuId: 'home', title: 'Add New User', user: req.user});
 });

@@ -9,7 +9,7 @@ router.get('/login', (req, res) => {
 
 // login using github
 router.get('/github', 
-        passport.authenticate('github', { scope: [ 'user:email' ] }), 
+        passport.authenticate('github', { scope: [ 'read:user', 'read:org' ] }), 
         (req, res) => {
             // The request gets redirected to github for authentication
             // so this function is not called
@@ -27,6 +27,7 @@ router.post('/password',
 router.get('/github/callback',
     passport.authenticate('github', { failureRedirect: '/auth/login' }),
    (req, res) => {
+       //console.log(req.url)
         res.redirect('/profile')
 })
 

@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@octokit/rest": "^18.0.0",
     "bcrypt-nodejs": "0.0.3",
     "bootstrap": "^3.4.1",
     "connect-ensure-login": "^0.1.1",

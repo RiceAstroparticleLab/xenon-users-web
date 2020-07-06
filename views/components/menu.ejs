@@ -23,6 +23,9 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ACCOUNT<span class="caret"></span></a>
               <ul class="dropdown-menu">
+                <% if (user.position == "PI" || user.groups != "undefined") {%>
+                  <li id="dashboard"><a href="/admin">Admin Dashboard</a></li>
+                <%}%>
                 <li id="profile"><a href="/profile">Profile</a></li>
                 <li id="logout"><a href="/auth/logout">Logout</a></li>
               </ul>

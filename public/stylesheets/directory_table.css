@@ -37,3 +37,19 @@ input[type=search] {
     background: transparent !important;
     border: none !important;
 }
+
+.btn-circle {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    border-radius: 14px;
+    border: 1px solid lightgray;
+}
+.btn-circle:hover {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    border-radius: 14px;
+    background-color: #d3d2d2;
+    border: 1px solid lightgray;
+}

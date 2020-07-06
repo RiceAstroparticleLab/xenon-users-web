@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include components/head %> 
+    <script src="javascripts/moment.min.js", type="text/javascript"></script>
+    <script src="javascripts/directory_scripts.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/stylesheets/directory_table.css">
+  </head>
+  <body>
+    <% include components/menu %>
+    <div class="container-fluid bg-3 text-left">  
+			<div class="row">
+				<h1><%= page %></h1>
+				<p>This page currently displays people who have been with 
+					XENON for a year (current and those who have left) and are 
+					not XENON students.</p>
+			</div>
+			<div class="row">
+				<!-- fill this with the laTex -->
+				<button class="btn btn-secondary" data-toggle="modal" data-target="#latexModal">Render LaTeX</button>
+			</div>
+			<div class="row">
+				<!-- Fill this with the list of people who are on the LaTeX-->
+				<h5>Current Members</h5>
+				<table id="currTable" style="width:100%"></table>
+				<h5>Previous Members</h5>
+				<table id="prevTable" style="width:100%"></table>
+			</div>
+		</div>
+
+		<!-- Modal with LaTeX Code -->
+		<div id="latexModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <div class="modal-content" style="padding: 20px 35px 20px 35px; background-color: #fdfdfd;">
+          <div class="modal-header" style="padding-left:30px">
+            <h3 class="modal-title">Authors</h3>
+          </div>
+          <div class="modal-body">
+						<% for (i = 0; i < data.length; i++) {%>
+							<% if (data[i].institute != null) {%>
+								\author{<%= (data[i].first_name).charAt(0) %>.~<%= (data[i].last_name).replace(/\s/g, "~"); %>}\<%= (data[i].institute).toLowerCase() %><br>
+							<%}%>
+						<%}%>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script>
+	$(document).ready(function () {
+		PrevAuthorsTable("#prevTable")
+		CurrAuthorsTable("#currTable")
+	})
+</script>

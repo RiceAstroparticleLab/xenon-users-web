@@ -33,6 +33,7 @@ var userRouter = require('./routes/users');
 var instituteRouter = require('./routes/institutes')
 var authRouter = require('./routes/auth')
 var shiftRouter = require('./routes/shifts')
+var adminRouter = require('./routes/admin')
 
 /* using Express */
 const app = express()
@@ -102,6 +103,7 @@ app.use('/users', userRouter);
 app.use('/institutes', instituteRouter)
 app.use('/auth', authRouter)
 app.use('/shifts', shiftRouter)
+app.use('/admin', adminRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

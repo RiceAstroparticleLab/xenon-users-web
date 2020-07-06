@@ -16,8 +16,12 @@
     <div class="container-fluid bg-3 text-left">
         <ul class="nav nav-tabs" id="shiftNavTab" role="tablist">
             <li class="active"><a id="calendar-tab" data-toggle="tab" href="#calendartab" role="tab" aria-controls="calendar" aria-selected="true">Calendar</a></li>
-            <!-- Make available to admin only? -->
-            <li><a id="rules-tab" data-toggle="tab" href="#management" role="tab" aria-controls="rules" aria-selected="false">Shift Management</a></li>
+            <!-- Make available to admin only. Admin defined as: group and/or PI -->
+            <% if (!(typeof(user.groups) == "undefined" && user.position !== "PI")) { %>
+                <!-- <li><a id="shift-rules-tab" data-toggle="tab" href="#shiftrules" role="tab" aria-controls="shift-rules" aria-selected="false">Shift Rules</a></li> -->
+                <li><a id="rules-tab" data-toggle="tab" href="#management" role="tab" aria-controls="rules" aria-selected="false">Shift Management</a></li>
+            <%}%>
+            
         </ul>
 
         <div class="tab-content" id="tabContent">
@@ -48,8 +52,32 @@
                 </div>
             </div>
 
+            <!-- Shift Rules Tab
+            <div class="tab-pane fade" id="shiftrules" role="tabpanel" aria-labelledby="shiftrules-tab">
+                <br>
+                <div class="row" style="height:100%; width:100%">
+                    <div class="col-12">
+                        <h4>Rules</h4>
+                        <form id="shift_rules_form" method="POST">
+                            <label for="years">Choose a Year:</label>
+                            <select name="years" id="years">
+                                <% cur_year = new Date(Date.now()).getFullYear(); for (year = cur_year; year > cur_year-5; year--) { %>
+                                    <option value="<%= year %>"><%= year %></option>
+                                <%}%>
+                            </select>
+                            &nbsp; &nbsp;
+                            <input type="submit" value="Submit" style="width:60px;padding:5px;">
+                          </form>
+                    </div>
+                    <div class="col-12" style="width:100%">
+                          <table id="rules_table" style="width:100%">
+                          </table>
+                    </div>
+                </div>
+            </div> -->
+
             <!-- Shift Management Tab -->
-            <div class="tab-pane fade" id="management" role="tabpanel" aria-labelledby="overview-tab">
+            <div class="tab-pane fade" id="management" role="tabpanel" aria-labelledby="rules-tab">
                 <br>
                 <span>Use the following forms to add/remove shifts: </span>
                 <br>
@@ -173,7 +201,7 @@
         </div>
     </div>
 
-    <!-- Mark Available Tab -->
+    <!-- Mark Available -->
     <div class="modal fade in" id="markAvailableModal">
         <div class="modal-dialog modal-md">
             <div class="modal-content" style="padding: 20px 45px 20px 45px; background-color: #fdfdfd;">
@@ -350,6 +378,7 @@
 <script type="text/javascript">
     $(function() {
         // page is now ready, initialize the calendar...
+        ShiftRules("#rules_table")
         InitializeCalendar("<%= user.daq_id %>");
         // initialize the table
         FillAggregates("#aggregate_table_body", "#table_head_this_year", "<%= user.institute %>");
