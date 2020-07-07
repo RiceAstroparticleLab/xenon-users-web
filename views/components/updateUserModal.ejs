@@ -1,0 +1,111 @@
+<div id="updateUserModal" class="modal fade" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content" style="padding: 20px 35px 20px 35px; background-color: #fdfdfd;">
+            <div class="modal-header" style="padding-left:30px">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title">Update User</h3>
+            </div>
+            <div class="modal-body">
+                <form id="formUpdateUser" name="updateuser" method="post">
+                  <div class="row" style="margin-top:12px">
+                    <label for="fname" style="padding-left:30px">First Name</label><br>
+                    <div style="text-align:center;">
+                      <input id="fname" type="text" name="FirstName" />
+                    </div>
+                  </div>
+    
+                  <div class="row" style="margin-top:12px">
+                    <label for="lname" style="padding-left:30px">Last Name</label><br>
+                    <div style="text-align:center;">
+                      <input id="lname" type="text" name="LastName" />
+                    </div>
+                  </div>
+    
+                  <div class="row" style="margin-top:12px">
+                    <label for="email" style="padding-left:30px">Email</label><br>
+                    <div style="text-align:center;">
+                      <input id="email" type="email" name="Email" />
+                    </div>
+                  </div>
+    
+                  <div class="row" style="margin-top:12px">
+                    <label for="position" style="padding-left:30px">Position</label><br>
+                    <div style="padding-left:30px">
+                      <select name="position" id="position">
+                        <option id="selected" selected disabled hidden>Please select</option>
+                        <option value="Engineer">Engineer</option>
+                        <option value="Master Student">Master Student</option>
+                        <option value="Non-permanent Sci.">Non-permanent Scientist</option>
+                        <option value="Other Student">Other Student</option>
+                        <option value="Permanent Scientist">Permanent Scientist</option>
+                        <option value="PhD Student">PhD Student</option>
+                        <option value="PI">PI</option>
+                        <option value="Postdoc">Postdoc</option>
+                        <option value="Staff">Staff</option>
+                        <option value="Thesis Student">Thesis Student</option>
+                        <option value="XENON Student">XENON Student</option>
+                      </select>
+                    </div>
+                  </div>
+    
+                  <div class="row" style="margin-top:12px">
+                    <label for="institute" style="padding-left:30px">Institute</label><br>
+                    <div style="text-align:center;">
+                      <input id="institute" type="text" name="Institute" />
+                    </div>
+                  </div>
+
+                  <div class="row" style="margin-top:12px">
+                    <label for="prevTime" style="padding-left:30px">Previous Time Info</label><br>
+                    <div style="text-align:center;">
+                      <input id="prevTime" type="text" name="prevTime" />
+                    </div>
+                  </div>
+    
+                  <div class="row" style="margin-top:12px">
+                    <label for="time" style="padding-left:30px">Percent Xenon</label><br>
+                    <div style="text-align:center;">
+                      <input id="time" type="number" name="Time" />
+                    </div>
+                  </div>
+    
+                  <div class="row" style="margin-top:12px">
+                    <label for="tasks" style="padding-left:30px">Tasks</label><br>
+                    <div style="text-align:center;">
+                      <input id="tasks" type="text" name="Tasks" />
+                    </div>
+                  </div>
+    
+                  <div class="row" style="margin-top:12px;padding-left:30px">
+                    <label for="mlists">Mailing Lists</label><br>
+                      <input type="checkbox" id="mlist1" name="mlist1" value="Calibration">&nbsp;&nbsp;&nbsp;Calibration<br>
+                      <input type="checkbox" id="mlist2" name="mlist2" value="Analysis">&nbsp;&nbsp;&nbsp;Analysis<br>
+                      <input type="checkbox" id="mlist3" name="mlist3" value="TPC">&nbsp;&nbsp;&nbsp;TPC<br>
+                  </div>
+    
+                  <div class="row" style="margin-top:12px">
+                    <label for="sdate" style="padding-left:30px">Start Date</label><br>
+                    <p style="padding-left:30px">*Desktop Safari users: use format YYYY-MM-DD</p>
+                    <div style="text-align:center;">
+                      <input id="sdate" type="date" name="StartDate" />
+                    </div>
+                  </div>
+    
+                  <div class="row" style="margin-top:12px">
+                    <label for="edate" style="padding-left:30px">End Date</label><br>
+                    <p style="padding-left:30px">*Desktop Safari users: use format YYYY-MM-DD</p>
+                    <div style="text-align:center;">
+                      <input id="edate" type="date" name="EndDate" />
+                    </div>
+                  </div>
+    
+                  <br>
+                  <div style="text-align:center;">
+                    <input type="submit" value="Submit">
+                  </div>
+                </form>
+              </div>
+        </div>
+    </div>
+</div>

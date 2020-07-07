@@ -46,6 +46,56 @@
 				</div>
 			</div>
 		</div>
+		<!-- Update User Modal -->
+		<div id="updateUserModal" class="modal fade" role="dialog" tabindex="-1">
+			<div class="modal-dialog" role="document">
+		
+				<div class="modal-content" style="padding: 20px 35px 20px 35px; background-color: #fdfdfd;">
+					<div class="modal-header" style="padding-left:30px">
+					  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h3 class="modal-title">Add Additional Institution</h3>
+					</div>
+					<div class="modal-body">
+						<form id="formUpdateUser" name="updateuser" method="post">
+							<div class="row" style="margin-top:12px">
+								<label for="fname" style="padding-left:30px">First Name</label><br>
+								<div style="text-align:center;">
+								  <input id="fname" type="text" name="FirstName" readonly />
+								</div>
+							  </div>
+				
+							  <div class="row" style="margin-top:12px">
+								<label for="lname" style="padding-left:30px">Last Name</label><br>
+								<div style="text-align:center;">
+								  <input id="lname" type="text" name="LastName" readonly />
+								</div>
+							  </div>
+				
+							  <div class="row" style="margin-top:12px">
+								<label for="email" style="padding-left:30px">Email</label><br>
+								<div style="text-align:center;">
+								  <input id="email" type="email" name="Email" readonly />
+								</div>
+							  </div>
+				
+							  <div class="row" style="margin-top:12px">
+								<label for="institute" style="padding-left:30px">Institute</label><br>
+								<div style="text-align:center;">
+								  <input id="institute" type="text" name="Institute" readonly />
+								</div>
+							  </div>
+						  <div class="row" style="margin-top:12px">
+							<label for="addInst" style="padding-left:30px">Additional Institutions</label><br>
+							<div style="text-align:center;">
+							  <input id="addInst" type="text" name="addInst" />
+							</div>
+						  </div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</body>
 </html>
 <script>

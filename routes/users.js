@@ -51,6 +51,12 @@ router.post('/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, res) =
     if(req.body.Time != ""){
         idoc['percent_xenon'] = req.body.Time;
     }
+    if(req.body.prevTime != null) {
+        idoc['previous_time'] = req.body.prevTime
+    }
+    if(req.body.addInst != null) {
+        idoc['additional_institutes'] = req.body.addInst
+    }
     if(req.body.Tasks != ""){
         idoc['tasks'] = req.body.Tasks;
     }
@@ -68,8 +74,7 @@ router.post('/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, res) =
     (e, update) => {
         console.log(update)
     })
-        console.log(`success. Modified ${req.body.FirstName} ${req.body.LastName}`),
-        res.redirect(`/institutes/${req.body.Institute}`)
+        console.log(`success. Modified ${req.body.FirstName} ${req.body.LastName}`)
 })
 
 /* POST req to add a user */

@@ -95,6 +95,9 @@ router.post("/prev_author_table", ensureAuthenticated, function(req, res){
   })
 })
 
+router.get('/test', ensureAuthenticated, function(req, res) {
+  res.render('test', {page: 'TEST', menuId: 'home', title: 'TEST', user: req.user})
+})
 // Dealing with profiles
 router.get('/profile', ensureAuthenticated, function(req, res){
   // console.log(req.session)
