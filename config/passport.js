@@ -164,14 +164,16 @@ passport.use(new GitHubStrategy({
                             console.log("Couldn't find user in run DB, un "+profile._json.login);
                             return done(null, false, "Couldn't find user in DB");
                         } else {
-                            use_db.collection('users').findOneAndUpdate({"github": profile._json.login},
+                            var doc = docs[0]
+                            PopulateProfile(doc, profile, accessToken, function(ret_profile){
+                                use_db.collection('users').findOneAndUpdate({"github": profile._json.login},
                                                 {"$set": { "picture_url": profile._json.avatar_url,
-                                                           "github_home": profile.html_url,
-                                                           "token": accessToken},
-                                                }, {returnOriginal: false}, (e, update) => {
-                                                    // console.log(update.value)
-                                                    return done(null, update.value, "Verification success");
-                                                })
+                                                        "github_home": profile.html_url,
+                                                        "token": accessToken},
+                                                }).then(() => console.log("update done"));
+                                console.log(ret_profile)
+                                return done(null, ret_profile)
+                            })
                         }
                     });
                     
