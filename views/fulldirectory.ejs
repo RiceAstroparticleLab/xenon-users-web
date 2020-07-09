@@ -3,6 +3,7 @@
   <head>
     <% include components/head %> 
     <script src="javascripts/moment.min.js", type="text/javascript"></script>
+    <script src="javascripts/moment-timezone-with-data.min.js", type="text/javascript"></script>
     <script src="javascripts/directory_scripts.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/stylesheets/directory_table.css">
   </head>
@@ -18,19 +19,11 @@
       <div class="tab-content">
         <div id="tableview" class="tab-pane fade in active">
           <h4>XENON members list</h4>
-          <table id="membersTable" style="width:100%"></table>
+          <table id="currentMembersTable" style="width:100%"></table>
         </div>
         <div id="previous" class="tab-pane fade">
-            <% for (i = 0; i < prev.length; i++) {%>
-                <details>
-                    <summary> <%=prev[i].last_name + ", " + prev[i].first_name %></summary>
-                    <p><b>Institute: </b><%= prev[i].institute %><br>
-                        <b>Email: </b><%= prev[i].email%> <br>
-                        <b>Position: </b><%= prev[i].position%> <br>
-                        <b>Start Date: </b><%= prev[i].start_date%> <br>
-                        <b>End Date: </b><%= prev[i].end_date%></p><br>
-                </details>
-            <%}%>
+          <h4 style="text-align: center;margin-bottom: -20px;padding-bottom: 0px;">People that left the collaboration</h4>
+          <table id="previousMembersTable" style="width:100%"></table>
         </div>
         <div id="current" class="tab-pane fade">
           <% for (i = 0; i < curr.length; i++) {%>
@@ -54,7 +47,8 @@
   </body>
   <script>
     $(document).ready(function() {
-      InitializeTable("#membersTable")
+      InitializeTable("#currentMembersTable")
+      InitializePrevTable("#previousMembersTable")
     })
   </script>
 </html>

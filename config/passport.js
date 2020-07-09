@@ -31,34 +31,156 @@ passport.deserializeUser(function(obj, done) {
     done(null, obj);
 });
 
+function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
+
+function UpdateUnique(mongo_doc, username){
+    return new Promise(resolve => {
+        use_db.collection("users").find({"daq_id": username}).toArray(function(e, docs){
+            console.log(docs.length)
+            if(docs.length !== 0)
+                return(UpdateUnique(mongo_doc, "xe"+username));
+            use_db.collection("users").updateOne({"last_name": mongo_doc['last_name'],
+                "first_name": mongo_doc['first_name'],
+                "institute": mongo_doc['institute']},
+                {"$set": {"daq_id": username}});
+            resolve(username)
+        });	    
+    })
+}
+
+function GenerateDAQID(mongo_doc){
+    // Just return the last name in lower case. In case not unique add the string 'xe' 
+    // until it is
+
+    if(typeof mongo_doc['daq_id'] !== 'undefined')
+	return new Promise(resolve => {
+	    resolve(mongo_doc['daq_id']);
+	});
+
+    var last_name = mongo_doc['last_name'];
+    var username = last_name.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+    // Check uniqueness
+    return new Promise(resolve => {
+        resolve(UpdateUnique(mongo_doc, username));
+        });
+}
+
+async function PopulateProfile(mongo_doc, github_profile, accessToken, callback){
+
+    var ret_profile = {};
+
+    // This step important. We need a unique identifier for each user. The user
+    // doesn't actually need to see this but it's important for some internal 
+    // things.     
+    ret_profile['daq_id'] = await GenerateDAQID(mongo_doc);
+
+    // This allows people to use github functions later on.
+    ret_profile['token'] = accessToken;
+    console.log(ret_profile);
+
+    var extra_fields = ['skype', 'github_id', 'cell', 'email', 'lngs_ldap_uid',
+                        'last_name', 'first_name', 'institute', 'position',
+                        'percent_xenon', 'start_date', 'LNGS', 'github',
+                        'picture_url', 'github_home', 'api_username', 'groups'];
+    for(var i in extra_fields){
+        if(typeof mongo_doc[extra_fields[i]]==='undefined')
+            ret_profile[extra_fields[i]] = "not set";
+        else
+            ret_profile[extra_fields[i]] = mongo_doc[extra_fields[i]];
+    }
+    if(!(isEmpty(github_profile))){
+	    ret_profile['github_info'] = github_profile;
+        // This field has a bunch of funny characters that serialize poorly
+        ret_profile['github_info']['_raw'] = '';
+        ret_profile['picture_url'] = github_profile._json.avatar_url;
+        ret_profile['github_home'] = github_profile._json.html_url;
+
+    }
+    
+    callback(ret_profile);
+}
+
+const { Octokit } = require("@octokit/rest")
+const TOKEN = process.env.PERSONAL_ACCESS_TOKEN
+const octokit = new Octokit({
+    auth: TOKEN,
+    baseUrl: "https://api.github.com",
+  });
+
 // Login with github
 passport.use(new GitHubStrategy({
-    clientID: process.env.TEST_CLIENT_ID, // GITHUB_CLIENT_ID
-    clientSecret: process.env.TEST_SECRET_KEY, // GITHUB_CLIENT_SECRET
-    callbackURL: process.env.TEST_CALLBACK_URL, //CALLBACK_URL
-    scope: ["read:user", "read:org"]
+    clientID: process.env.TEST_CLIENT_ID , // GITHUB_CLIENT_ID process.env.TEST_CLIENT_ID
+    clientSecret: process.env.TEST_SECRET_KEY, // GITHUB_CLIENT_SECRET process.env.TEST_SECRET_KEY
+    callbackURL: process.env.TEST_CALLBACK_URL, //CALLBACK_URL process.env.TEST_CALLBACK_URL
+    scope: ["read:user", "read:orgs"]
   }, 
   function (accessToken, refreshToken, profile, done) {
       // console.log(profile._json)
 
     // asynchronous verification 
     process.nextTick(() => {
-        use_db.collection('users').find({"github": profile._json.login}).toArray((e, docs) => {
-                            if(docs.length===0){
-                                console.log("Couldn't find user in run DB, un "+profile._json.login);
-                                return done(null, false, "Couldn't find user in DB");
-                            } else {
-                                use_db.collection('users').findOneAndUpdate({"github": profile._json.login},
-                                                    {"$set": { "picture_url": profile._json.avatar_url,
-                                                               "github_home": profile.html_url,
-                                                               "token": accessToken},
-                                                    }, {returnOriginal: false}, (e, update) => {
-                                                        // console.log(update.value)
-                                                        return done(null, update.value, "Verification success");
-                                                    })
-                                // console.log(result)
-                            }
-        });
+
+        var github_login = profile._json.login 
+        octokit.orgs.checkMembershipForUser({
+            org: "XENON1T",
+            username: github_login,
+        }).then((response) => {
+            if (response.status == 204) {
+                console.log(response.status)
+                use_db.collection('users').find({"github": profile._json.login}).toArray((e, docs) => {
+                    if(docs.length===0){
+                        console.log("Couldn't find user in run DB, un "+profile._json.login);
+                        return done(null, false, "Couldn't find user in DB");
+                    } else {
+                        var doc = docs[0]
+                        PopulateProfile(doc, profile, accessToken, function(ret_profile){
+                            use_db.collection('users').findOneAndUpdate({"github": profile._json.login},
+                                            {"$set": { "picture_url": profile._json.avatar_url,
+                                                       "github_home": profile.html_url,
+                                                       "token": accessToken},
+                                            }).then(() => console.log("update done"));
+                            console.log(ret_profile)
+                            return done(null, ret_profile)
+                        })
+                    }
+                });
+            }
+        }).catch((e) => {
+            console.log(e)
+            octokit.orgs.checkMembershipForUser({
+                org: "XENONnT",
+                username: github_login,
+            }).then((response) => {
+                if (response.status == 204) {
+                    use_db.collection('users').find({"github": profile._json.login}).toArray((e, docs) => {
+                        if(docs.length===0){
+                            console.log("Couldn't find user in run DB, un "+profile._json.login);
+                            return done(null, false, "Couldn't find user in DB");
+                        } else {
+                            use_db.collection('users').findOneAndUpdate({"github": profile._json.login},
+                                                {"$set": { "picture_url": profile._json.avatar_url,
+                                                           "github_home": profile.html_url,
+                                                           "token": accessToken},
+                                                }, {returnOriginal: false}, (e, update) => {
+                                                    // console.log(update.value)
+                                                    return done(null, update.value, "Verification success");
+                                                })
+                        }
+                    });
+                    
+                }
+            }).catch((e) => {
+                console.log(e)
+                return done(null, false);
+            }); 
+        });     
     });
 }));
 

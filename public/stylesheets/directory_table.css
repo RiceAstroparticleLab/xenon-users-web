@@ -21,35 +21,3 @@ input[type=search] {
     padding-left: 10px !important;
     padding: 3px;
 }
-
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-    background: #8eaebd !important;
-    color: white !important;
-}
-
-.paginate_button:hover {
-    background: #d6d6d6 !important;
-    border: 1px solid #d6d6d6 !important;
-}
-
-.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
-    background: transparent !important;
-    border: none !important;
-}
-
-.btn-circle {
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-    border-radius: 14px;
-    border: 1px solid lightgray;
-}
-.btn-circle:hover {
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-    border-radius: 14px;
-    background-color: #d3d2d2;
-    border: 1px solid lightgray;
-}

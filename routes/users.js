@@ -35,10 +35,11 @@ router.post('/updateContactInfo', ensureAuthenticated, (req, res) => {
     return(res.redirect('/profile'));
 }); 
 
-router.post('/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, res) => {
+router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, res) => {
     // Get our form values. These rely on the "name" attributes
     var db = req.test_db
     var user_id = new ObjectId(req.params.userid)
+    var page = req.params.page
 
     var idoc = {};
     idoc['first_name'] = req.body.FirstName;
@@ -48,7 +49,7 @@ router.post('/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, res) =
     if(req.body.position != null){
         idoc['position'] = req.body.position;
     }
-    if(req.body.Time != ""){
+    if(req.body.Time != "" && req.body.Time != null){
         idoc['percent_xenon'] = req.body.Time;
     }
     if(req.body.prevTime != null) {
@@ -60,11 +61,13 @@ router.post('/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, res) =
     if(req.body.Tasks != ""){
         idoc['tasks'] = req.body.Tasks;
     }
-    idoc['mailing_lists'] = [req.body.mlist1, req.body.mlist2, req.body.mlist3]
-    if(req.body.StartDate != ""){
+    if(req.body.mlist1 != null || req.body.mlist2 != null || req.body.mlist3 != null) {
+        idoc['mailing_lists'] = [req.body.mlist1, req.body.mlist2, req.body.mlist3]
+    }
+    if(req.body.StartDate != "" && req.body.StartDate != null){
         idoc['start_date'] = new Date(`${req.body.StartDate}`);
     }
-    if(req.body.EndDate != "") {
+    if(req.body.EndDate != "" && req.body.EndDate != null) {
         idoc["end_date"] = new Date(req.body.EndDate)
     }
 
@@ -74,7 +77,13 @@ router.post('/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, res) =
     (e, update) => {
         console.log(update)
     })
-        console.log(`success. Modified ${req.body.FirstName} ${req.body.LastName}`)
+    console.log(`success. Modified ${req.body.FirstName} ${req.body.LastName}`)
+    if (page.toString().includes("Institute")) {
+        var split = page.toString().split('_')[1]
+        page = 'institutes/' + split
+    }
+        
+    return res.redirect('/'+page)
 })
 
 /* POST req to add a user */

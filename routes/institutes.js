@@ -1,6 +1,10 @@
 var express = require("express")
 var router = express.Router()
 
+// var Highcharts = require('highcharts');  
+// // Load module after Highcharts is loaded
+// require('highcharts/modules/exporting')(Highcharts);  
+
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   return res.redirect('/auth/login');

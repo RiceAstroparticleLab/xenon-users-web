@@ -150,7 +150,7 @@ details[open] summary {
 /* admin styles */
 .sidebar {
   padding: 0px !important;
-  height: 5000px !important;
+  height: 1400px !important;
   background-color: #3c4758;
 }
 
@@ -170,4 +170,29 @@ details[open] summary {
 .sidebar-pill li a:hover{
   border-radius: 0px;
   background-color: #ffffff88 !important;
+}
+
+/* buttons */
+.btn-circle {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  border-radius: 14px;
+  border: 1px solid lightgray;
+}
+.btn-circle:hover {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  background-color: #d3d2d2;
+  border: 1px solid lightgray;
+}
+
+.red{
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size: inherit;
+  background-color: #aa1212a8;
+  border: 1px solid #aa12123a;
+  color: white;
 }

@@ -27,6 +27,14 @@ MongoClient.connect(process.env.MONGO_LOCAL_URI, {useUnifiedTopology: true}, (er
     err => {console.log(err)}
 })
 
+/* GLOBAL VARIABLES */
+global.array_of_institutes = ['Bologna', 'Coimbra', 'Columbia', 'Freiburg', 'KIT', 
+                              'Kobe', 'LAL', "L'Aquila", 'LNGS-GSSI', 'LPNHE', 'Mainz',
+                              'MPI Heidelberg', 'Munster', 'Nagoya', 'Naples', 'Nikhef',
+                              'NYUAD', 'Purdue', 'Rensselear', 'Rice', 'Stockholm',
+                              'Subatech', 'Subatech', 'Tokyo', 'Torino', 'UChicago', 
+                              'UCSD', 'WIS', 'Zurich'];
+
 // Routers for subsites
 var landingRouter = require('./routes/pages');
 var userRouter = require('./routes/users');

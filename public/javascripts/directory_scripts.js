@@ -6,21 +6,21 @@ function InitializeTable(divname){
         ],        
         searchPanes:{
             viewTotal: true,
-            columns: [0, 3],
         },       
         dom: 'Bflrtip',                                  
         order: [[groupColumn, 'asc']],
-        lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
         pageResize: true,
+        paging: false,
         language: {
             search: "",
             searchPlaceholder: "Search...",
             searchPanes: {
+                columns: [0, 3],
                 collapse: {0: 'Filter', _: 'Filter (%d)'}
             }
         },
         ajax : {
-            url: '/table_info',
+            url: '/curr_table_info',
 	        type: "POST",
         },
         columns : [	    
@@ -55,7 +55,7 @@ function InitializeTable(divname){
             render: function(data){
                 if(typeof(data)=="undefined") 
                     return "";
-                return moment(data).format('MM/DD/YYYY');
+                return moment(data).tz('Atlantic/St_Helena').format('MMM YYYY');
             }
             }
         ],
@@ -78,11 +78,95 @@ function InitializeTable(divname){
     $(divname + ' tbody').on( 'click', 'button', function (e) {
         e.preventDefault()
         var data = table.row( $(this).parents('tr') ).data();
-        openModal(data)
+        openModal(data, 'fulldirectory')
     } );
 
 }
 
+function InitializePrevTable(divname){
+    var groupColumn = 8
+    var table = $(divname).DataTable({
+        buttons: [
+            'searchPanes'
+        ],     
+        searchPanes:{
+            viewTotal: true,
+        },       
+        dom: 'Bflrtip',                                  
+        order: [[groupColumn, 'desc']],
+        pageResize: true,
+        paging: false,
+        language: {
+            search: "",
+            searchPlaceholder: "Search...",
+            searchPanes: {
+                columns: [0, 3],
+                collapse: {0: 'Filter', _: 'Filter (%d)'}
+            }
+        },
+        ajax : {
+            url: '/prev_table_info',
+	        type: "POST",
+        },
+        columns : [	    
+            { data : "institute", searchable: true },
+            { data : "last_name" , searchable: true},
+            { data : "first_name", searchable: true },
+            { data : "email", orderable: false, searchable: true},
+            { data : "position", searchable: true },
+            { data : "percent_xenon", orderable: false},
+            { data : "start_date", format: 'MM.YYYY', type: 'datetime', orderable: false}, 
+            { data : "end_date", format: 'MM.YYYY', type: 'datetime'},
+            { data : "end_date", format: 'YYYY', type: 'datetime', orderable: false},
+            { title: "", orderable: false}
+        ],
+        columnDefs: [
+            { title: "Institute", targets: 0},
+            { title: "Last Name", targets: 1},
+            { title: "First Name", targets: 2},
+            { title: "Email", targets: 3},
+            { title: "Position", targets: 4},
+            { title: "Time", targets: 5},
+            { title: "Start Date", targets: 6},
+            { title: "End Date", targets: 7},
+            { "targets": -1,
+             data: null,
+             "defaultContent": "<button type='button' class='btn-circle'><i class='fas fa-pen'></i></button>"
+            },
+            {"visible": false, "targets": groupColumn},
+            {
+            targets: [6, 7],
+            render: function(data){
+                if(typeof(data)=="undefined") 
+                    return "";
+                return moment(data).tz('Atlantic/St_Helena').format('MMM YYYY');
+            }
+            }
+        ],
+        drawCallback: function(settings) {
+            var api = this.api()
+            var rows = api.rows({page: 'current'}).nodes();
+            var last = null;
+            
+            api.column(groupColumn, {page: 'current'}).data().each(function(group,i) {
+                var year = moment(group).tz('Atlantic/St_Helena').format('YYYY');
+                if (last !== year) {
+                    $(rows).eq(i).before(
+                        '<tr class="group"><td colspan="9"><strong>'+year+'</strong></td></tr>'
+                    )
+                    last = year;
+                }
+            })
+        }
+    });
+
+    $(divname + ' tbody').on( 'click', 'button', function (e) {
+        e.preventDefault()
+        var data = table.row( $(this).parents('tr') ).data();
+        openModal(data, 'fulldirectory')
+    } );
+
+}
 function PrevAuthorsTable(divname) {
     var table = $(divname).DataTable({
         lengthMenu: [[10, 50, 100, -1], [10, 50, 100, "All"]],
@@ -131,7 +215,7 @@ function PrevAuthorsTable(divname) {
     $(divname + ' tbody').on( 'click', 'button', function (e) {
         e.preventDefault()
         var data = table.row( $(this).parents('tr') ).data();
-        openModal(data)
+        openModal(data, 'authors')
     } );
 }
 
@@ -181,17 +265,18 @@ function CurrAuthorsTable(divname) {
     $(divname + ' tbody').on( 'click', 'button', function (e) {
         e.preventDefault()
         var data = table.row( $(this).parents('tr') ).data();
-        openModal(data)
+        openModal(data, 'authors')
     } );
 }
 
-function openModal(data) {
+function openModal(data, page) {
     $('#updateUserModal').on('show.bs.modal', function (event) {
         var user_info = data // Extract info from data-* attributes
-        
+        var curr_pg = page
+
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this)
-        document.getElementById("formUpdateUser").action = "/users/"+user_info._id+"/updateContactInfoAdmin"
+        document.getElementById("formUpdateUser").action = "/users/"+curr_pg+"/"+user_info._id+"/updateContactInfoAdmin"
         modal.find('.modal-body input[name="FirstName"]').val(user_info.first_name)
         modal.find('.modal-body input[name="LastName"]').val(user_info.last_name)
         modal.find('.modal-body input[name="Email"]').val(user_info.email)
@@ -227,11 +312,15 @@ function UpdateUserModal() {
     $('#updateUserModal').on('show.bs.modal', function (event) {
      var button = $(event.relatedTarget) // Button that triggered the modal
      var user_info = button.data('id') // Extract info from data-* attributes
+     var institute = user_info.institute
+     if (institute == 'Bern/Freiburg') {
+         institute = 'Freiburg'
+     }
      console.log(user_info)
      
      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
      var modal = $(this)
-     document.getElementById("formUpdateUser").action = "/users/"+user_info._id+"/updateContactInfoAdmin"
+     document.getElementById("formUpdateUser").action = "/users/Institute_"+institute+"/"+user_info._id+"/updateContactInfoAdmin"
      modal.find('.modal-body input[name="FirstName"]').val(user_info.first_name)
      modal.find('.modal-body input[name="LastName"]').val(user_info.last_name)
      modal.find('.modal-body input[name="Email"]').val(user_info.email)

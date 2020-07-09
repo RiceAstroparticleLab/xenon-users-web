@@ -16,7 +16,6 @@ var today = Date.now()
 var oneYearAgo = new Date(Number(today) - 31556952000);
 
 console.log(`Today is ${Date(today)}. One Year ago today was ${oneYearAgo.toString()}`)
-var cur_institute
 
 /* GET Userlist page. */
 router.get('/fulldirectory', ensureAuthenticated, function(req, res) {
@@ -50,12 +49,23 @@ router.get('/fulldirectory', ensureAuthenticated, function(req, res) {
   })
 })
 
-router.post("/table_info", ensureAuthenticated, function(req, res){
+router.post("/curr_table_info", ensureAuthenticated, function(req, res){
 	//var db = req.run_db;
 	var db = req.test_db
 
   // If valid show all users in that institute
   db.collection('users').find({"end_date": {$exists: false}}, {"sort": "institute"}).toArray(function(err, result) {
+		  res.send(JSON.stringify({"data": result}));
+  })
+    
+});
+
+router.post("/prev_table_info", ensureAuthenticated, function(req, res){
+	//var db = req.run_db;
+	var db = req.test_db
+
+  // If valid show all users in that institute
+  db.collection('users').find({"end_date": {$exists: true}}, {"sort": "institute"}).toArray(function(err, result) {
 		  res.send(JSON.stringify({"data": result}));
   })
     

@@ -17,7 +17,7 @@
 			</div>
 			<div class="row">
 				<!-- fill this with the laTex -->
-				<button class="btn btn-secondary" data-toggle="modal" data-target="#latexModal">Render LaTeX</button>
+				<button class="btn btn-secondary" data-toggle="modal" data-target="#latexModal">Display LaTeX</button>
 			</div>
 			<div class="row">
 				<!-- Fill this with the list of people who are on the LaTeX-->
@@ -33,13 +33,14 @@
       <div class="modal-dialog">
 
         <div class="modal-content" style="padding: 20px 35px 20px 35px; background-color: #fdfdfd;">
-          <div class="modal-header" style="padding-left:30px">
+		  <div class="modal-header" style="padding-left:30px">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h3 class="modal-title">Authors</h3>
           </div>
           <div class="modal-body">
 						<% for (i = 0; i < data.length; i++) {%>
 							<% if (data[i].institute != null) {%>
-								\author{<%= (data[i].first_name).charAt(0) %>.~<%= (data[i].last_name).replace(/\s/g, "~"); %>}\<%= (data[i].institute).toLowerCase() %><br>
+								\author{<%= (data[i].first_name).toString().match(/[A-Z]/g).join('.~') %>.~<%= (data[i].last_name).replace(/\s/g, "~"); %>}<%if(data[i].additional_institutes) {%>\altaffiliation[Also at ]{<%=data[i].additional_institutes%>}<%}%>\<%= (data[i].institute).toLowerCase() %><br>
 							<%}%>
 						<%}%>
 					</div>
@@ -90,6 +91,11 @@
 							  <input id="addInst" type="text" name="addInst" />
 							</div>
 						  </div>
+
+						  <br>
+							<div style="text-align:center;">
+								<input type="submit" value="Submit">
+							</div>
 						</form>
 					</div>
 				</div>
