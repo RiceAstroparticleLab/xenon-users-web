@@ -45,7 +45,9 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, 
     idoc['first_name'] = req.body.FirstName;
     idoc['last_name'] = req.body.LastName;
     idoc['email'] = req.body.Email;
-    idoc['institute'] = req.body.Institute;
+    if(req.body.position != null){
+        idoc['institute'] = req.body.institute;
+    }
     if(req.body.position != null){
         idoc['position'] = req.body.position;
     }
@@ -99,7 +101,7 @@ router.post('/adduser', ensureAuthenticated, (req, res) => {
     idoc['first_name'] = req.body.FirstName;
     idoc['last_name'] = req.body.LastName;
     idoc['email'] = req.body.Email;
-    idoc['institute'] = req.body.Institute;
+    idoc['institute'] = req.body.institute;
     idoc['position'] = req.body.position;
     idoc['percent_xenon'] = req.body.Time;
     idoc['tasks'] = req.body.Tasks;

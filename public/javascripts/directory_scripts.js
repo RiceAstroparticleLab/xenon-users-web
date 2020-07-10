@@ -1,3 +1,10 @@
+var array_of_institutes = [['Bologna'], ['Coimbra'], ['Columbia'], ['Freiburg', 'Bern/Freiburg'], ['KIT'], 
+['Kobe'], ["L'Aquila"], ['LAL'], ['LNGS-GSSI', 'LNGS'], ['LPNHE'], ['Mainz'],
+['MPI Heidelberg', 'MPIK Heidelberg'], ['Munster', 'Muenster'], ['Nagoya'], 
+['Naples', 'INFN Naples'], ['Nikhef'], ['NYUAD'], ['Purdue'], ['Rensselear'], 
+['Rice'], ['Stockholm'], ['Subatech'], ['Tokyo'], ['Torino'], 
+['UChicago', 'Chicago'], ['UCSD', 'UC San Diego'], ['WIS', 'Weizmann'], ['Zurich']];
+
 function InitializeTable(divname){
     var groupColumn = 1
     var table = $(divname).DataTable({
@@ -43,7 +50,7 @@ function InitializeTable(divname){
             { title: "Email", targets: 4},
             { title: "Position", targets: 5},
             { title: "Time", targets: 6},
-            { title: "Start", targets: 7},
+            { title: "Start Date", targets: 7},
             { title: "Previous Time Info", targets: 8},
             { "targets": -1,
              data: null,
@@ -78,7 +85,12 @@ function InitializeTable(divname){
     $(divname + ' tbody').on( 'click', 'button', function (e) {
         e.preventDefault()
         var data = table.row( $(this).parents('tr') ).data();
-        openModal(data, 'fulldirectory')
+        if((data.current_user.position == "PI" && data.current_user.institute == data.institute) ||
+        (data.current_user.groups != undefined)) {
+            openModal(data, 'fulldirectory')
+        } else {
+            alert("Sorry, you don't have the correct permissions.")
+        }
     } );
 
 }
@@ -163,7 +175,12 @@ function InitializePrevTable(divname){
     $(divname + ' tbody').on( 'click', 'button', function (e) {
         e.preventDefault()
         var data = table.row( $(this).parents('tr') ).data();
-        openModal(data, 'fulldirectory')
+        if((data.current_user.position == "PI" && data.current_user.institute == data.institute) ||
+        (data.current_user.groups != undefined)) {
+            openModal(data, 'fulldirectory')
+        } else {
+            alert("Sorry, you don't have the correct permissions.")
+        }
     } );
 
 }
@@ -215,7 +232,13 @@ function PrevAuthorsTable(divname) {
     $(divname + ' tbody').on( 'click', 'button', function (e) {
         e.preventDefault()
         var data = table.row( $(this).parents('tr') ).data();
+        if((data.current_user.first_name == data.first_name) && (data.current_user.last_name == data.last_name) || 
+        (data.current_user.position == "PI" && data.current_user.institute == data.institute) ||
+        (data.current_user.groups != undefined)) {
         openModal(data, 'authors')
+        } else {
+            alert("Sorry, you don't have the correct permissions.")
+        }
     } );
 }
 
@@ -265,7 +288,13 @@ function CurrAuthorsTable(divname) {
     $(divname + ' tbody').on( 'click', 'button', function (e) {
         e.preventDefault()
         var data = table.row( $(this).parents('tr') ).data();
-        openModal(data, 'authors')
+        if((data.current_user.first_name == data.first_name) && (data.current_user.last_name == data.last_name) || 
+            (data.current_user.position == "PI" && data.current_user.institute == data.institute) ||
+            (data.current_user.groups != undefined)) {
+            openModal(data, 'authors')
+        } else {
+            alert("Sorry, you don't have the correct permissions.")
+        }
     } );
 }
 
@@ -274,18 +303,31 @@ function openModal(data, page) {
         var user_info = data // Extract info from data-* attributes
         var curr_pg = page
 
+        var institute
+        for (i = 0; i < array_of_institutes.length; i++) {
+            if (array_of_institutes[i][0] == user_info.institute || array_of_institutes[i][1] == user_info.institute) {
+              institute = array_of_institutes[i][0]
+            }
+          }
+        
+        
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this)
         document.getElementById("formUpdateUser").action = "/users/"+curr_pg+"/"+user_info._id+"/updateContactInfoAdmin"
         modal.find('.modal-body input[name="FirstName"]').val(user_info.first_name)
         modal.find('.modal-body input[name="LastName"]').val(user_info.last_name)
         modal.find('.modal-body input[name="Email"]').val(user_info.email)
-        modal.find('.modal-body input[name="Institute"]').val(user_info.institute)
         modal.find('.modal-body input[name="prevTime"]').val(user_info.previous_time)
         modal.find('.modal-body input[name="Time"]').val(user_info.percent_xenon)
         modal.find('.modal-body input[name="Tasks"]').val(user_info.tasks)
         modal.find('.modal-body input[name="StartDate"]').val(new Date(user_info.start_date).toISOString().slice(0,10))
-    
+          
+        if (page == 'authors') {
+            modal.find('.modal-body input[name="Institute"]').val(user_info.institute)
+        } else {
+            modal.find('.modal-body option[value="'+institute+'"]').attr('selected', true)
+        }
+
         if (modal.find('.modal-body option[value="'+ user_info.position +'"]').length) {
           modal.find('.modal-body option[id="selected"]').attr('selected', false)
           modal.find('.modal-body option[value="'+ user_info.position +'"]').attr('selected', true)
@@ -318,13 +360,20 @@ function UpdateUserModal() {
      }
      console.log(user_info)
      
+     var institute
+        for (i = 0; i < array_of_institutes.length; i++) {
+            if (array_of_institutes[i][0] == user_info.institute || array_of_institutes[i][1] == user_info.institute) {
+              institute = array_of_institutes[i][0]
+            }
+    }
+    console.log(institute)
      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
      var modal = $(this)
      document.getElementById("formUpdateUser").action = "/users/Institute_"+institute+"/"+user_info._id+"/updateContactInfoAdmin"
      modal.find('.modal-body input[name="FirstName"]').val(user_info.first_name)
      modal.find('.modal-body input[name="LastName"]').val(user_info.last_name)
      modal.find('.modal-body input[name="Email"]').val(user_info.email)
-     modal.find('.modal-body input[name="Institute"]').val(user_info.institute)
+     modal.find('.modal-body option[value="'+institute+'"]').attr('selected', true)
      modal.find('.modal-body input[name="prevTime"]').val(user_info.previous_time)
      modal.find('.modal-body input[name="Time"]').val(user_info.percent_xenon)
      modal.find('.modal-body input[name="Tasks"]').val(user_info.tasks)

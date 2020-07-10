@@ -12,23 +12,7 @@ function ensureAuthenticated(req, res, next) {
 
 /* GET Institutes List page. */
 router.get('/', ensureAuthenticated, function(req, res) {
-  // var db = req.test_db
-  var db = req.recode_db
-  var array = []
-  
-  db.collection('users').distinct("institute", (e, docs) => {
-    // Hard code some exceptions
-    for (i = 0; i < docs.length; i++) {
-      if (docs[i] === "Bern/Freiburg" || docs[i] === null || docs[i] === "Munster" || docs[i] === "Other" || docs[i] === "UCSD" || docs[i] === "Chicago" || docs[i] === "LNGS") {
-        // console.log(`Institute not inserted: ${docs[i]}`)
-      } else {
-        //console.log(docs[i])
-        array.push(docs[i])
-      }
-    }
-    // console.log(`GET array: ${array}`);
-    res.render('institutes', {page:'Institutes', menuId:'home', "data": array, user: req.user});
-  })
+  res.render('institutes', {page:'Institutes', menuId:'home', "institutes": array_of_institutes, user: req.user});
 })
 
 /* GET individual institution page. */
@@ -40,19 +24,22 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
     console.log(`Institute: ${given_inst}`)
   
     // Stats for this institute
-    var find_institute
-    // Hard code Muenster/Munster, UCSD/UC San Diego, Uchicago/Chicago, and Bern-Freiburg/Freiburg because they 
+    var find_institute 
+
+     // Hard code Muenster/Munster, UCSD/UC San Diego, Uchicago/Chicago, and Bern-Freiburg/Freiburg because they 
     // are the same institutes but come up under different names on the db
-    if (given_inst === "Freiburg") {
-      find_institute = db.collection('users').find({$or: [{"institute": given_inst}, {"institute": "Bern/Freiburg"}]}, {"sort": "last_name"})
-    } else if (given_inst === "Muenster") {
-      find_institute = db.collection('users').find({$or: [{"institute": given_inst}, {"institute": "Munster"}]}, {"sort": "last_name"})
-    } else if (given_inst === "UC San Diego") {
-      find_institute = db.collection('users').find({$or: [{"institute": given_inst}, {"institute": "UCSD"}]}, {"sort": "last_name"})
-    } else if (given_inst === "UChicago") {
-      find_institute = db.collection('users').find({$or: [{"institute": given_inst}, {"institute": "Chicago"}]}, {"sort": "last_name"})
-    } else if (given_inst === "LNGS-GSSI") {
-      find_institute = db.collection('users').find({$or: [{"institute": given_inst}, {"institute": "LNGS"}]}, {"sort": "last_name"})
+    for (i = 0; i < array_of_institutes.length; i++) {
+      if (array_of_institutes[i][0] == given_inst) {
+        if (array_of_institutes[i].length > 1) {
+        var alternate_institute = array_of_institutes[i][1]
+        break;
+        }
+      }
+    }
+    console.log(alternate_institute)
+
+    if (alternate_institute) {
+      find_institute = db.collection('users').find({$or: [{"institute": given_inst}, {"institute": alternate_institute}]}, {"sort": "last_name"})
     } else {
       find_institute = db.collection('users').find({"institute": given_inst}, {"sort": "last_name"})
     }
@@ -90,6 +77,8 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
           prev.push(docs[i])
         }
       }
+
+      console.log(req.user.groups)
   
       res.render('institute_stats', {page: `${ given_inst }`, 
         menuId: 'home', 
@@ -97,6 +86,7 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
         "dict": dict,
         "curr": current, 
         "prev": prev,
+        "institutes": array_of_institutes,
         user: req.user})
     })
   

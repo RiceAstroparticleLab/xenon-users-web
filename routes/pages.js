@@ -45,7 +45,7 @@ router.get('/fulldirectory', ensureAuthenticated, function(req, res) {
         prev.push(docs[i])
       }
     }
-    res.render('fulldirectory', {page: 'Full Directory', menuId: 'home', "curr": current, "prev": prev, "institutes": institutes, user: req.user})
+    res.render('fulldirectory', {page: 'Full Directory', menuId: 'home', "curr": current, "prev": prev, "institutes": array_of_institutes, user: req.user})
   })
 })
 
@@ -55,6 +55,9 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
 
   // If valid show all users in that institute
   db.collection('users').find({"end_date": {$exists: false}}, {"sort": "institute"}).toArray(function(err, result) {
+    for (i = 0; i < result.length; i++) {
+      result[i]['current_user'] = req.user
+    }
 		  res.send(JSON.stringify({"data": result}));
   })
     
@@ -66,6 +69,9 @@ router.post("/prev_table_info", ensureAuthenticated, function(req, res){
 
   // If valid show all users in that institute
   db.collection('users').find({"end_date": {$exists: true}}, {"sort": "institute"}).toArray(function(err, result) {
+    for (i = 0; i < result.length; i++) {
+      result[i]['current_user'] = req.user
+    }
 		  res.send(JSON.stringify({"data": result}));
   })
     
@@ -85,6 +91,7 @@ router.post("/curr_author_table", ensureAuthenticated, function(req, res){
   db.collection('users').find({start_date: {$lt: oneYearAgo}}, {"sort": "last_name"}).toArray((e, docs) => {
     for (i = 0; i < docs.length; i++) {
       if(!docs[i].end_date) {
+        docs[i]['current_user'] = req.user
         current.push(docs[i])
       } 
     }
@@ -95,19 +102,19 @@ router.post("/curr_author_table", ensureAuthenticated, function(req, res){
 router.post("/prev_author_table", ensureAuthenticated, function(req, res){
   var db = req.test_db
   var prev = []
-  db.collection('users').find({start_date: {$lt: oneYearAgo}}, {"sort": "last_name"}).toArray((e, docs) => {
+  db.collection('users').find({start_date: {$lt: oneYearAgo}, end_date: {$gt: oneYearAgo}}, {"sort": "last_name"}).toArray((e, docs) => {
     for (i = 0; i < docs.length; i++) {
-      if(docs[i].end_date) {
+      var end = new Date(Number(docs[i].end_date) - 31556952000)
+      var start = new Date(Number(docs[i].start_date))
+      if(start < end && docs[i].end_date) {
+        docs[i]['current_user'] = req.user
         prev.push(docs[i])
-      } 
+      }
     }
     res.send(JSON.stringify({"data": prev}));
   })
 })
 
-router.get('/test', ensureAuthenticated, function(req, res) {
-  res.render('test', {page: 'TEST', menuId: 'home', title: 'TEST', user: req.user})
-})
 // Dealing with profiles
 router.get('/profile', ensureAuthenticated, function(req, res){
   // console.log(req.session)
