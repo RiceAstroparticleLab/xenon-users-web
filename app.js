@@ -115,12 +115,12 @@ app.use((req,res,next) => {
 })
 
 //app.listen(port, () => console.log(`Listening on port ${ port }`))
-app.use('/users_test/', landingRouter);
-app.use('/users_test/users', userRouter);
-app.use('/users_test/institutes', instituteRouter)
-app.use('/users_test/auth', authRouter)
-app.use('/users_test/shifts', shiftRouter)
-app.use('/users_test/admin', adminRouter)
+app.use('/', landingRouter);
+app.use('/users', userRouter);
+app.use('/institutes', instituteRouter)
+app.use('/auth', authRouter)
+app.use('/shifts', shiftRouter)
+app.use('/admin', adminRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
