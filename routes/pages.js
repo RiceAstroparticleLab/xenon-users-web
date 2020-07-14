@@ -1,9 +1,10 @@
 var express = require('express')
 var router = express.Router()
+var base = '/users_test'
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
-  return res.redirect('/auth/login');
+  return res.redirect(base + '/auth/login');
 }
 
 // /* GET home page. */
@@ -22,20 +23,7 @@ router.get('/fulldirectory', ensureAuthenticated, function(req, res) {
   var db = req.test_db
   var current = []
   var prev = []
-  var institutes = []
-
-  db.collection('users').distinct("institute", (e, docs) => {
-    // Hard code some exceptions
-    for (i = 0; i < docs.length; i++) {
-      if (docs[i] === "Bern/Freiburg" || docs[i] === null || docs[i] === "Munster" || docs[i] === "Other") {
-        console.log(`Institute not inserted: ${docs[i]}`)
-      } else {
-        //console.log(docs[i])
-        institutes.push(docs[i])
-      }
-    }
-  })
-
+  
   db.collection('users').find({}, {"sort": "last_name"}).toArray((e,docs) => {
     for (i = 0; i < docs.length; i++) {
       if(!docs[i].end_date) {
@@ -102,7 +90,9 @@ router.post("/curr_author_table", ensureAuthenticated, function(req, res){
 router.post("/prev_author_table", ensureAuthenticated, function(req, res){
   var db = req.test_db
   var prev = []
-  db.collection('users').find({start_date: {$lt: oneYearAgo}, end_date: {$gt: oneYearAgo}}, {"sort": "last_name"}).toArray((e, docs) => {
+  db.collection('users').find({start_date: {$lt: oneYearAgo}, 
+                                end_date: {$gt: oneYearAgo}}, 
+                              {"sort": "last_name"}).toArray((e, docs) => {
     for (i = 0; i < docs.length; i++) {
       var end = new Date(Number(docs[i].end_date) - 31556952000)
       var start = new Date(Number(docs[i].start_date))
@@ -117,9 +107,11 @@ router.post("/prev_author_table", ensureAuthenticated, function(req, res){
 
 // Dealing with profiles
 router.get('/profile', ensureAuthenticated, function(req, res){
-  // console.log(req.session)
-  // res.send(`Profile for the user: ${req.user.first_name} ${req.user.last_name}`)
-  res.render('profile', { page: 'Profile', menuId: 'home', title: `${req.user.first_name} ${req.user.last_name}`, user: req.user });
+  res.render('profile', { page: 'Profile', 
+                          menuId: 'home', 
+                          title: `${req.user.first_name} ${req.user.last_name}`, 
+                          user: req.user 
+                        });
 });
 
 module.exports = router

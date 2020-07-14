@@ -27,7 +27,7 @@ function InitializeTable(divname){
             }
         },
         ajax : {
-            url: '/curr_table_info',
+            url: 'curr_table_info',
 	        type: "POST",
         },
         columns : [	    
@@ -117,7 +117,7 @@ function InitializePrevTable(divname){
             }
         },
         ajax : {
-            url: '/prev_table_info',
+            url: 'prev_table_info',
 	        type: "POST",
         },
         columns : [	    
@@ -188,7 +188,7 @@ function PrevAuthorsTable(divname) {
     var table = $(divname).DataTable({
         lengthMenu: [[10, 50, 100, -1], [10, 50, 100, "All"]],
         ajax : {
-            url: '/prev_author_table',
+            url: 'prev_author_table',
 	        type: "POST",
         },
         columns : [	    
@@ -246,7 +246,7 @@ function CurrAuthorsTable(divname) {
     var table = $(divname).DataTable({
         lengthMenu: [[10, 50, 100, -1], [10, 50, 100, "All"]],
         ajax : {
-            url: '/curr_author_table',
+            url: 'curr_author_table',
 	        type: "POST",
         },
         columns : [	    

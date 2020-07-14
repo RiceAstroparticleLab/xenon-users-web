@@ -84,7 +84,7 @@ function InitializeCalendar(calling_user){
     $('#sign_up_form').submit(function(e){
         e.preventDefault();
         $.ajax({
-            url:'shifts/modify_shift',
+            url: 'shifts/modify_shift',
             type:'post',
             data:$('#sign_up_form').serialize(),
             success:function(){

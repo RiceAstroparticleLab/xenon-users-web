@@ -1,5 +1,6 @@
 var express = require("express")
 var router = express.Router()
+var base = '/users_test'
 
 // var Highcharts = require('highcharts');  
 // // Load module after Highcharts is loaded
@@ -7,7 +8,7 @@ var router = express.Router()
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
-  return res.redirect('/auth/login');
+  return res.redirect(base + '/auth/login');
 }
 
 /* GET Institutes List page. */

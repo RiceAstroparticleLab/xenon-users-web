@@ -1,6 +1,7 @@
 var express = require("express")
 var router = express.Router()
 var passport = require("passport")
+var base = '/users_test'
 
 // auth login page
 router.get('/login', (req, res) => {
@@ -19,7 +20,7 @@ router.get('/github',
 router.post('/password', 
   passport.authenticate('local', {failureRedirect: './login'}),
   (req, res) => {
-      res.redirect('/profile')
+      res.redirect(base + '/profile')
   }
 );
 
@@ -28,7 +29,7 @@ router.get('/github/callback',
     passport.authenticate('github', { failureRedirect: '/auth/login' }),
    (req, res) => {
        //console.log(req.url)
-        res.redirect('/profile')
+        res.redirect(base + '/profile')
 })
 
 
@@ -36,7 +37,7 @@ router.get('/github/callback',
 router.get('/logout', (req, res) => {
     req.logout();
     req.session.destroy();
-    res.redirect('/');
+    res.redirect(base + '/');
 })
 
 module.exports = router;
