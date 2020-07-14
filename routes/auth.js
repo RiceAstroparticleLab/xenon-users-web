@@ -18,7 +18,7 @@ router.get('/github',
 
 // local authentication
 router.post('/password', 
-  passport.authenticate('local', {failureRedirect: './login'}),
+  passport.authenticate('local', {failureRedirect: base + '/auth/login'}),
   (req, res) => {
       res.redirect(base + '/profile')
   }
@@ -26,7 +26,7 @@ router.post('/password',
 
 // callback link
 router.get('/github/callback',
-    passport.authenticate('github', { failureRedirect: '/auth/login' }),
+    passport.authenticate('github', { failureRedirect: base + '/auth/login' }),
    (req, res) => {
        //console.log(req.url)
         res.redirect(base + '/profile')
