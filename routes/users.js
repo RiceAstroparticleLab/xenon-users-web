@@ -1,11 +1,12 @@
 var express = require("express")
 var router = express.Router()
 var ObjectId = require('mongodb').ObjectId; 
+var base = '/users_test'
 
 // authentication
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
-    return res.redirect('/auth/login');
+    return res.redirect(base + '/auth/login');
 }
 
 router.post('/updateContactInfo', ensureAuthenticated, (req, res) => {
@@ -32,7 +33,7 @@ router.post('/updateContactInfo', ensureAuthenticated, (req, res) => {
 		      {"$set": idoc});
     // console.log(req.user);
     // console.log(idoc);    
-    return(res.redirect('/profile'));
+    return(res.redirect(base + '/profile'));
 }); 
 
 router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, res) => {
@@ -45,7 +46,9 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, 
     idoc['first_name'] = req.body.FirstName;
     idoc['last_name'] = req.body.LastName;
     idoc['email'] = req.body.Email;
-    idoc['institute'] = req.body.Institute;
+    if(req.body.position != null){
+        idoc['institute'] = req.body.institute;
+    }
     if(req.body.position != null){
         idoc['position'] = req.body.position;
     }
@@ -83,7 +86,7 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, 
         page = 'institutes/' + split
     }
         
-    return res.redirect('/'+page)
+    return res.redirect(base + '/'+page)
 })
 
 /* POST req to add a user */
@@ -99,7 +102,7 @@ router.post('/adduser', ensureAuthenticated, (req, res) => {
     idoc['first_name'] = req.body.FirstName;
     idoc['last_name'] = req.body.LastName;
     idoc['email'] = req.body.Email;
-    idoc['institute'] = req.body.Institute;
+    idoc['institute'] = req.body.institute;
     idoc['position'] = req.body.position;
     idoc['percent_xenon'] = req.body.Time;
     idoc['tasks'] = req.body.Tasks;
@@ -112,7 +115,7 @@ router.post('/adduser', ensureAuthenticated, (req, res) => {
     try {
         db.collection('users').insertOne(idoc)
         console.log(`success. Added ${req.body.FirstName} ${req.body.LastName}`)
-        res.redirect(`/institutes/${req.body.Institute}`)
+        res.redirect(`${base}/institutes/${req.body.Institute}`)
     } catch (e) {
         console.log(e)
     }

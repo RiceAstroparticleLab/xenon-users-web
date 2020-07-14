@@ -1,10 +1,11 @@
 var express = require("express")
 var url = require("url");
 var router = express.Router()
+var base = '/users_test'
 
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
-    return res.redirect('/auth/login');
+    return res.redirect(base + '/auth/login');
 }
 
 /* GET home page. */
@@ -72,26 +73,25 @@ router.get('/get_shifts', ensureAuthenticated, function(req, res){
 	console.log(`start: ${start}`)
 	console.log(`end: ${end}`)
 
-    collection.find({"start": {"$gt": start, "$lt": end}}).toArray( 
-		function(e, docs){
-			// console.log(`docs: ${docs}`)
-			var ret = [];
-			for(var i = 0; i < docs.length; i+=1){
-			    doc = docs[i];
-			    ret.push({
-				"start": doc['start'].toISOString().substr(0, 19),
-				"end": doc['end'].toISOString().substr(0, 19),
-				"title": doc['type'] + ': ' + doc['shifter'] + 
-				    '(' + doc['institute'] + ')',
-				"type": doc['type'],
-				"available": doc['available'],
-				"institute": doc['institute'],
-				"shifter": doc['shifter']
-			    })
-			}
-			console.log(`ret: ${ret}`)
-			return res.send(ret); 
-		    });
+    collection.find({"start": {"$gt": start, "$lt": end}}).toArray(function(e, docs){
+        // console.log(`docs: ${docs}`)
+        var ret = [];
+        for(var i = 0; i < docs.length; i+=1){
+            doc = docs[i];
+            ret.push({
+            "start": doc['start'].toISOString().substr(0, 19),
+            "end": doc['end'].toISOString().substr(0, 19),
+            "title": doc['type'] + ': ' + doc['shifter'] + 
+                '(' + doc['institute'] + ')',
+            "type": doc['type'],
+            "available": doc['available'],
+            "institute": doc['institute'],
+            "shifter": doc['shifter']
+            })
+        }
+        console.log(`ret: ${ret}`)
+        return res.send(ret); 
+	});
     
 });
 

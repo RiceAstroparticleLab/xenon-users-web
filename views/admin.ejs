@@ -2,7 +2,6 @@
 <html lang="en">
 <style>
     .dash-panel > .panel-heading{
-        background-color:#8eaebd; 
         height: 165px;
         color: white;
     }
@@ -12,9 +11,15 @@
         border-top: none;
         border-radius: 0px 0px 4px 4px;
     }
+
+    .nav-pills>li.active>a{
+        color: white !important;
+        background-color: #183046 !important;
+    }
 </style>
 <head>
     <% include components/head %> 
+    <script src="/javascripts/admin_scripts.js" type="text/javascript"></script>
 </head>
 <body>
     <% include components/menu %>
@@ -32,55 +37,80 @@
         <div class="col-sm-9" style="padding-top:20px;padding-right:55px;padding-left:40px">
             <div class="tab-content">
                 <div class="tab-pane fade in active" id="github">
-                    <h3 style="letter-spacing:4px;font-weight:400;display:inline-block;margin:0px;padding-top:14px;">DASHBOARD</h3>
-                    <button class="btn btn-coral pull-right"><i class="fas fa-sync-alt"></i>&nbsp;&nbsp;&nbsp;Refresh</button>
-                    <div class="row" style="padding-top:30px">
-                        <div class="col-md-4">
-                            <div class="panel dash-panel">
-                                <div class="panel-heading">
-                                <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;"><%= remove.length %></h1>
-                                <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">REMOVE FROM GITHUB</h3>
+                    <ul class="nav nav-pills" style="padding-top:20px;">
+                        <li class="active"><a data-toggle="pill" href="#xenon1t">XENON1T</a></li>
+                        <li><a data-toggle="pill" href="#xenonnt">XENONnT</a></li>
+                        <button class="btn btn-coral pull-right" style="margin-top:-2px;background-color:#8eaebd"><i class="fas fa-sync-alt"></i>&nbsp;&nbsp;&nbsp;Refresh</button>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="xenon1t" class="tab-pane fade in active">
+                            <div class="row" style="padding-top:30px">
+                                <div class="col-md-6">
+                                    <div class="panel dash-panel">
+                                        <div class="panel-heading" style="background-color: #c43e3e;">
+                                        <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;">0</h1>
+                                        <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">REMOVE FROM GITHUB</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <table id='remove_1t' class="table">
+                                               
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="panel-body">
-                                    <table class="table">
-                                        <% for (i=0; i < remove.length; i++) {%>
-                                            <tr>
-                                                <td><%= remove[i][0].first_name %>
-                                                <%= remove[i][0].last_name %></td>
-                                                <td><button class="btn-circle red"><i class="fas fa-times"></i></button></td>
-                                            </tr>
-                                        <%}%>
-                                    </table>
+                                <div class="col-md-6">
+                                    <div class="panel dash-panel">
+                                        <div class="panel-heading" style="background-color:#2b3137;">
+                                            <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;">0</h1>
+                                            <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">ADD TO GITHUB</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <table class="table"></table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="panel dash-panel">
-                                <div class="panel-heading">
-                                    <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;">0</h1>
-                                    <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">ADD TO GITHUB</h3>
+                            
+                        <div id="xenonnt" class="tab-pane fade">
+                            <div class="row" style="padding-top:30px">
+                                <div class="col-md-6">
+                                    <div class="panel dash-panel">
+                                        <div class="panel-heading" style="background-color: #c43e3e;">
+                                        <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;">0</h1>
+                                        <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">REMOVE FROM GITHUB</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <table class="table">
+                                               
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="panel-body">
-                                No users for now
+                                <div class="col-md-6">
+                                    <div class="panel dash-panel">
+                                        <div class="panel-heading" style="background-color:#2b3137;">
+                                            <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;">0</h1>
+                                            <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">ADD TO GITHUB</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                        No users for now
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                    </div>
+                    <div class="col">
                         <div class="panel dash-panel">
-                                <div class="panel-heading">
-                                <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;"><%= add_db.length %></h1>
+                            <div class="panel-heading" style="background-color:#3fa037">
+                                <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;">0</h1>
                                 <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">ADD TO DB</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <table class="table">
-                                        <% for (i=0; i < add_db.length; i++) {%>
-                                            <tr>
-                                                <td><%= add_db[i].toString().replace(/,/g, " "); %></td>
-                                                <td><button class="btn-circle green"><i class="fas fa-plus"></i></button></td>
-                                            </tr>
-                                        <%}%>
-                                    </table>
-                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <table id="add_db" class="table">
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -95,4 +125,10 @@
         </div>
     </div>
 </body>
+<script>
+    $(document).ready(function(){
+        loadAddToDB('#add_db')
+        loadXENON1t('#remove_1t')
+    })
+</script>
 </html>

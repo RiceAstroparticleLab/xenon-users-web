@@ -5,7 +5,6 @@
  */
 
 var app = require('../app');
-// var debug = require('debug')('waveform-watch-web:server');
 var http = require('http');
 
 /**
@@ -18,7 +17,6 @@ app.set('port', port);
 /**
  * Create HTTP server.
  */
-
 var server = http.createServer(app);
 
 /**

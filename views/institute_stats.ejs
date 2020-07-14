@@ -58,7 +58,7 @@
             <h3>Members</h3>
             <!-- make this button available only if authorized as admin/PI-->
             <!-- Button triggers newUserModal -->
-            <% if ((user.position == "PI" && user.institute == page) || (user.groups != "undefined")) {%>
+            <% if ((user.position == "PI" && user.institute == page) || (user.groups !== undefined)) {%>
               <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#newUserModal" style="float:right;margin-top:20px">Add Member</button>
             <%}%>  
           <% include components/directory %>

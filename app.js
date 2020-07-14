@@ -28,12 +28,21 @@ MongoClient.connect(process.env.MONGO_LOCAL_URI, {useUnifiedTopology: true}, (er
 })
 
 /* GLOBAL VARIABLES */
-global.array_of_institutes = ['Bologna', 'Coimbra', 'Columbia', 'Freiburg', 'KIT', 
-                              'Kobe', 'LAL', "L'Aquila", 'LNGS-GSSI', 'LPNHE', 'Mainz',
-                              'MPI Heidelberg', 'Munster', 'Nagoya', 'Naples', 'Nikhef',
-                              'NYUAD', 'Purdue', 'Rensselear', 'Rice', 'Stockholm',
-                              'Subatech', 'Subatech', 'Tokyo', 'Torino', 'UChicago', 
-                              'UCSD', 'WIS', 'Zurich'];
+ // notes:
+        // Bern/Freiburg -> Freiburg
+        // Chicago -> UChicago
+        // INFN Naples -> Naples
+        // LNGS -> LNGS-GSSI
+        // MPIK Heidelberg -> MPI Heidelberg
+        // Muenster -> Munster
+        // UC San Diego -> UCSD
+        // Weizmann -> WIS
+global.array_of_institutes = [['Bologna'], ['Coimbra'], ['Columbia'], ['Freiburg', 'Bern/Freiburg'], ['KIT'], 
+                              ['Kobe'], ["L'Aquila"], ['LAL'], ['LNGS-GSSI', 'LNGS'], ['LPNHE'], ['Mainz'],
+                              ['MPI Heidelberg', 'MPIK Heidelberg'], ['Munster', 'Muenster'], ['Nagoya'], 
+                              ['Naples', 'INFN Naples'], ['Nikhef'], ['NYUAD'], ['Purdue'], ['Rensselear'], 
+                              ['Rice'], ['Stockholm'], ['Subatech'], ['Tokyo'], ['Torino'], 
+                              ['UChicago', 'Chicago'], ['UCSD', 'UC San Diego'], ['WIS', 'Weizmann'], ['Zurich']];
 
 // Routers for subsites
 var landingRouter = require('./routes/pages');
@@ -107,12 +116,12 @@ app.use((req,res,next) => {
 })
 
 //app.listen(port, () => console.log(`Listening on port ${ port }`))
-app.use('/', landingRouter);
-app.use('/users', userRouter);
-app.use('/institutes', instituteRouter)
-app.use('/auth', authRouter)
-app.use('/shifts', shiftRouter)
-app.use('/admin', adminRouter)
+app.use('/users_test/', landingRouter);
+app.use('/users_test/users', userRouter);
+app.use('/users_test/institutes', instituteRouter)
+app.use('/users_test/auth', authRouter)
+app.use('/users_test/shifts', shiftRouter)
+app.use('/users_test/admin', adminRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

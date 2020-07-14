@@ -11,20 +11,20 @@
       <h2 style="color:#031424;float:left;padding: 15px 0px 0px 35px;padding-bottom:20px;">Institutes</h2>
     </div>
     <div class="col-sm-6">
-      <h4 style="text-align:right;padding:35px;">Number of Institutes: <%= data.length %></h4>
+      <h4 style="text-align:right;padding:35px;">Number of Institutes: <%= institutes.length %></h4>
     </div>
   </div>  
   <div class="row">
     <div class="col-sm-12">
-      <% for (i = 0; i < data.length; i++) {%>
-          <a class="btn btn-institutes" href="/institutes/<%=data[i]%>"><%=data[i]%></a>
+      <% for (i = 0; i < institutes.length; i++) {%>
+          <a class="btn btn-institutes" href="institutes/<%=institutes[i][0]%>"><%=institutes[i][0]%></a>
           &nbsp; &nbsp; &nbsp; &nbsp;
       <%}%>
     </div>
   </div>
   <hr>
   <br>
-  <h4>For full member directory visit <a href="/fulldirectory">/fulldirectory</a></h4>
+  <h4>For full member directory visit <a href="fulldirectory">/fulldirectory</a></h4>
 </div>
 </body>
 </html>

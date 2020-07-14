@@ -51,8 +51,12 @@
     
                   <div class="row" style="margin-top:12px">
                     <label for="institute" style="padding-left:30px">Institute</label><br>
-                    <div style="text-align:center;">
-                      <input id="institute" type="text" name="Institute" />
+                    <div style="padding-left:30px">
+                      <select name="institute" id="institute">
+                        <% for (i = 0; i < institutes.length; i++) {%>
+                          <option value="<%= institutes[i][0]%>"><%= institutes[i][0]%></option>
+                        <%}%>
+                      </select>
                     </div>
                   </div>
 
