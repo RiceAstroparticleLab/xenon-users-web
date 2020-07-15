@@ -15,8 +15,7 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 
 
 router.get('/get_current_shifters', ensureAuthenticated, function(req, res){
-	//var db = req.run_db;
-	var db = req.test_db
+	var db = req.recode_db
 
     var today = new Date();
     db.collection("shifts").find(
@@ -62,8 +61,7 @@ router.get('/get_current_shifters', ensureAuthenticated, function(req, res){
  * The arguments are fixed as 'start' and 'end', which are ISO dates 
  */
 router.get('/get_shifts', ensureAuthenticated, function(req, res){
-	// var db = req.run_db;
-	var db = req.test_db
+	var db = req.recode_db
     var collection = db.collection("shifts");
 
     var q = url.parse(req.url, true).query;
@@ -96,9 +94,7 @@ router.get('/get_shifts', ensureAuthenticated, function(req, res){
 });
 
 router.get("/total_shift_aggregates", ensureAuthenticated, function(req, res){
-    
-	//var db = req.run_db;
-	var db = req.test_db
+	var db = req.recode_db
     db.collection('shifts').aggregate([
 	{"$match": {"institute": {"$ne": "none"}}}, 
 	{$group: { "_id": { "institute": "$institute", "yr": {"$year": "$start"}}, 
@@ -118,7 +114,7 @@ router.post("/get_rules", ensureAuthenticated, function(req,res){
     var year = req.body.years
     console.log(typeof year)
 
-    var db = req.test_db
+    var db = req.recode_db
     db.collection('shift_ruls').find({"year": year}, {"$sort": {"institute": 1}}).toArray((err,result) => {
         // console.log(result)
         res.status(200).send(result)
@@ -132,8 +128,7 @@ function getNextDayOfWeek(date, dayOfWeek) {
     return resultDate;
 }
 router.post('/add_shifts', ensureAuthenticated, function(req, res){
-	// var db = req.run_db;
-	var db = req.test_db
+	var db = req.recode_db
     
       // Get form data
       var start = new Date(Date.UTC(parseInt(req.body.start_date.substr(0, 4)), 
@@ -176,8 +171,7 @@ router.post('/add_shifts', ensureAuthenticated, function(req, res){
 });
 
 router.post('/remove_shifts', ensureAuthenticated, function(req, res){
-	// var db = req.run_db;
-	var db = req.test_db
+	   var db = req.recode_db
       var collection = db.collection("shifts");
     
        var start = new Date(req.body.start_date);
@@ -199,9 +193,7 @@ router.post('/remove_shifts', ensureAuthenticated, function(req, res){
 });
 
 router.post('/modify_shift', ensureAuthenticated, function(req, res){
-
-	// var db = req.run_db;
-      var db = req.test_db
+      var db = req.recode_db
 
       var collection = db.collection("shifts");
 

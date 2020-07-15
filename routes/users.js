@@ -10,7 +10,7 @@ function ensureAuthenticated(req, res, next) {
 }
 
 router.post('/updateContactInfo', ensureAuthenticated, (req, res) => {
-    var db = req.test_db;
+    var db = req.recode_db;
     var idoc = {};
     if(req.body.email != ""){
         idoc['email'] = req.body.email;
@@ -38,7 +38,7 @@ router.post('/updateContactInfo', ensureAuthenticated, (req, res) => {
 
 router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, res) => {
     // Get our form values. These rely on the "name" attributes
-    var db = req.test_db
+    var db = req.recode_db
     var user_id = new ObjectId(req.params.userid)
     var page = req.params.page
 
@@ -95,7 +95,7 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, 
 // in edit: cell, 
 // admin: % xenon, start date, end date, position, institute
 router.post('/adduser', ensureAuthenticated, (req, res) => {
-    var db = req.test_db
+    var db = req.recode_db
 
     // Get our form values. These rely on the "name" attributes
     var idoc = {};

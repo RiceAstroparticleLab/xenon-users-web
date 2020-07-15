@@ -23,7 +23,7 @@ router.get('/', ensureAuthenticated, function(req, res) {
 })
 
 router.get('/add_to_db', ensureAuthenticated, function(req,res) {
-  db = req.test_db;
+  db = req.recode_db;
   var add_db = [];
   db.collection('github_users').find({}).forEach((doc) => {
     var name_arr = []
@@ -95,7 +95,7 @@ router.get('/gitremove_xenon1t', ensureAuthenticated, function(req, res) {
 
 router.post('/get_github', ensureAuthenticated, function(req, res) {
   
-  db = req.test_db
+  db = req.recode_db
   async function getXenon1tUsernames() {
     let page1 = octokit.orgs.listMembers({
       org: "XENON1T",

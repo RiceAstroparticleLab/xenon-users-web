@@ -11,12 +11,15 @@ var CALLBACK_LOCAL_URL = process.env.CALLBACK_LOCAL_URL;
 var LocalStrategy = require('passport-local').Strategy;
 const GENERAL_LOGIN_PW = process.env.GENERAL_LOGIN_PW;
 
-// connecting MONGO
+// connect to the mongo server
 const MongoClient = require('mongodb').MongoClient
-var local_uri = process.env.MONGO_LOCAL_URI
+// const mongoURI = process.env.DAQ_MONGO_URI
+const mongoURI = process.env.MONGO_LOCAL_URI
 var use_db
-MongoClient.connect(local_uri, {useUnifiedTopology: true}, (err, db) => {
-    use_db = db.db('xenon'),
+MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
+    use_db = db.db('xenon')
+    // use_db = db.db("recode")
+    console.log(`Connected in passport`),
     err => {console.log(err)}
 })
 

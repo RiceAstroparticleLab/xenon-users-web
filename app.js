@@ -8,22 +8,13 @@ var dotenv = require('dotenv')
 dotenv.config()
 // connect to the mongo server
 const MongoClient = require('mongodb').MongoClient
-const mongoURI = process.env.DAQ_MONGO_URI
-var xenonnt_db
-var run_db
-var test_db
-global.recode_db
+// const mongoURI = process.env.DAQ_MONGO_URI
+const mongoURI = process.env.MONGO_LOCAL_URI
+var recode_db
 MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
-    xenonnt_db = db.db("xenonnt"),
-    run_db = db.db("run"),
-    recode_db = db.db("recode")
+    recode_db = db.db('xenon')
+    // recode_db = db.db("recode")
     console.log(`mongoDB is connected to remote mongo`),
-    err => {console.log(err)}
-})
-
-MongoClient.connect(process.env.MONGO_LOCAL_URI, {useUnifiedTopology: true}, (err, db) => {
-    test_db = db.db('xenon'),
-    console.log(`mongoDB is connected to local mongo`),
     err => {console.log(err)}
 })
 
@@ -108,10 +99,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Make our db accessible to our router
 app.use((req,res,next) => {
-    req.xenonnt_db = xenonnt_db
-    req.run_db = run_db
     req.recode_db = recode_db
-    req.test_db = test_db
     next()
 })
 
