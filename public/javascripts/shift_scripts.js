@@ -169,14 +169,16 @@ function InitializeCalendar(calling_user){
             if(calEvent.available){
                 $('#btn_mark_available').attr("disabled", true);
                 $('#btn_sign_up').attr("disabled", false);
+                $('#btn_assign_shftr').attr("disabled", false)
             }
             else{
 		        $('#btn_sign_up').attr("disabled", true);
-		    
+                $('#btn_assign_shftr').attr("disabled", true)
+
                 // Want to allow people to set as available only if allowed 
                 console.log(calEvent);
 		        console.log(`calling_user: ${calling_user} `);
-                if( calling_user == calEvent.shifter )
+                if( calling_user.daq_id == calEvent.shifter )
                     $('#btn_mark_available').attr("disabled", false);
                 else
                     $('#btn_mark_available').attr("disabled", true);
@@ -191,6 +193,10 @@ function InitializeCalendar(calling_user){
             +calEvent.start+"', '"
             +calEvent.end+"', '"+calEvent.shifter+"', '"+
             calEvent.institute+"')");
+            $("#btn_assign_shftr").attr("onclick",
+                            "SignUp('"+calEvent.type+"', '"
+                            +calEvent.start+"', '"
+                            +calEvent.end+"')");
 
             // Put at proper location     
             var x = (jsEvent.clientX + 20) + 'px',

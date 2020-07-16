@@ -129,7 +129,6 @@ passport.use(new GitHubStrategy({
 
     // asynchronous verification 
     process.nextTick(() => {
-
         var github_login = profile._json.login 
         octokit.orgs.checkMembershipForUser({
             org: "XENON1T",
@@ -188,6 +187,44 @@ passport.use(new GitHubStrategy({
         });     
     });
 }));
+
+// Login with LNGS 
+// var LdapStrategy = require('passport-ldapauth').Strategy;
+// var OPTS = {
+//   server: {
+//     url: process.env.LDAP_URI,
+//     bindDn: process.env.LDAP_BIND_DN,
+//     bindCredentials: process.env.LDAP_BIND_CREDENTIALS,
+//     searchBase: 'ou=xenon,ou=accounts,dc=lngs,dc=infn,dc=it',
+//       searchFilter: '(uid={{username}})' //'(uid=%(user)s)'
+//   },
+//     usernameField: 'user',
+//     passwordField: 'password'
+// };
+// passport.use(new LdapStrategy(OPTS,
+//              function(user, done) {
+
+//                  // Need to verify uid matches
+//                  var collection = runs_db.get("users");
+//                  collection.find({"lngs_ldap_uid": user.uid},
+//                                  function(e, docs){
+//                                      if(docs.length===0){
+// 					 console.log("No user " + user.uid + " in DB");
+// 					 return done(null, false, "Couldn't find user in DB");
+// 				     }
+// 				     var doc = docs[0];
+// 				     var ret_profile = PopulateProfile(doc, {}, user, function(ret_profile){
+// 					 // Save a couple things from the github profile 
+// 					 collection.update({"lngs_ldap_uid": user.uid},
+// 							   {"$set": { 
+// 							       "lngs_ldap_email": user.mail,
+// 							       "lngs_ldap_cn": user.cn
+// 							   }
+// 							   });
+// 					 return done(null, ret_profile);
+// 				     });
+//                                  }); // end mongo query
+//              }));
 
 // Login with Local username/pw
 passport.use(new LocalStrategy(

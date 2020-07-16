@@ -94,7 +94,7 @@
                                             <strong>Start Date</strong> 
                                         </div>
                                         <div class="col-6">
-                                            <input name="start_date" type="date" required>
+                                            <input name="start_date" type="date" placeholder="YYYY-MM-DD" required>
                                         </div>
                                     </div>
                                 </div>
@@ -104,7 +104,7 @@
                                             <strong>End Date</strong>  
                                         </div>
                                         <div class="col-6">
-                                            <input name="end_date" type="date" required>
+                                            <input name="end_date" type="date" placeholder="YYYY-MM-DD" required>
                                         </div>
                                     </div>
                                 </div>
@@ -156,7 +156,7 @@
                                             <strong>Start Date</strong>
                                         </div>
                                         <div class="col-6">
-                                            <input name="start_date" type="date" required="required">
+                                            <input name="start_date" type="date" placeholder="YYYY-MM-DD" required="required">
                                         </div>
                                     </div>
                                 </div>
@@ -166,7 +166,7 @@
                                             <strong>End Date</strong>
                                         </div>
                                         <div class="col-6">
-                                            <input name="end_date" type="date" required="required">
+                                            <input name="end_date" type="date" placeholder="YYYY-MM-DD" required="required">
                                         </div>
                                     </div>
                                 </div>
@@ -321,6 +321,79 @@
         </div>
     </div>
 
+    <!-- Shift Sign Up -->
+    <div class="modal fade in" id="assignModal">   
+        <div class="modal-dialog modal-md">
+            <div class="modal-content" style="padding: 20px 45px 20px 45px; background-color: #fdfdfd;">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="assign_title"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp; &nbsp;Assign user to a Shift</h3>
+                </div>
+                <span style="font-size:12px;">
+                    <strong style="color: #e96245">* required field</strong>
+                </span>
+                <form id="sign_up_form" method="POST" style="margin-top: 0px">
+                    <div class="modal-body" style="min-height:200px;overflow-y:auto">           
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Shift Start</strong>
+                            </div>
+                            <div class="col-6">
+                                <input id="id_start_date" type="date" name="start_date" readonly>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:12px">
+                            <div class="col-6">
+                                <strong>Shift End</strong>
+                            </div>
+                            <div class="col-6">
+                                <input id="id_end_date" type="date" name="end_date" readonly>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:12px">
+                            <div class="col-6">
+                                <strong>Shifter</strong>
+                            </div>
+                            <div class="col-6">
+                                <input id="id_shifter" type="text" name="shifter">
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:12px">
+                            <div class="col-6">
+                                <strong>Institute</strong>
+                            </div>
+                            <div class="col-6">
+                                <input id="id_institute" type="text" name="institute">
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:12px">
+                            <div class="col-6">
+                                <strong>Shift Type</strong>
+                            </div>
+                            <div class="col-6">
+                                <select id="id_shift_type" name="shift_type"></select>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top:12px">
+                            <div class="col-6">
+                                <strong>Will the shifter have access to transportation?</strong><strong style="color: #e96245">*</strong>
+                            </div>
+                            <div class="col-6">
+                                <input id="id_has_car" type="checkbox" name=has_car required>
+                                <span>&nbsp;(check for yes)</span>
+                            </div>
+                        </div>
+                  
+                         
+                        <input id="id_remove" type="hidden" value="false" name="remove">
+                    </div>
+                    <div class="modal-footer">
+                        <button id="shift_submit_button" type="submit" style="background-color:#588296;border:#718c99;border-radius:5px;width:100%;padding:16px 32px;color:white;">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Shift Tooltip -->
     <div class="ttip" id="ttip">
        <div class="row" style="width:440px;margin-left:10px; padding-bottom: 5px; padding-top: 3px;">
@@ -368,6 +441,8 @@
                 <span>&nbsp;</span>
                 <!-- Add this button back when i know what it does lol -->
                 <!-- <button class="btn btn-info" id="btn_train">Sign up for Training</button> -->
+                <button class="btn btn-primary" id="btn_assign_shftr">Assign Shifter</button>
+                <span>&nbsp;</span>
             </div>
         </div>
     </div>
@@ -377,7 +452,7 @@
     $(function() {
         // page is now ready, initialize the calendar...
         ShiftRules("#rules_table")
-        InitializeCalendar("<%= user.daq_id %>");
+        InitializeCalendar("<%= user %>");
         // initialize the table
         FillAggregates("#aggregate_table_body", "#table_head_this_year", "<%= user.institute %>");
     });
