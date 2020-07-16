@@ -13,12 +13,12 @@ const GENERAL_LOGIN_PW = process.env.GENERAL_LOGIN_PW;
 
 // connect to the mongo server
 const MongoClient = require('mongodb').MongoClient
-// const mongoURI = process.env.DAQ_MONGO_URI
-const mongoURI = process.env.MONGO_LOCAL_URI
+const mongoURI = process.env.DAQ_MONGO_URI
+// const mongoURI = process.env.MONGO_LOCAL_URI
 var use_db
 MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
-    use_db = db.db('xenon')
-    // use_db = db.db("recode")
+    // use_db = db.db('xenon')
+    use_db = db.db("recode")
     console.log(`Connected in passport`),
     err => {console.log(err)}
 })
