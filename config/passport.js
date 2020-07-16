@@ -119,9 +119,9 @@ const octokit = new Octokit({
 
 // Login with github
 passport.use(new GitHubStrategy({
-    clientID: process.env.TEST_CLIENT_ID , // GITHUB_CLIENT_ID process.env.TEST_CLIENT_ID
-    clientSecret: process.env.TEST_SECRET_KEY, // GITHUB_CLIENT_SECRET process.env.TEST_SECRET_KEY
-    callbackURL: process.env.TEST_CALLBACK_URL, //CALLBACK_URL process.env.TEST_CALLBACK_URL
+    clientID: GITHUB_CLIENT_ID, // GITHUB_CLIENT_ID process.env.TEST_CLIENT_ID
+    clientSecret: GITHUB_CLIENT_SECRET, // GITHUB_CLIENT_SECRET process.env.TEST_SECRET_KEY
+    callbackURL: CALLBACK_URL, //CALLBACK_URL process.env.TEST_CALLBACK_URL
     scope: ["read:user", "read:orgs"]
   }, 
   function (accessToken, refreshToken, profile, done) {
