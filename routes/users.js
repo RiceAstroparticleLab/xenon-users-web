@@ -115,7 +115,7 @@ router.post('/adduser', ensureAuthenticated, (req, res) => {
     try {
         db.collection('users').insertOne(idoc)
         console.log(`success. Added ${req.body.FirstName} ${req.body.LastName}`)
-        res.redirect(`${base}/institutes/${req.body.Institute}`)
+        res.redirect(`${base}/institutes/${req.body.institute}`)
     } catch (e) {
         console.log(e)
     }
