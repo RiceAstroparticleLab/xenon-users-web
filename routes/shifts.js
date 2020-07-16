@@ -150,7 +150,7 @@ router.post('/add_shifts', ensureAuthenticated, function(req, res){
     var credit_multiplier = req.body.credit_multiplier;
 
 	start = getNextDayOfWeek(start, weekday);
-	console.log(`day of week: ${start_monday}`)
+	console.log(`day of week: ${start}`)
     var idoc;
     if(start < end){ // why the while loop originally?
         var end_of_shift = new Date(Date.UTC(start.getFullYear(), start.getMonth(), start.getDate(),

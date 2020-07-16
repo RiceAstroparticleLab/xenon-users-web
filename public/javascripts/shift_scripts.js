@@ -105,7 +105,8 @@ function InitializeCalendar(calling_user){
             success: function(){
                 alert("Added your shifts! Please refresh and check out the calendar page.");
             },
-            error: function(){
+            error: function(e){
+                console.log(e)
                 alert("Error adding your shifts... sorry? Hey, could it be that you don't have permission?");
             }
         });
