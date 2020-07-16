@@ -169,7 +169,10 @@ function InitializeCalendar(calling_user){
             if(calEvent.available){
                 $('#btn_mark_available').attr("disabled", true);
                 $('#btn_sign_up').attr("disabled", false);
-                $('#btn_assign_shftr').attr("disabled", false)
+                if( calling_user.position == "PI" || calling_user.groups != undefined )
+                    $('#btn_assign_shftr').attr("disabled", false)
+                else
+                    $('#btn_assign_shftr').attr("disabled", false)
             }
             else{
 		        $('#btn_sign_up').attr("disabled", true);

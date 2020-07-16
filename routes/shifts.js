@@ -145,17 +145,23 @@ router.post('/add_shifts', ensureAuthenticated, function(req, res){
       // if(typeof(req.user.groups) == "undefined" || !req.user.groups.includes("operations"))
 	// return res.send(JSON.stringify({"res": "Woah, who do you think you are there buddy?"}));
     
-      // var weekday = req.body.shift_change_day;
-      var shift_type = req.body.shift_type;
-      var credit_multiplier = req.body.credit_multiplier;
+    var weekday = req.body.shift_change_day
+    var shift_type = req.body.shift_type;
+    var credit_multiplier = req.body.credit_multiplier;
 
-	// start = getNextDayOfWeek(start, weekday);
-	console.log(`day of week: ${start}`)
-      var idoc;
-	if(start < end){ // why the while loop originally?
+	start = getNextDayOfWeek(start, weekday);
+	console.log(`day of week: ${start_monday}`)
+    var idoc;
+    if(start < end){ // why the while loop originally?
+        var end_of_shift = new Date(Date.UTC(start.getFullYear(), start.getMonth(), start.getDate(),
+				    0, 0, 0));
+        end_of_shift.setDate(start.getDate() + 7);
+        end_of_shift.setHours(23, 59, 59, 0);
+
 		idoc = {
-			"start": new Date(start),
-			"end": new Date(end),
+			"start":  new Date(Date.UTC(start.getFullYear(), start.getMonth(), start.getDate(),
+            0, 0, 0)),
+			"end": end_of_shift,
 			"type": shift_type,
 			"available": true,
 			"credit_multiplier": credit_multiplier,
