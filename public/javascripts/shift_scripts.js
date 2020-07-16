@@ -236,7 +236,24 @@ function SignUp(shiftType, shiftStart, shiftEnd){
 
 
 }
-    
+
+function Assign(shiftType, shiftStart, shiftEnd){
+
+    $('#assign_start_date').val(moment(parseInt(shiftStart)).format("YYYY-MM-DD"));
+    $("#assign_start_date").prop("readonly", true);
+    $('#assign_end_date').val(moment(parseInt(shiftEnd)).format("YYYY-MM-DD"));
+    $("#assign_end_date").prop("readonly", true);
+    $('#assignModal').modal('show');
+
+    ret = "";
+    ret+="<option value='"+shiftType+"'>"+shiftType+"</option>";
+    ret+="<option value='training'>training</option>";
+    document.getElementById("assign_shift_type").innerHTML=ret;
+    document.getElementById("assign_remove").checked = false;
+    $("#assign_remove").val(false);
+
+
+}
     
 function SignUpTrain(shiftType, shiftStart, shiftEnd){
 
