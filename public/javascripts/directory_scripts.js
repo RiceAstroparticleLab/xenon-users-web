@@ -313,7 +313,7 @@ function openModal(data, page) {
         
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this)
-        document.getElementById("formUpdateUser").action = "/users/"+curr_pg+"/"+user_info._id+"/updateContactInfoAdmin"
+        document.getElementById("formUpdateUser").action = "users/"+curr_pg+"/"+user_info._id+"/updateContactInfoAdmin"
         modal.find('.modal-body input[name="FirstName"]').val(user_info.first_name)
         modal.find('.modal-body input[name="LastName"]').val(user_info.last_name)
         modal.find('.modal-body input[name="Email"]').val(user_info.email)
@@ -369,7 +369,7 @@ function UpdateUserModal() {
     console.log(institute)
      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
      var modal = $(this)
-     document.getElementById("formUpdateUser").action = "/users/Institute_"+institute+"/"+user_info._id+"/updateContactInfoAdmin"
+     document.getElementById("formUpdateUser").action = "users/Institute_"+institute+"/"+user_info._id+"/updateContactInfoAdmin"
      modal.find('.modal-body input[name="FirstName"]').val(user_info.first_name)
      modal.find('.modal-body input[name="LastName"]').val(user_info.last_name)
      modal.find('.modal-body input[name="Email"]').val(user_info.email)
