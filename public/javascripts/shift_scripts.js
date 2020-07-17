@@ -257,9 +257,9 @@ function SignUp(shiftType, shiftStart, shiftEnd){
 
 function Assign(shiftType, shiftStart, shiftEnd){
 
-    $('#assign_start_date').val(moment(parseInt(shiftStart)).format("YYYY-MM-DD"));
+    $('#assign_start_date').val(moment(parseInt(shiftStart)).tz('Atlantic/St_Helena').format("YYYY-MM-DD"));
     $("#assign_start_date").prop("readonly", true);
-    $('#assign_end_date').val(moment(parseInt(shiftEnd)).format("YYYY-MM-DD"));
+    $('#assign_end_date').val(moment(parseInt(shiftEnd)).tz('Atlantic/St_Helena').format("YYYY-MM-DD"));
     $("#assign_end_date").prop("readonly", true);
     $('#assignModal').modal('show');
 
@@ -275,9 +275,9 @@ function Assign(shiftType, shiftStart, shiftEnd){
     
 function SignUpTrain(shiftType, shiftStart, shiftEnd){
 
-    $('#id_start_date').val(moment(parseInt(shiftStart)).format("YYYY-MM-DD"));
+    $('#id_start_date').val(moment(parseInt(shiftStart)).tz('Atlantic/St_Helena').format("YYYY-MM-DD"));
     $("#id_start_date").prop("readonly", true);
-    $('#id_end_date').val(moment(parseInt(shiftEnd)).format("YYYY-MM-DD"));
+    $('#id_end_date').val(moment(parseInt(shiftEnd)).tz('Atlantic/St_Helena').format("YYYY-MM-DD"));
     $("#id_end_date").prop("readonly", true);
     $('#signUpModal').modal('show');
 
