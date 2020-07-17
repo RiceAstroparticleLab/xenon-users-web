@@ -95,6 +95,20 @@ function InitializeCalendar(calling_user){
         });
     });
 
+    $('#assign_form').submit(function(e){
+        e.preventDefault();
+        $.ajax({
+            url: 'shifts/modify_shift',
+            type:'post',
+            data:$('#assign_form').serialize(),
+            success:function(){
+                $("#calendarview").fullCalendar('refetchEvents');		
+                $("#ttip").css('display', 'none');
+                $("#assignModal").modal('hide');
+            }
+        });
+    });
+
     // script to add a shift             
     $('#add_shift_form').submit(function(e){
         e.preventDefault();
@@ -198,7 +212,7 @@ function InitializeCalendar(calling_user){
             +calEvent.end+"', '"+calEvent.shifter+"', '"+
             calEvent.institute+"')");
             $("#btn_assign_shftr").attr("onclick",
-                            "SignUp('"+calEvent.type+"', '"
+                            "Assign('"+calEvent.type+"', '"
                             +calEvent.start+"', '"
                             +calEvent.end+"')");
 
