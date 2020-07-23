@@ -72,7 +72,7 @@ function ShiftRules(tablediv) {
 }
 
 /* Initializes calendar and all related forms */
-function InitializeCalendar(calling_user){
+function InitializeCalendar(daq_id, position, groups){
     var colors = {"free": "#4f97a3",
                   "run coordinator": "#23395d",
                   "taken": "#23395d",
@@ -184,10 +184,10 @@ function InitializeCalendar(calling_user){
             if(calEvent.available){
                 $('#btn_mark_available').attr("disabled", true);
                 $('#btn_sign_up').attr("disabled", false);
-                if( calling_user.position == "PI" || calling_user.groups != undefined )
+                if( position == "PI" || groups != undefined )
                     $('#btn_assign_shftr').attr("disabled", false)
                 else
-                    $('#btn_assign_shftr').attr("disabled", false)
+                    $('#btn_assign_shftr').attr("disabled", true)
             }
             else{
 		        $('#btn_sign_up').attr("disabled", true);
@@ -195,8 +195,8 @@ function InitializeCalendar(calling_user){
 
                 // Want to allow people to set as available only if allowed 
                 console.log(calEvent);
-		        console.log(`calling_user: ${calling_user} `);
-                if( calling_user.daq_id == calEvent.shifter )
+		        console.log(`calling_user: ${daq_id} ${position} ${groups} `);
+                if( daq_id == calEvent.shifter || position == "PI" || groups != undefined)
                     $('#btn_mark_available').attr("disabled", false);
                 else
                     $('#btn_mark_available').attr("disabled", true);
