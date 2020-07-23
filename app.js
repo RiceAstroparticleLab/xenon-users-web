@@ -8,7 +8,7 @@ var dotenv = require('dotenv')
 dotenv.config()
 // connect to the mongo server
 const MongoClient = require('mongodb').MongoClient
-const mongoURI = process.env.MONGOLAB_URI
+const mongoURI = process.env.DAQ_MONGO_URI
 // const mongoURI = process.env.MONGO_LOCAL_URI
 var recode_db
 MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
