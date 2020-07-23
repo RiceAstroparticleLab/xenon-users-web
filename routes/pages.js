@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router()
-var base = '/users_test'
+var base = '/shifts'
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
@@ -10,7 +10,7 @@ function ensureAuthenticated(req, res, next) {
 // /* GET home page. */
 router.get('/', ensureAuthenticated, function(req, res, next) {
   console.log(req.session)
-    res.render('home', {page: 'Home', menuId: 'home', user: req.user})
+    res.render('shifts', {page: 'Shift Management', menuId: 'home', user: req.user})
 })
 
 var today = Date.now()

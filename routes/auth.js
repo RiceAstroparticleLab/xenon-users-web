@@ -1,7 +1,7 @@
 var express = require("express")
 var router = express.Router()
 var passport = require("passport")
-var base = '/users_test'
+var base = '/shifts'
 
 // auth login page
 router.get('/login', (req, res) => {

@@ -13,7 +13,7 @@ const GENERAL_LOGIN_PW = process.env.GENERAL_LOGIN_PW;
 
 // connect to the mongo server
 const MongoClient = require('mongodb').MongoClient
-const mongoURI = process.env.DAQ_MONGO_URI
+const mongoURI = process.env.MONGOLAB_URI
 // const mongoURI = process.env.MONGO_LOCAL_URI
 var use_db
 MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
@@ -142,7 +142,7 @@ passport.use(new GitHubStrategy({
                         return done(null, false, "Couldn't find user in DB");
                     } else {
                         var doc = docs[0]
-                        PopulateProfile(doc, profile, accessToken, function(ret_profile){
+                        PopulateProfile(doc, profile, {}, function(ret_profile){
                             use_db.collection('users').findOneAndUpdate({"github": profile._json.login},
                                             {"$set": { "picture_url": profile._json.avatar_url,
                                                        "github_home": profile.html_url,
@@ -167,7 +167,7 @@ passport.use(new GitHubStrategy({
                             return done(null, false, "Couldn't find user in DB");
                         } else {
                             var doc = docs[0]
-                            PopulateProfile(doc, profile, accessToken, function(ret_profile){
+                            PopulateProfile(doc, profile, {}, function(ret_profile){
                                 use_db.collection('users').findOneAndUpdate({"github": profile._json.login},
                                                 {"$set": { "picture_url": profile._json.avatar_url,
                                                         "github_home": profile.html_url,

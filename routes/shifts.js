@@ -1,7 +1,7 @@
 var express = require("express")
 var url = require("url");
 var router = express.Router()
-var base = '/users_test'
+var base = '/shifts'
 
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
@@ -9,9 +9,9 @@ function ensureAuthenticated(req, res, next) {
 }
 
 /* GET home page. */
-router.get('/', ensureAuthenticated, function(req, res, next) {
-      res.render('shifts', {page: 'Home', menuId: 'home', user: req.user})
-})
+// router.get('/', ensureAuthenticated, function(req, res, next) {
+//       res.render('shifts', {page: 'Home', menuId: 'home', user: req.user})
+// })
 
 
 router.get('/get_current_shifters', ensureAuthenticated, function(req, res){
@@ -200,13 +200,12 @@ router.post('/remove_shifts', ensureAuthenticated, function(req, res){
 
 router.post('/modify_shift', ensureAuthenticated, function(req, res){
       var db = req.recode_db
-
       var collection = db.collection("shifts");
 
       var start = new Date(req.body.start_date);
       var end = new Date(req.body.end_date);
       start.setDate(start.getDate() - 1);
-      end.setDate(end.getDate() + 2);
+      end.setDate(end.getDate() + 1);
       var doc = {
             'start': start,
             'end': end,
@@ -221,30 +220,29 @@ router.post('/modify_shift', ensureAuthenticated, function(req, res){
       // Update the shift with this user
       if(doc['remove'] == 'false'){
             console.log("ADD NEW");
-            collection.findOneAndUpdate(
-            { "start": { "$gt": doc['start']}, 
-                  "end": { "$lt": doc['end']},
-                  "available": true,
-                  "type": doc['shift_type']
-            },
-            {
-                  "$set": {
-                  "shifter": doc['shifter'],
-                  "institute": doc['institute'],
-                  "comment": doc['comment'],
-                  "available": false
-                  }
-            },
-            (e, update) => {
-                console.log(update)
-            })
+                collection.updateOne(
+                    { "start": { "$gt": doc['start']}, 
+                          "end": { "$lt": doc['end']},
+                          "available": true,
+                          "type": doc['shift_type']
+                    },
+                    {
+                        "$set": {
+                            "shifter": doc['shifter'],
+                            "institute": doc['institute'],
+                            "comment": doc['comment'],
+                            "available": false
+                        }
+                    }).then(() => {
+                        return res.sendStatus(200);
+                    })
       }
       else
             // Remove the user from the shift
             console.log("MARK AVAILABLE:")
             console.log(doc)
             try{
-                  collection.updateOne(
+                  collection.findOneAndUpdate(
                         { "start": { "$gt": doc['start']},
                         "end": { "$lt": doc['end']},
                         "available": false,
@@ -258,7 +256,7 @@ router.post('/modify_shift', ensureAuthenticated, function(req, res){
                               "comment": '',
                               "available": true
                         }
-                        }, {multi: false}, function(){ 
+                        }, function(){ 
                               res.sendStatus(200);
                         })
             } catch (e) {

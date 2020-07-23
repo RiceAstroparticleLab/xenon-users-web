@@ -1,6 +1,6 @@
 var express = require("express")
 var router = express.Router()
-var base = '/users_test'
+var base = '/shifts'
 
 // var Highcharts = require('highcharts');  
 // // Load module after Highcharts is loaded
