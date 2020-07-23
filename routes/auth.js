@@ -16,6 +16,15 @@ router.get('/github',
             // so this function is not called
 })
 
+// lngs login
+router.post('/ldap',
+	    passport.authenticate('ldapauth', {
+		successRedirect: base+'/profile',
+		failureRedirect: base+'/auth/login'}), 
+	    function(req, res){
+		res.redirect(base + '/profile');
+	    });
+
 // local authentication
 router.post('/password', 
   passport.authenticate('local', {failureRedirect: base + '/auth/login'}),

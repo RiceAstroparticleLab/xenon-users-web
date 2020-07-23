@@ -15,13 +15,11 @@
           <br>
           <form action="password" method="post">
             <div>
-                <label style="float:left;padding-left:25px;">Email</label>
-                <input type="text" name="username"/>
+                <input type="text" name="username" placeholder="email"/>
             </div>
             <br>
             <div>
-                <label style="float:left;padding-left:25px;">Password:</label>
-                <input type="password" name="password"/>
+                <input type="password" name="password" placeholder="password"/>
             </div>
             <br>
             <div>
@@ -29,15 +27,36 @@
             </div>
           </form>
           <br>
-          <br>
           <p class="text-center" style="color:#9e9e9e;">OR</p>
           <br>
           <!--Github-->
-          <a href="/shifts/auth/github"><button type="button" class="btn btn-github" style="width: 90%; padding: 10px"><i class="fab fa-github pr-1"></i> Login with Github</button></a>
+          <a href="/shifts/auth/github"><button type="button" class="btn btn-github" style="width: 90%; padding: 10px"><i class="fab fa-github pr-1"></i> Login with GitHub</button></a>
+          <!-- LNGS -->
+          <button type="button" data-toggle="modal" data-target="#LNGSmodal" class="btn" style="width: 90%; padding: 10px; margin-top:10px"><i class="fas fa-globe-americas"></i> Login with LNGS</button>
         </div>
         <div class="col-sm-3"></div>
       </div>
     </div>
-    
+    <div class="modal fade" id="LNGSmodal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <br>
+            <form method='post' action='/shifts/auth/ldap'>
+              <div class="row">
+                <div class="col-md-6 col-xs-12 form-group">
+                  <label class="form-label" for='email'>LNGS ID</label>
+                  <input class="form-control" type='text' name='user' required>
+                <div class="col-md-6 col-xs-12 form-group">
+                  <label class="form-label" for='password'>LNGS Password</label>
+                  <input class="form-control" type='password' name='password' required>
+                <br>
+              </div>
+              <button class="btn btn-info" type='submit'>Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 </body>
 </html>
