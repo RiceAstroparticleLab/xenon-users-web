@@ -203,9 +203,8 @@ passport.use(new LdapStrategy(OPTS,
              function(user, done) {
 
                  // Need to verify uid matches
-                 var collection = runs_db.get("users");
-                 collection.find({"lngs_ldap_uid": user.uid},
-                                 function(e, docs){
+                 var collection = use_db.collection("users");
+                 collection.find({"lngs_ldap_uid": user.uid}).toArray(function(e, docs){
                                      if(docs.length===0){
 					 console.log("No user " + user.uid + " in DB");
 					 return done(null, false, "Couldn't find user in DB");
