@@ -191,7 +191,7 @@ router.post('/remove_shifts', ensureAuthenticated, function(req, res){
       // if(typeof(req.user.groups) == "undefined" || !req.user.groups.includes("operations"))
 	// return res.send(JSON.stringify({"res": "Berechtigung nicht vorgewiesen. Bitte begrÃnden."}));
     
-      query = {"start": {"$gte": start, "$lte": end}};
+      query = {"start": {"$gte": start, "$lte": end}, "available": true};
       if(type != "all")
 		query['type'] = type;
       collection.removeOne(query, {multi: true});
@@ -237,7 +237,7 @@ router.post('/modify_shift', ensureAuthenticated, function(req, res){
                         return res.sendStatus(200);
                     })
       }
-      else
+      else {
             // Remove the user from the shift
             console.log("MARK AVAILABLE:")
             console.log(doc)
@@ -262,6 +262,7 @@ router.post('/modify_shift', ensureAuthenticated, function(req, res){
             } catch (e) {
                   console.log(e)
             }
+        }
             
     
 
