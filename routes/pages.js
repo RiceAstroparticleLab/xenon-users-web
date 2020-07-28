@@ -9,14 +9,14 @@ function ensureAuthenticated(req, res, next) {
 
 // /* GET home page. */
 router.get('/', ensureAuthenticated, function(req, res, next) {
-  console.log(req.session)
-    res.render('shifts', {page: 'Shift Management', menuId: 'home', user: req.user})
+  // console.log(req.session)
+    res.render('shifts', {page: 'Shift Management', menuId: 'home', user: req.user, "institutes": array_of_institutes})
 })
 
 var today = Date.now()
 var oneYearAgo = new Date(Number(today) - 31556952000);
 
-console.log(`Today is ${Date(today)}. One Year ago today was ${oneYearAgo.toString()}`)
+// console.log(`Today is ${Date(today)}. One Year ago today was ${oneYearAgo.toString()}`)
 
 /* GET Userlist page. */
 router.get('/fulldirectory', ensureAuthenticated, function(req, res) {

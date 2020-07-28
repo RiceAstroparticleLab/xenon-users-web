@@ -72,7 +72,7 @@ function ShiftRules(tablediv) {
 }
 
 /* Initializes calendar and all related forms */
-function InitializeCalendar(daq_id, position, groups){
+function InitializeCalendar(daq_id, position, groups, user_institute){
     var colors = {"free": "#4f97a3",
                   "run coordinator": "#23395d",
                   "taken": "#23395d",
@@ -88,7 +88,7 @@ function InitializeCalendar(daq_id, position, groups){
             type:'post',
             data:$('#sign_up_form').serialize(),
             success:function(){
-                $("#calendarview").fullCalendar('refetchEvents');		
+                $("#calendar").fullCalendar('refetchEvents');		
                 $("#ttip").css('display', 'none');
                 $("#signUpModal").modal('hide');
             }
@@ -102,7 +102,7 @@ function InitializeCalendar(daq_id, position, groups){
             type:'post',
             data:$('#assign_form').serialize(),
             success:function(){
-                $("#calendarview").fullCalendar('refetchEvents');		
+                $("#calendar").fullCalendar('refetchEvents');		
                 $("#ttip").css('display', 'none');
                 $("#assignModal").modal('hide');
             }
@@ -148,7 +148,7 @@ function InitializeCalendar(daq_id, position, groups){
         events: 'shifts/get_shifts',
         timezone: 'UTC',
         eventLimit: true,
-        eventLimitClick: 'day',
+        eventLimitClick: 'week',
         header: {
             left: 'prev,next today',
             center: 'title',
@@ -184,7 +184,7 @@ function InitializeCalendar(daq_id, position, groups){
             if(calEvent.available){
                 $('#btn_mark_available').attr("disabled", true);
                 $('#btn_sign_up').attr("disabled", false);
-                if( position == "PI" || groups != undefined )
+                if( position == "PI" || groups.includes("operations") )
                     $('#btn_assign_shftr').attr("disabled", false)
                 else
                     $('#btn_assign_shftr').attr("disabled", true)
@@ -196,7 +196,7 @@ function InitializeCalendar(daq_id, position, groups){
                 // Want to allow people to set as available only if allowed 
                 console.log(calEvent);
 		        console.log(`calling_user: ${daq_id} ${position} ${groups} `);
-                if( daq_id == calEvent.shifter || position == "PI" || groups != undefined)
+                if( daq_id == calEvent.shifter || position == "PI" || groups.includes("operations"))
                     $('#btn_mark_available').attr("disabled", false);
                 else
                     $('#btn_mark_available').attr("disabled", true);
@@ -207,10 +207,10 @@ function InitializeCalendar(daq_id, position, groups){
                             "SignUp('"+calEvent.type+"', '"
                             +calEvent.start+"', '"
                             +calEvent.end+"')");
-            $("#btn_mark_available").attr("onclick", "MarkAvailable('"+calEvent.type+"', '"
-            +calEvent.start+"', '"
-            +calEvent.end+"', '"+calEvent.shifter+"', '"+
-            calEvent.institute+"')");
+            $("#btn_mark_available").attr("onclick", 'MarkAvailable("'+calEvent.type+'", "'
+                        +calEvent.start+'", "'
+                        +calEvent.end+'", "'+calEvent.shifter+'", "'+
+                        calEvent.institute+'", "' + daq_id + '", "' + user_institute +'")');
             $("#btn_assign_shftr").attr("onclick",
                             "Assign('"+calEvent.type+"', '"
                             +calEvent.start+"', '"
@@ -308,7 +308,7 @@ function SignUpCredit(shiftType, shiftStart, shiftEnd){
 }
     
     
-function MarkAvailable(shiftType, shiftStart, shiftEnd, shifter, institute){
+function MarkAvailable(shiftType, shiftStart, shiftEnd, shifter, institute, daq_id, user_institute){
     $('#markAvailableModal').modal('show')
     $('#submit_m_avail').click(function() {
         $('#id_start_date').val(moment(parseInt(shiftStart)).format("YYYY-MM-DD"));
@@ -317,9 +317,9 @@ function MarkAvailable(shiftType, shiftStart, shiftEnd, shifter, institute){
         $("#id_end_date").prop("readonly", true);
         $("#id_institute").val(institute);
 
-        $("#id_user").val(shifter);
+        $("#id_shifter").val(shifter);
         console.log($("#id_institute").val());
-        console.log($("#id_user").val());
+        console.log($("#id_shifter").val());
         console.log(shifter);
 
         ret = "";
@@ -329,6 +329,10 @@ function MarkAvailable(shiftType, shiftStart, shiftEnd, shifter, institute){
         document.getElementById("id_remove").checked = true;
         $("#id_remove").val(true);
         $("#sign_up_form").submit();
+        $('#markAvailableModal').on('hidden.bs.modal', function(e) {
+            $("#id_institute").val(user_institute);
+            $("#id_shifter").val(daq_id);
+        })
         $('#markAvailableModal').modal('hide')
     })
 }

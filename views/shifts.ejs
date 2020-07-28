@@ -15,7 +15,7 @@
         <ul class="nav nav-tabs" id="shiftNavTab" role="tablist">
             <li class="active"><a id="calendar-tab" data-toggle="tab" href="#calendartab" role="tab" aria-controls="calendar" aria-selected="true">Calendar</a></li>
             <!-- Make available to admin only. Admin defined as: group and/or PI -->
-            <% if (!(typeof(user.groups) == "undefined" && user.position !== "PI")) { %>
+            <% if (user.position == "PI" || user.groups.includes("operations")) { %>
                 <!-- <li><a id="shift-rules-tab" data-toggle="tab" href="#shiftrules" role="tab" aria-controls="shift-rules" aria-selected="false">Shift Rules</a></li> -->
                 <li><a id="rules-tab" data-toggle="tab" href="#management" role="tab" aria-controls="rules" aria-selected="false">Shift Management</a></li>
             <%}%>
@@ -73,7 +73,6 @@
                     </div>
                 </div>
             </div> -->
-
             <!-- Shift Management Tab -->
             <div class="tab-pane fade" id="management" role="tabpanel" aria-labelledby="rules-tab">
                 <br>
@@ -125,13 +124,13 @@
                                         </div>
                                         <div class="col-6">
                                             <select name="shift_change_day">
-                                                <option value=0>Sunday</option>
                                                 <option value=1>Monday</option>
                                                 <option value=2>Tuesday</option>
                                                 <option value=3>Wednesday</option>
                                                 <option value=4>Thursday</option>
                                                 <option value=5>Friday</option>
                                                 <option value=6>Saturday</option>
+                                                <option value=0>Sunday</option>
                                             </select>
                                         </div>
                                     </div>
@@ -213,7 +212,6 @@
                     <br>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -380,7 +378,12 @@
                                 <strong>Institute</strong>
                             </div>
                             <div class="col-6">
-                                <input id="assign_institute" type="text" name="institute">
+                                <select name="institute" id="assign_institute">
+                                    <option value="" disabled selected>Select your option</option>
+                                    <% for (i = 0; i < institutes.length; i++) {%>
+                                      <option value="<%= institutes[i][0]%>"><%= institutes[i][0]%></option>
+                                    <%}%>
+                                  </select>
                             </div>
                         </div>
                         <div class="row" style="margin-top:12px">
@@ -470,7 +473,7 @@
     $(function() {
         // page is now ready, initialize the calendar...
         ShiftRules("#rules_table")
-        InitializeCalendar("<%= user %>");
+        InitializeCalendar("<%= user.daq_id %>", "<%= user.position %>", "<%= user.groups %>", "<%= user.institute %>");
         // initialize the table
         FillAggregates("#aggregate_table_body", "#table_head_this_year", "<%= user.institute %>");
     });

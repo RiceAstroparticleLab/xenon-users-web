@@ -18,7 +18,7 @@ router.post('/updateContactInfo', ensureAuthenticated, (req, res) => {
     }
     if(req.body.skype != ""){
         idoc["skype"] = req.body.skype;
-	    
+	    req.user.skype = req.user.skype;
     }
     if(req.body.cell != ""){	
         idoc["cell"] = req.body.cell;
@@ -42,18 +42,20 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, 
     var user_id = new ObjectId(req.params.userid)
     var page = req.params.page
 
+    console.log(req.body.institute)
+
     var idoc = {};
     idoc['first_name'] = req.body.FirstName;
     idoc['last_name'] = req.body.LastName;
     idoc['email'] = req.body.Email;
-    if(req.body.position != null){
+    if(req.body.institute != null){
         idoc['institute'] = req.body.institute;
     }
     if(req.body.position != null){
         idoc['position'] = req.body.position;
     }
     if(req.body.Time != "" && req.body.Time != null){
-        idoc['percent_xenon'] = req.body.Time;
+        idoc['percent_xenon'] = Number(req.body.Time);
     }
     if(req.body.prevTime != null) {
         idoc['previous_time'] = req.body.prevTime

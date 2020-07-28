@@ -3,7 +3,7 @@
 
         <div class="modal-content" style="padding: 20px 35px 20px 35px; background-color: #fdfdfd;">
             <div class="modal-header" style="padding-left:30px">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <button id="updateCloseButton" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h3 class="modal-title">Update User</h3>
             </div>
             <div class="modal-body">
@@ -52,9 +52,9 @@
                   <div class="row" style="margin-top:12px">
                     <label for="institute" style="padding-left:30px">Institute</label><br>
                     <div style="padding-left:30px">
-                      <select name="institute" id="institute">
+                      <select name="institute" id="update_institute">
                         <% for (i = 0; i < institutes.length; i++) {%>
-                          <option value="<%= institutes[i][0]%>"><%= institutes[i][0]%></option>
+                          <option id="<%= institutes[i][0]%>" value="<%= institutes[i][0]%>"><%= institutes[i][0]%></option>
                         <%}%>
                       </select>
                     </div>

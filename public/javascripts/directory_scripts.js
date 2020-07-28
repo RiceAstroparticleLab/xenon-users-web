@@ -351,20 +351,20 @@ function openModal(data, page) {
 }
 
 function UpdateUserModal() {
+    var institute
     $('#updateUserModal').on('show.bs.modal', function (event) {
      var button = $(event.relatedTarget) // Button that triggered the modal
      var user_info = button.data('id') // Extract info from data-* attributes
-     var institute = user_info.institute
+     institute = user_info.institute
      if (institute == 'Bern/Freiburg') {
          institute = 'Freiburg'
      }
      console.log(user_info)
      
-     var institute
-        for (i = 0; i < array_of_institutes.length; i++) {
-            if (array_of_institutes[i][0] == user_info.institute || array_of_institutes[i][1] == user_info.institute) {
-              institute = array_of_institutes[i][0]
-            }
+    for (i = 0; i < array_of_institutes.length; i++) {
+        if (array_of_institutes[i][0] == user_info.institute || array_of_institutes[i][1] == user_info.institute) {
+            institute = array_of_institutes[i][0]
+        }
     }
     console.log(institute)
      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
@@ -373,7 +373,7 @@ function UpdateUserModal() {
      modal.find('.modal-body input[name="FirstName"]').val(user_info.first_name)
      modal.find('.modal-body input[name="LastName"]').val(user_info.last_name)
      modal.find('.modal-body input[name="Email"]').val(user_info.email)
-     modal.find('.modal-body option[value="'+institute+'"]').attr('selected', true)
+     modal.find('.modal-body option[value="'+institute+'"]').attr('selected', 'selected')
      modal.find('.modal-body input[name="prevTime"]').val(user_info.previous_time)
      modal.find('.modal-body input[name="Time"]').val(user_info.percent_xenon)
      modal.find('.modal-body input[name="Tasks"]').val(user_info.tasks)
@@ -395,7 +395,7 @@ function UpdateUserModal() {
    })
    $('#updateUserModal').on('hidden.bs.modal', function(e) {
      $("#updateUserModal .modal-body").find('input:checkbox').prop('checked', false);
-     $("#updateUserModal .modal-body").find('option').attr('selected', false);
-     $("#updateUserModal").find('.modal-body option[id="selected"]').attr('selected', true)
+     $("#update_institute option").removeAttr("selected")
+     document.getElementById(institute).selected = false;
    })
  }

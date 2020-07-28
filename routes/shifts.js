@@ -68,8 +68,8 @@ router.get('/get_shifts', ensureAuthenticated, function(req, res){
     var start = new Date(q.start);
     var end = new Date(q.end);
 
-	console.log(`start: ${start}`)
-	console.log(`end: ${end}`)
+	// console.log(`start: ${start}`)
+	// console.log(`end: ${end}`)
 
     collection.find({"start": {"$gt": start, "$lt": end}}).toArray(function(e, docs){
         // console.log(`docs: ${docs}`)
@@ -87,7 +87,7 @@ router.get('/get_shifts', ensureAuthenticated, function(req, res){
             "shifter": doc['shifter']
             })
         }
-        console.log(`ret: ${ret}`)
+        // console.log(`ret: ${ret}`)
         return res.send(ret); 
 	});
     

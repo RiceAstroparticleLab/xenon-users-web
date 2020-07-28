@@ -60,12 +60,6 @@
                         <td>LNGS ID</td>
                         <td><%= user.lngs_ldap_uid %></td>
                     </tr>
-                    <tr>
-                        <td>My Github</td>
-                        <td>
-                            <a href='<%= user.github_home%>'>Link</a>
-                        </td>
-                    </tr>
                 </table>
             </div>
         </div>
@@ -78,7 +72,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <form method="post" action="/users/updateContactInfo">
+                        <form method="post" action="users/updateContactInfo">
                             <div class="form-group">
                                 <label class="form-label" for="email">Email</label>
                                 <input class="form-control" type="email" value="<%= user.email %>" name="email">
@@ -105,10 +99,10 @@
 <script>
      $(document).ready(function(){
     	DrawActiveLink("#laccount");
-      var userdoc = JSON.parse('!{JSON.stringify(user)}');      
-      FillAPIInfo(userdoc);
-      if('#{user.favorite_color}' != "not set"){
-        $("#form_color").val("#{user.favorite_color}");
+        var userdoc = JSON.parse('!{JSON.stringify(user)}');      
+        FillAPIInfo(userdoc);
+        if('#{user.favorite_color}' != "not set"){
+            $("#form_color").val("#{user.favorite_color}");
       }
     });
 </script>
