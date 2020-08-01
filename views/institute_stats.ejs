@@ -80,21 +80,21 @@
               <div class="row" style="margin-top:12px">
                 <label for="fname" style="padding-left:30px">First Name</label><br>
                 <div style="text-align:center;">
-                  <input id="fname" type="text" name="FirstName" />
+                  <input id="fname" type="text" name="FirstName" required>
                 </div>
               </div>
 
               <div class="row" style="margin-top:12px">
                 <label for="lname" style="padding-left:30px">Last Name</label><br>
                 <div style="text-align:center;">
-                  <input id="lname" type="text" name="LastName" />
+                  <input id="lname" type="text" name="LastName" required>
                 </div>
               </div>
 
               <div class="row" style="margin-top:12px">
                 <label for="email" style="padding-left:30px">Email</label><br>
                 <div style="text-align:center;">
-                  <input id="email" type="email" name="Email" />
+                  <input id="email" type="email" name="Email" required>
                 </div>
               </div>
 
@@ -128,14 +128,14 @@
               <div class="row" style="margin-top:12px">
                 <label for="time" style="padding-left:30px">Percent Xenon</label><br>
                 <div style="text-align:center;">
-                  <input id="time" type="number" name="Time" />
+                  <input id="time" type="number" name="Time" required>
                 </div>
               </div>
 
               <div class="row" style="margin-top:12px">
                 <label for="tasks" style="padding-left:30px">Tasks</label><br>
                 <div style="text-align:center;">
-                  <input id="tasks" type="text" name="Tasks" />
+                  <input id="tasks" type="text" name="Tasks">
                 </div>
               </div>
 
@@ -148,12 +148,17 @@
 
               <div class="row" style="margin-top:12px">
                 <label for="sdate" style="padding-left:30px">Start Date</label><br>
-                <p style="padding-left:30px">*Desktop Safari users: use format YYYY-MM-DD</p>
                 <div style="text-align:center;">
-                  <input id="sdate" type="date" name="StartDate" />
+                  <input id="sdate" type="date" name="StartDate" placeholder="YYYY-MM-DD" required>
                 </div>
               </div>
 
+              <div class="row" style="margin-top:12px">
+                <label for="edate" style="padding-left:30px">End Date</label><br>
+                <div style="text-align:center;">
+                  <input id="edate" type="date" name="expectedEnd" placeholder="YYYY-MM-DD"/>
+                </div>
+              </div>
               <br>
               <div style="text-align:center;">
                 <input type="submit" value="Submit">

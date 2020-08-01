@@ -39,9 +39,9 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
     console.log(alternate_institute)
 
     if (alternate_institute) {
-      find_institute = db.collection('users').find({$or: [{"institute": given_inst}, {"institute": alternate_institute}]}, {"sort": "last_name"})
+      find_institute = db.collection('users').find({"end_date": {$exists: false}, $or: [{"institute": given_inst}, {"institute": alternate_institute}]}, {"sort": "last_name"})
     } else {
-      find_institute = db.collection('users').find({"institute": given_inst}, {"sort": "last_name"})
+      find_institute = db.collection('users').find({"institute": given_inst, "end_date": {$exists: false}}, {"sort": "last_name"})
     }
   
     // If valid show all users in that institute
@@ -54,8 +54,6 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
         if (position_str === "PI") {
           pi.push(docs[i])
         } else {
-          position_str = position_str.toLowerCase()
-          position_str = position_str[0].toUpperCase() + position_str.slice(1)
           if(dict[`${position_str}`]) {
             dict[`${position_str}`] += 1
           } else {
@@ -64,8 +62,8 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
         }
       }
       
-      console.log(pi)
-      console.log(dict)
+      // console.log(pi)
+      // console.log(dict)
 
       var current = []
       var prev = []

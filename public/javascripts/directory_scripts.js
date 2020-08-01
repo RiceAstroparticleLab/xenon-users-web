@@ -7,24 +7,14 @@ var array_of_institutes = [['Bologna'], ['Coimbra'], ['Columbia'], ['Freiburg', 
 
 function InitializeTable(divname){
     var groupColumn = 1
-    var table = $(divname).DataTable({
-        buttons: [
-            'searchPanes'
-        ],        
-        searchPanes:{
-            viewTotal: true,
-        },       
-        dom: 'Bflrtip',                                  
+    var table = $(divname).DataTable({       
+        dom: 'flrtip',                                  
         order: [[groupColumn, 'asc']],
         pageResize: true,
         paging: false,
         language: {
             search: "",
             searchPlaceholder: "Search...",
-            searchPanes: {
-                columns: [0, 3],
-                collapse: {0: 'Filter', _: 'Filter (%d)'}
-            }
         },
         ajax : {
             url: 'curr_table_info',
@@ -97,24 +87,14 @@ function InitializeTable(divname){
 
 function InitializePrevTable(divname){
     var groupColumn = 8
-    var table = $(divname).DataTable({
-        buttons: [
-            'searchPanes'
-        ],     
-        searchPanes:{
-            viewTotal: true,
-        },       
-        dom: 'Bflrtip',                                  
+    var table = $(divname).DataTable({  
+        dom: 'flrtip',                                  
         order: [[groupColumn, 'desc']],
         pageResize: true,
         paging: false,
         language: {
             search: "",
             searchPlaceholder: "Search...",
-            searchPanes: {
-                columns: [0, 3],
-                collapse: {0: 'Filter', _: 'Filter (%d)'}
-            }
         },
         ajax : {
             url: 'prev_table_info',
@@ -321,16 +301,12 @@ function openModal(data, page) {
         modal.find('.modal-body input[name="Time"]').val(user_info.percent_xenon)
         modal.find('.modal-body input[name="Tasks"]').val(user_info.tasks)
         modal.find('.modal-body input[name="StartDate"]').val(new Date(user_info.start_date).toISOString().slice(0,10))
-          
+        modal.find('.modal-body input[name="position"]').val(user_info.position)
+
         if (page == 'authors') {
             modal.find('.modal-body input[name="Institute"]').val(user_info.institute)
         } else {
-            modal.find('.modal-body option[value="'+institute+'"]').attr('selected', true)
-        }
-
-        if (modal.find('.modal-body option[value="'+ user_info.position +'"]').length) {
-          modal.find('.modal-body option[id="selected"]').attr('selected', false)
-          modal.find('.modal-body option[value="'+ user_info.position +'"]').attr('selected', true)
+            modal.find('.modal-body input[name="institute"]').val(user_info.institute)
         }
         
         if (user_info.mailing_lists) {
@@ -373,7 +349,7 @@ function UpdateUserModal() {
      modal.find('.modal-body input[name="FirstName"]').val(user_info.first_name)
      modal.find('.modal-body input[name="LastName"]').val(user_info.last_name)
      modal.find('.modal-body input[name="Email"]').val(user_info.email)
-     modal.find('.modal-body option[value="'+institute+'"]').attr('selected', 'selected')
+     modal.find('.modal-body input[name="institute"]').val(institute)
      modal.find('.modal-body input[name="prevTime"]').val(user_info.previous_time)
      modal.find('.modal-body input[name="Time"]').val(user_info.percent_xenon)
      modal.find('.modal-body input[name="Tasks"]').val(user_info.tasks)
@@ -399,3 +375,37 @@ function UpdateUserModal() {
      document.getElementById(institute).selected = false;
    })
  }
+
+function AutocompleteInstitutes(id) {
+    var arr = array_of_institutes
+    console.log(arr)
+    $(id).autocomplete({
+      source: function( request, response ) {
+        console.log(request)
+        console.log(response)
+        var matches = $.map( arr, function(item) {
+          if ( item[0].toUpperCase().indexOf(request.term.toUpperCase()) != -1 ) {
+            return item[0];
+          }
+        });
+        response(matches);
+      }
+    });
+}
+
+function Autocomplete(id, arr) {
+    arr = arr.split(",")
+    console.log(arr)
+    $(id).autocomplete({
+      source: function( request, response ) {
+        console.log(request)
+        console.log(response)
+        var matches = $.map( arr, function(item) {
+          if ( item.toUpperCase().indexOf(request.term.toUpperCase()) != -1 ) {
+            return item;
+          }
+        });
+        response(matches);
+      }
+    });
+}

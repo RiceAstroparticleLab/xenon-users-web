@@ -63,9 +63,6 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, 
     if(req.body.addInst != null) {
         idoc['additional_institutes'] = req.body.addInst
     }
-    if(req.body.Tasks != ""){
-        idoc['tasks'] = req.body.Tasks;
-    }
     if(req.body.mlist1 != null || req.body.mlist2 != null || req.body.mlist3 != null) {
         idoc['mailing_lists'] = [req.body.mlist1, req.body.mlist2, req.body.mlist3]
     }
@@ -107,20 +104,67 @@ router.post('/adduser', ensureAuthenticated, (req, res) => {
     idoc['institute'] = req.body.institute;
     idoc['position'] = req.body.position;
     idoc['percent_xenon'] = req.body.Time;
-    idoc['tasks'] = req.body.Tasks;
     idoc['mailing_lists'] = [req.body.mlist1, req.body.mlist2, req.body.mlist3]
-    idoc['mail_list_added'] = false;
     if(req.body.StartDate != ""){
         idoc['start_date'] = new Date(`${req.body.StartDate}`);
     }
     
+    var mailing_lists = ""
+    if (req.body.mlist1 != null) 
+        mailing_lists += req.body.mlist1
+        mailing_lists += " "
+    if (req.body.mlist2 != null) 
+        mailing_lists += req.body.mlist2
+        mailing_lists += " "
+    if (req.body.mlist3 != null) 
+        mailing_lists += req.body.mlist3
+        mailing_lists += " "    
+
     try {
-        db.collection('users').insertOne(idoc)
-        console.log(`success. Added ${req.body.FirstName} ${req.body.LastName}`)
-        res.redirect(`${base}/institutes/${req.body.institute}`)
+        NewUserMail(req, mailing_lists, function(success){
+            if (success) {
+                db.collection('users').insertOne(idoc)
+                console.log(`success. Added ${req.body.FirstName} ${req.body.LastName}`)
+                res.redirect(`${base}/institutes/${req.body.institute}`)
+            } else {
+                console.log("error. Could not send email.")
+                res.redirect(`${base}/institutes/${req.body.institute}`)
+            }
+        })
     } catch (e) {
         console.log(e)
     }
 })
+
+function NewUserMail(req, mailing_lists, callback){
+    // send mail
+    var transporter = req.transporter;
+    var message = {
+        from: process.env.NOTIFS_ACCOUNT,
+        to: process.env.MAILING_LIST,
+        subject: 'New Member Confirmation: ' + req.body.FirstName + ' ' + req.body.LastName,
+        html: '<p>Hi,</p>' 
+            + '<p>A new member has been added by ' + req.user.first_name + ' ' + req.user.last_name + ' at ' + req.body.institute + ' that needs access to midway: <br>' 
+            + 'a) Name: ' + req.body.FirstName + ' ' + req.body.LastName + '<br>'
+            + 'b) email: ' + req.body.Email + '<br>'
+            + 'c) Position: ' + req.body.position + '<br>'
+            + 'd) Time: ' + req.body.Time + '%<br>'
+            + 'e) Tasks: ' + req.body.Tasks + '<br>'
+            + 'f) Mailing lists: ' + mailing_lists + '<br>'
+            + 'g) Start date: ' + req.body.StartDate + '<br>'
+            + 'h) End date: ' + req.body.expectedEnd + '<br>'
+            + '<p>Thanks!<br>XENON User Management</p>'
+    };
+    
+    transporter.sendMail(message, function(error, info){
+        if (error) {
+            console.log(error);
+            callback(false);
+        } else {
+            console.log("Message sent: " + info.message)
+            callback(true);
+        }
+    });
+}
 
 module.exports = router;

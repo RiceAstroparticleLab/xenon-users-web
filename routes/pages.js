@@ -20,34 +20,63 @@ var oneYearAgo = new Date(Number(today) - 31556952000);
 
 /* GET Userlist page. */
 router.get('/fulldirectory', ensureAuthenticated, function(req, res) {
-  var db = req.recode_db
-  var current = []
-  var prev = []
-  
-  db.collection('users').find({}, {"sort": "last_name"}).toArray((e,docs) => {
-    for (i = 0; i < docs.length; i++) {
-      if(!docs[i].end_date) {
-        if(docs)
-        current.push(docs[i])
-      } else {
-        prev.push(docs[i])
-      }
-    }
-    res.render('fulldirectory', {page: 'Full Directory', menuId: 'home', "curr": current, "prev": prev, "institutes": array_of_institutes, user: req.user})
-  })
+  var positions_arr = ["Engineer", "Master Student", "Non-permanent Sci.", "Other Student", "Permanent Scientist", 
+                   "PhD Student", "PI", "Postdoc", "Staff", "Thesis Student", "XENON Student"]
+  res.render('fulldirectory', {page: 'Full Directory', 
+                                menuId: 'home',
+                                positions: positions_arr,
+                                "institutes": array_of_institutes,
+                                user: req.user})
 })
 
 router.post("/curr_table_info", ensureAuthenticated, function(req, res){
 	var db = req.recode_db
-
+  var order = ['PI', "Permanent Scientist", "Non-permanent Sci.", "PhD Student", "Thesis Student", "XENON Student", "Engineer"]
+  var users = []
   // If valid show all users in that institute
-  db.collection('users').find({"end_date": {$exists: false}}, {"sort": "institute"}).toArray(function(err, result) {
-    for (i = 0; i < result.length; i++) {
-      result[i]['current_user'] = req.user
+  db.collection('users').find({"position": "PI", "end_date": {$exists: false}}, {"sort": "institute"}).toArray(function(err, pi) {
+    for (i = 0; i < pi.length; i++) {
+      pi[i]['current_user'] = req.user
+      users.push(pi[i])
     }
-		  res.send(JSON.stringify({"data": result}));
+    db.collection('users').find({"position": "Permanent Scientist", "end_date": {$exists: false}}, {"sort": "institute"}).toArray(function(err, ps) {
+      for (i = 0; i < ps.length; i++) {
+        ps[i]['current_user'] = req.user
+        users.push(ps[i])
+      }
+      db.collection('users').find({"position": "Non-permanent Sci.", "end_date": {$exists: false}}, {"sort": "institute"}).toArray(function(err, nps) {
+        for (i = 0; i < nps.length; i++) {
+          nps[i]['current_user'] = req.user
+          users.push(nps[i])
+        }
+        db.collection('users').find({"position": "PhD Student", "end_date": {$exists: false}}, {"sort": "institute"}).toArray(function(err, phd) {
+          for (i = 0; i < phd.length; i++) {
+            phd[i]['current_user'] = req.user
+            users.push(phd[i])
+          }
+          db.collection('users').find({"position": "Thesis Student", "end_date": {$exists: false}}, {"sort": "institute"}).toArray(function(err, ts) {
+            for (i = 0; i < ts.length; i++) {
+              ts[i]['current_user'] = req.user
+              users.push(ts[i])
+            }
+            db.collection('users').find({"position": "XENON Student", "end_date": {$exists: false}}, {"sort": "institute"}).toArray(function(err, xs) {
+              for (i = 0; i < xs.length; i++) {
+                xs[i]['current_user'] = req.user
+                users.push(xs[i])
+              }
+              db.collection('users').find({"position": {$not: {$in: order}}, "end_date": {$exists: false}}, {"sort": "institute"}).toArray(function(err, o) {
+                for (i = 0; i < o.length; i++) {
+                  o[i]['current_user'] = req.user
+                  users.push(o[i])
+                }
+                res.send(JSON.stringify({"data": users}));
+              })
+            })
+          })
+        })
+      })
+    })
   })
-    
 });
 
 router.post("/prev_table_info", ensureAuthenticated, function(req, res){

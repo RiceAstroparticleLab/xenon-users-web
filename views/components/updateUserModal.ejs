@@ -7,7 +7,7 @@
                 <h3 class="modal-title">Update User</h3>
             </div>
             <div class="modal-body">
-                <form id="formUpdateUser" name="updateuser" method="post">
+                <form autocomplete="off" id="formUpdateUser" name="updateuser" method="post">
                   <div class="row" style="margin-top:12px">
                     <label for="fname" style="padding-left:30px">First Name</label><br>
                     <div style="text-align:center;">
@@ -31,32 +31,15 @@
     
                   <div class="row" style="margin-top:12px">
                     <label for="position" style="padding-left:30px">Position</label><br>
-                    <div style="padding-left:30px">
-                      <select name="position" id="position">
-                        <option id="selected" selected disabled hidden>Please select</option>
-                        <option value="Engineer">Engineer</option>
-                        <option value="Master Student">Master Student</option>
-                        <option value="Non-permanent Sci.">Non-permanent Scientist</option>
-                        <option value="Other Student">Other Student</option>
-                        <option value="Permanent Scientist">Permanent Scientist</option>
-                        <option value="PhD Student">PhD Student</option>
-                        <option value="PI">PI</option>
-                        <option value="Postdoc">Postdoc</option>
-                        <option value="Staff">Staff</option>
-                        <option value="Thesis Student">Thesis Student</option>
-                        <option value="XENON Student">XENON Student</option>
-                      </select>
+                    <div class="autocomplete" style="text-align:center;">
+                      <input type="text" name="position" id="position">
                     </div>
                   </div>
     
                   <div class="row" style="margin-top:12px">
                     <label for="institute" style="padding-left:30px">Institute</label><br>
-                    <div style="padding-left:30px">
-                      <select name="institute" id="update_institute">
-                        <% for (i = 0; i < institutes.length; i++) {%>
-                          <option id="<%= institutes[i][0]%>" value="<%= institutes[i][0]%>"><%= institutes[i][0]%></option>
-                        <%}%>
-                      </select>
+                    <div class="autocomplete" style="text-align:center;">
+                      <input type="text" name="institute" id="update_institute">
                     </div>
                   </div>
 
@@ -74,13 +57,6 @@
                     </div>
                   </div>
     
-                  <div class="row" style="margin-top:12px">
-                    <label for="tasks" style="padding-left:30px">Tasks</label><br>
-                    <div style="text-align:center;">
-                      <input id="tasks" type="text" name="Tasks" />
-                    </div>
-                  </div>
-    
                   <div class="row" style="margin-top:12px;padding-left:30px">
                     <label for="mlists">Mailing Lists</label><br>
                       <input type="checkbox" id="mlist1" name="mlist1" value="Calibration">&nbsp;&nbsp;&nbsp;Calibration<br>
@@ -90,17 +66,15 @@
     
                   <div class="row" style="margin-top:12px">
                     <label for="sdate" style="padding-left:30px">Start Date</label><br>
-                    <p style="padding-left:30px">*Desktop Safari users: use format YYYY-MM-DD</p>
                     <div style="text-align:center;">
-                      <input id="sdate" type="date" name="StartDate" />
+                      <input id="sdate" type="date" name="StartDate" placeholder="YYYY-MM-DD">
                     </div>
                   </div>
     
                   <div class="row" style="margin-top:12px">
                     <label for="edate" style="padding-left:30px">End Date</label><br>
-                    <p style="padding-left:30px">*Desktop Safari users: use format YYYY-MM-DD</p>
                     <div style="text-align:center;">
-                      <input id="edate" type="date" name="EndDate" />
+                      <input id="edate" type="date" name="EndDate" placeholder="YYYY-MM-DD">
                     </div>
                   </div>
     

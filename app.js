@@ -35,9 +35,19 @@ global.array_of_institutes = [['Bologna'], ['Coimbra'], ['Columbia'], ['Freiburg
                               ['Rice'], ['Stockholm'], ['Subatech'], ['Tokyo'], ['Torino'], 
                               ['UChicago', 'Chicago'], ['UCSD', 'UC San Diego'], ['WIS', 'Weizmann'], ['Zurich']];
 
+// For email confirmations
+var nodemailer = require("nodemailer");
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+      user: process.env.NOTIFS_ACCOUNT,
+      pass: process.env.NOTIFS_PASSWORD
+  }
+});
+
 // Routers for subsites
 var landingRouter = require('./routes/pages');
-var userRouter = require('./routes/users');
+var userRouter = require('./routes/users'); 
 var instituteRouter = require('./routes/institutes')
 var authRouter = require('./routes/auth')
 var shiftRouter = require('./routes/shifts')
@@ -100,6 +110,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Make our db accessible to our router
 app.use((req,res,next) => {
     req.recode_db = recode_db
+    req.transporter = transporter
     next()
 })
 
