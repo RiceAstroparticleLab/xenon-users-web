@@ -4,6 +4,12 @@
  * #30415d indigo
  * #031424 ultramarine
  * #8eaebd light blue
+ *
+ * XENON COLORS:
+ * #355C99 blue
+ * #30415d indigo
+ * #031424 ultramarine
+ * #cf6766 coral
  */
 
 .bg-3 { 
@@ -34,8 +40,8 @@
 
 /* Making the navbar colors */
 .navbar {
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   border: 0;
   border-radius: 0;
   margin-bottom: 0;
@@ -60,7 +66,7 @@
 
 .dropdown-menu {
   letter-spacing: 1px;
-  background-color: #2e3746;
+  background-color: #30415d;
 }
 
 /* End of Navbar colors */
@@ -141,10 +147,6 @@ details[open] {
 details[open] summary {
   border-bottom: 1px solid #aaa;
   margin-bottom: .5em;
-}
-
-.panel-default > .panel-heading {
-  background-color:#8eaebd; 
 }
 
 /* admin styles */

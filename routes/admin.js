@@ -1,6 +1,6 @@
 var express = require('express')
 var router = express.Router()
-var base = 'shifts'
+var base = '/shifts'
 
 const { Octokit } = require("@octokit/rest")
 
@@ -18,14 +18,37 @@ function ensureAuthenticated(req, res, next) {
 }
 
 router.get('/', ensureAuthenticated, function(req, res) {
-      res.render('admin', {page:'Admin Dashboard', menuId:'home', user: req.user}) 
+  var db = req.recode_db
+  db.collection('admin').find({'roles_list': {$exists: true}}).toArray(function(e, docs) {
+    var roles = docs[0].roles_list
+    var dbx = req.xenonnt_db
+    dbx.collection('users').find({"groups": {$exists: true}}).toArray(function(e, docs) {
+      res.render('admin', {page:'Admin Dashboard',
+                           menuId:'home',
+                           'roles': roles,
+                           'users': docs,
+                           user: req.user}) 
+    })
+  })
+})
 
+router.post('/add_role', ensureAuthenticated, function(req, res) {
+  var db = req.recode_db;
+  var new_role = req.body.role
+  db.collection('admin').findOneAndUpdate({'roles_list': {$exists: true}}, {$push: {'roles_list': new_role}})
+})
+
+router.get('/get_roles', ensureAuthenticated, function(req, res) {
+  var db = req.recode_db;
+  db.collection('admin').find({'roles_list': {$exists: true}}).toArray(function(e, docs) {
+    res.send(docs)
+  })
 })
 
 router.get('/add_to_db', ensureAuthenticated, function(req,res) {
-  db = req.recode_db;
+  var db = req.recode_db;
   var add_db = [];
-  db.collection('github_users').find({}).forEach((doc) => {
+  db.collection('admin').find({}).forEach((doc) => {
     var name_arr = []
     var regex = []
     if(doc.first_name != null) {
@@ -61,7 +84,7 @@ router.get('/add_to_db', ensureAuthenticated, function(req,res) {
 
 router.get('/gitremove_xenon1t', ensureAuthenticated, function(req, res) {
   var remove = []
-  db.collection('github_users').find({}).forEach((doc) => {
+  db.collection('admin').find({}).forEach((doc) => {
     var name_arr
     var regex = []
     if(doc.first_name != null) {
@@ -152,7 +175,7 @@ router.post('/get_github', ensureAuthenticated, function(req, res) {
     for (i = 0; i < xenon1t.length; i++) {
       users = xenon1t[i].data
       for (j = 0; j < users.length; j++) {
-        await db.collection('github_users').updateOne(
+        await db.collection('admin').updateOne(
           { "github": users[j].login }, 
           { $set: {"github": users[j].login,
             "xenon1t": true} }, 
@@ -163,7 +186,7 @@ router.post('/get_github', ensureAuthenticated, function(req, res) {
     for (i = 0; i < xenonnt.length; i++) {
       users = xenonnt[i].data
       for (j = 0; j < users.length; j++) {
-        await db.collection('github_users').updateOne(
+        await db.collection('admin').updateOne(
           { "github": users[j].login }, 
           { $set: {"github": users[j].login,
             "xenon1t": true} }, 
@@ -203,7 +226,7 @@ router.post('/get_github', ensureAuthenticated, function(req, res) {
       for (i = 0; i < val.length; i++) {
         
         /* update the db with the name of each user */
-        db.collection('github_users').updateOne(
+        db.collection('admin').updateOne(
           {"github": val[i].data.login}, 
           { $set: {"first_name": val[i].data.name}})
         // names.push(val[i].data.name)

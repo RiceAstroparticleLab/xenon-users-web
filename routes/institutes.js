@@ -18,7 +18,7 @@ router.get('/', ensureAuthenticated, function(req, res) {
 
 /* GET individual institution page. */
 router.get('/:institute', ensureAuthenticated, function(req, res) {
-    var db = req.recode_db
+    var db = req.xenonnt_db
     var given_inst = req.params.institute
     cur_institute = given_inst
     console.log(`Institute: ${given_inst}`)

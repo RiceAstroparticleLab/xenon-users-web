@@ -30,7 +30,7 @@ router.get('/fulldirectory', ensureAuthenticated, function(req, res) {
 })
 
 router.post("/curr_table_info", ensureAuthenticated, function(req, res){
-	var db = req.recode_db
+	var db = req.xenonnt_db
   var order = ['PI', "Permanent Scientist", "Non-permanent Sci.", "PhD Student", "Thesis Student", "XENON Student", "Engineer"]
   var users = []
   // If valid show all users in that institute
@@ -80,7 +80,7 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
 });
 
 router.post("/prev_table_info", ensureAuthenticated, function(req, res){
-	var db = req.recode_db
+	var db = req.xenonnt_db
 
   // If valid show all users in that institute
   db.collection('users').find({"end_date": {$exists: true}}, {"sort": "institute"}).toArray(function(err, result) {
@@ -94,14 +94,14 @@ router.post("/prev_table_info", ensureAuthenticated, function(req, res){
 
 /* GET List of Authors page. */
 router.get('/authors', ensureAuthenticated, function(req, res) {
-  var db = req.recode_db
+  var db = req.xenonnt_db
   db.collection('users').find({start_date: {$lt: oneYearAgo}}, {"sort": "last_name"}).toArray((e, docs) => {
     res.render('authors', {page: 'Author List', menuId: 'home', "data": docs, user: req.user})
   })
 })
 
 router.post("/curr_author_table", ensureAuthenticated, function(req, res){
-  var db = req.recode_db
+  var db = req.xenonnt_db
   var current = []
   db.collection('users').find({start_date: {$lt: oneYearAgo}}, {"sort": "last_name"}).toArray((e, docs) => {
     for (i = 0; i < docs.length; i++) {
@@ -115,7 +115,7 @@ router.post("/curr_author_table", ensureAuthenticated, function(req, res){
 })
 
 router.post("/prev_author_table", ensureAuthenticated, function(req, res){
-  var db = req.recode_db
+  var db = req.xenonnt_db
   var prev = []
   db.collection('users').find({start_date: {$lt: oneYearAgo}, 
                                 end_date: {$gt: oneYearAgo}}, 

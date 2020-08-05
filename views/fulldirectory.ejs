@@ -8,7 +8,6 @@
   <body>
     <% include components/menu %>
     <div class="container-fluid bg-3 text-left">  
-      <h1><%= page %></h1>
       <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#tableview">Current Members</a></li>
         <li><a data-toggle="tab" href="#previous">Previous Members</a></li>
@@ -16,7 +15,10 @@
       
       <div class="tab-content">
         <div id="tableview" class="tab-pane fade in active">
-          <h4 style="margin-bottom:-20px;padding-bottom:0px;">XENON members list</h4>
+          <h4 style="margin-bottom:-15px;">XENON members list</h4>
+          <% if (user.position == "PI") {%>
+            <button type="button" class="btn btn-sm" data-toggle="modal" data-target="#newUserModal" style="margin-bottom:-60px;z-index:100;position:relative;"><i class="fas fa-plus"></i>&nbsp;&nbsp;&nbsp;Add Member</button>
+          <%}%>
           <table id="currentMembersTable" style="width:100%"></table>
         </div>
         <div id="previous" class="tab-pane fade">
@@ -27,13 +29,109 @@
     </div>
     <!-- Modal -->
     <% include components/updateUserModal %>
+    <!-- New User Modal -->
+    <div id="newUserModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <div class="modal-content" style="padding: 20px 35px 20px 35px; background-color: #fdfdfd;">
+          <div class="modal-header" style="padding-left:30px">
+            <h3 class="modal-title">Add New User</h3>
+          </div>
+          <div class="modal-body">
+            <form id="formAddUser" name="adduser" method="post" action="/shifts/users/adduser">
+              <div class="row" style="margin-top:12px">
+                <label for="fname" style="padding-left:30px">First Name</label><br>
+                <div style="text-align:center;">
+                  <input id="fname" type="text" name="FirstName" required>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px">
+                <label for="lname" style="padding-left:30px">Last Name</label><br>
+                <div style="text-align:center;">
+                  <input id="lname" type="text" name="LastName" required>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px">
+                <label for="email" style="padding-left:30px">Email</label><br>
+                <div style="text-align:center;">
+                  <input id="email" type="email" name="Email" required>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px">
+                <label for="position" style="padding-left:30px">Position</label><br>
+                <div style="text-align:center;">
+                  <input type="text" name="position" id="new_position">
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px">
+                <label for="institute" style="padding-left:30px">Institute</label><br>
+                <div style="text-align:center;">
+                  <!-- Eventually add a 'users' section to permissions so this isnt so specific -->
+                  <% if( user.last_name == "Matias-Lopes") {%>
+                  <input type="text" name="institute" id="new_institute" required>
+                  <%} else if (user.position == "PI") {%>
+                    <input type="text" name="institute" id="new_institute" readonly value=<%= user.institute %> />
+                  <%}%>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px">
+                <label for="time" style="padding-left:30px">Percent Xenon</label><br>
+                <div style="text-align:center;">
+                  <input id="time" type="number" name="Time" required>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px">
+                <label for="tasks" style="padding-left:30px">Tasks</label><br>
+                <div style="text-align:center;">
+                  <input id="tasks" type="text" name="Tasks">
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px;padding-left:30px">
+                <label for="mlists">Mailing Lists</label><br>
+                  <input type="checkbox" id="mlist1" name="mlist1" value="Calibration">&nbsp;&nbsp;&nbsp;Calibration<br>
+                  <input type="checkbox" id="mlist2" name="mlist2" value="Analysis">&nbsp;&nbsp;&nbsp;Analysis<br>
+                  <input type="checkbox" id="mlist3" name="mlist3" value="TPC">&nbsp;&nbsp;&nbsp;TPC<br>
+              </div>
+
+              <div class="row" style="margin-top:12px">
+                <label for="sdate" style="padding-left:30px">Start Date</label><br>
+                <div style="text-align:center;">
+                  <input id="sdate" type="date" name="StartDate" placeholder="YYYY-MM-DD" required>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px">
+                <label for="edate" style="padding-left:30px">End Date</label><br>
+                <div style="text-align:center;">
+                  <input id="edate" type="date" name="expectedEnd" placeholder="YYYY-MM-DD"/>
+                </div>
+              </div>
+              <input type="hidden" id="page" name="page" value="fulldirectory">
+              <br>
+              <div style="text-align:center;">
+                <input type="submit" value="Submit">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
   <script>
     $(document).ready(function() {
       InitializeTable("#currentMembersTable")
       InitializePrevTable("#previousMembersTable")
       AutocompleteInstitutes("#update_institute")
+      AutocompleteInstitutes("#new_institute")
       Autocomplete(document.getElementById("position"), "<%= positions %>")
+      Autocomplete("#new_position", "<%= positions %>")
     })
   </script>
 </html>

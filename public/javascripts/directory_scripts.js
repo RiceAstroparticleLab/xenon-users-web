@@ -76,7 +76,7 @@ function InitializeTable(divname){
         e.preventDefault()
         var data = table.row( $(this).parents('tr') ).data();
         if((data.current_user.position == "PI" && data.current_user.institute == data.institute) ||
-        (data.current_user.groups != undefined)) {
+            (data.current_user.groups != "not set") || data.current_user.last_name == "Matias-Lopes") {
             openModal(data, 'fulldirectory')
         } else {
             alert("Sorry, you don't have the correct permissions.")
@@ -156,7 +156,7 @@ function InitializePrevTable(divname){
         e.preventDefault()
         var data = table.row( $(this).parents('tr') ).data();
         if((data.current_user.position == "PI" && data.current_user.institute == data.institute) ||
-        (data.current_user.groups != undefined)) {
+            data.current_user.groups != "not set" || data.current_user.last_name == "Matias-Lopes") {
             openModal(data, 'fulldirectory')
         } else {
             alert("Sorry, you don't have the correct permissions.")
@@ -212,9 +212,8 @@ function PrevAuthorsTable(divname) {
     $(divname + ' tbody').on( 'click', 'button', function (e) {
         e.preventDefault()
         var data = table.row( $(this).parents('tr') ).data();
-        if((data.current_user.first_name == data.first_name) && (data.current_user.last_name == data.last_name) || 
-        (data.current_user.position == "PI" && data.current_user.institute == data.institute) ||
-        (data.current_user.groups != undefined)) {
+        if((data.current_user.position == "PI" && data.current_user.institute == data.institute) ||
+            (data.current_user.groups != "not set") || data.current_user.last_name == "Matias-Lopes") {
         openModal(data, 'authors')
         } else {
             alert("Sorry, you don't have the correct permissions.")
@@ -268,9 +267,8 @@ function CurrAuthorsTable(divname) {
     $(divname + ' tbody').on( 'click', 'button', function (e) {
         e.preventDefault()
         var data = table.row( $(this).parents('tr') ).data();
-        if((data.current_user.first_name == data.first_name) && (data.current_user.last_name == data.last_name) || 
-            (data.current_user.position == "PI" && data.current_user.institute == data.institute) ||
-            (data.current_user.groups != undefined)) {
+        if((data.current_user.position == "PI" && data.current_user.institute == data.institute) ||
+            (data.current_user.groups != "not set") || data.current_user.last_name == "Matias-Lopes") {
             openModal(data, 'authors')
         } else {
             alert("Sorry, you don't have the correct permissions.")
@@ -377,16 +375,20 @@ function UpdateUserModal() {
  }
 
 function AutocompleteInstitutes(id) {
-    var arr = array_of_institutes
+    var arr = ['Bologna', 'Coimbra', 'Columbia', 'Freiburg', 'KIT',
+    'Kobe', "L'Aquila", 'LAL', 'LNGS-GSSI', 'LPNHE', 'Mainz',
+    'MPI Heidelberg','Muenster', 'Nagoya', 'Naples', 'Nikhef',
+    'NYUAD', 'Purdue', 'Rensselear', 'Rice', 'Stockholm', 'Subatech',
+    'Tokyo', 'Torino', 'UChicago', 'UCSD', 'WIS', 'Zurich'];
     console.log(arr)
     $(id).autocomplete({
       source: function( request, response ) {
         console.log(request)
         console.log(response)
         var matches = $.map( arr, function(item) {
-          if ( item[0].toUpperCase().indexOf(request.term.toUpperCase()) != -1 ) {
-            return item[0];
-          }
+          if ( item.toUpperCase().indexOf(request.term.toUpperCase()) != -1 ) {
+            return item;
+          } 
         });
         response(matches);
       }

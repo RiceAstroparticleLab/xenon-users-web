@@ -1,8 +1,8 @@
 function FillAggregates(tablediv, headerdiv, myinstitute){
     $.getJSON('shifts/total_shift_aggregates', function(data){
 	    html = "";
-	    console.log(data);
-	    console.log(myinstitute);
+//	    console.log(data);
+//	    console.log(myinstitute);
 	    var yr = (new Date()).getFullYear();
 	    var total = 0;
 	    var totalyr = 0;
@@ -256,7 +256,7 @@ function SignUp(shiftType, shiftStart, shiftEnd){
 }
 
 function Assign(shiftType, shiftStart, shiftEnd){
-
+    DAQAutocomplete('#assign_shifter')
     $('#assign_start_date').val(moment(parseInt(shiftStart)).tz('Atlantic/St_Helena').format("YYYY-MM-DD"));
     $("#assign_start_date").prop("readonly", true);
     $('#assign_end_date').val(moment(parseInt(shiftEnd)).tz('Atlantic/St_Helena').format("YYYY-MM-DD"));
@@ -270,7 +270,25 @@ function Assign(shiftType, shiftStart, shiftEnd){
     document.getElementById("assign_remove").checked = false;
     $("#assign_remove").val(false);
 
+}
 
+function DAQAutocomplete(div){
+    $.get('shifts/get_daqids', function(data) {
+        var arr = data.split(',')
+        console.log(arr)
+        $(div).autocomplete({
+            source: function( request, response ) {
+//              console.log(request)
+//              console.log(response)
+              var matches = $.map( arr, function(item) {
+                if ( item.toUpperCase().indexOf(request.term.toUpperCase()) != -1 ) {
+                  return item;
+                }
+              });
+              response(matches);
+            }
+          });
+    })
 }
     
 function SignUpTrain(shiftType, shiftStart, shiftEnd){

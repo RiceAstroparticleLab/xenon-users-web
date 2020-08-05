@@ -10,7 +10,7 @@ function ensureAuthenticated(req, res, next) {
 }
 
 router.post('/updateContactInfo', ensureAuthenticated, (req, res) => {
-    var db = req.recode_db;
+    var db = req.xenonnt_db;
     var idoc = {};
     if(req.body.email != ""){
         idoc['email'] = req.body.email;
@@ -38,7 +38,7 @@ router.post('/updateContactInfo', ensureAuthenticated, (req, res) => {
 
 router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, res) => {
     // Get our form values. These rely on the "name" attributes
-    var db = req.recode_db
+    var db = req.xenonnt_db
     var user_id = new ObjectId(req.params.userid)
     var page = req.params.page
 
@@ -94,8 +94,7 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, (req, 
 // in edit: cell, 
 // admin: % xenon, start date, end date, position, institute
 router.post('/adduser', ensureAuthenticated, (req, res) => {
-    var db = req.recode_db
-
+    var db = req.xenonnt_db
     // Get our form values. These rely on the "name" attributes
     var idoc = {};
     idoc['first_name'] = req.body.FirstName;
@@ -125,10 +124,10 @@ router.post('/adduser', ensureAuthenticated, (req, res) => {
             if (success) {
                 db.collection('users').insertOne(idoc)
                 console.log(`success. Added ${req.body.FirstName} ${req.body.LastName}`)
-                res.redirect(`${base}/institutes/${req.body.institute}`)
+                res.redirect(`${base}/${req.body.page}`)
             } else {
                 console.log("error. Could not send email.")
-                res.redirect(`${base}/institutes/${req.body.institute}`)
+                res.redirect(`${base}/${req.body.page}`)
             }
         })
     } catch (e) {

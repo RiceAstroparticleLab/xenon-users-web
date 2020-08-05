@@ -109,6 +109,12 @@
  .btn-reddit:active,.btn-reddit.active,.open>.dropdown-toggle.btn-reddit{background-image:none}
  .btn-reddit.disabled:hover,.btn-reddit[disabled]:hover,fieldset[disabled] .btn-reddit:hover,.btn-reddit.disabled:focus,.btn-reddit[disabled]:focus,fieldset[disabled] .btn-reddit:focus,.btn-reddit.disabled.focus,.btn-reddit[disabled].focus,fieldset[disabled] .btn-reddit.focus{background-color:#eff7ff;border-color:rgba(0,0,0,0.2)}
  .btn-reddit .badge{color:#eff7ff;background-color:#000}
+ .btn-slack{color:#fff;background-color:#007a5a;border-color:rgba(0,0,0,0.2)}.btn-slack:focus,.btn-slack.focus{color:#fff;background-color:#00523c;border-color:rgba(0,0,0,0.2)}
+ .btn-slack:hover{color:#fff;background-color:#00523c;border-color:rgba(0,0,0,0.2)}
+ .btn-slack:active,.btn-slack.active,.open>.dropdown-toggle.btn-slack{color:#fff;background-color:#00523c;border-color:rgba(0,0,0,0.2)}.btn-slack:active:hover,.btn-slack.active:hover,.open>.dropdown-toggle.btn-slack:hover,.btn-slack:active:focus,.btn-slack.active:focus,.open>.dropdown-toggle.btn-slack:focus,.btn-slack:active.focus,.btn-slack.active.focus,.open>.dropdown-toggle.btn-slack.focus{color:#fff;background-color:#013f2f;border-color:rgba(0,0,0,0.2)}
+ .btn-slack:active,.btn-slack.active,.open>.dropdown-toggle.btn-slack{background-image:none}
+ .btn-slack.disabled:hover,.btn-slack[disabled]:hover,fieldset[disabled] .btn-slack:hover,.btn-slack.disabled:focus,.btn-slack[disabled]:focus,fieldset[disabled] .btn-slack:focus,.btn-slack.disabled.focus,.btn-slack[disabled].focus,fieldset[disabled] .btn-slack.focus{background-color:#007a5a;border-color:rgba(0,0,0,0.2)}
+ .btn-slack .badge{color:#007a5a;background-color:#fff}
  .btn-soundcloud{color:#fff;background-color:#f50;border-color:rgba(0,0,0,0.2)}.btn-soundcloud:focus,.btn-soundcloud.focus{color:#fff;background-color:#c40;border-color:rgba(0,0,0,0.2)}
  .btn-soundcloud:hover{color:#fff;background-color:#c40;border-color:rgba(0,0,0,0.2)}
  .btn-soundcloud:active,.btn-soundcloud.active,.open>.dropdown-toggle.btn-soundcloud{color:#fff;background-color:#c40;border-color:rgba(0,0,0,0.2)}.btn-soundcloud:active:hover,.btn-soundcloud.active:hover,.open>.dropdown-toggle.btn-soundcloud:hover,.btn-soundcloud:active:focus,.btn-soundcloud.active:focus,.open>.dropdown-toggle.btn-soundcloud:focus,.btn-soundcloud:active.focus,.btn-soundcloud.active.focus,.open>.dropdown-toggle.btn-soundcloud.focus{color:#fff;background-color:#a83800;border-color:rgba(0,0,0,0.2)}

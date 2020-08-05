@@ -15,7 +15,7 @@ function ensureAuthenticated(req, res, next) {
 
 
 router.get('/get_current_shifters', ensureAuthenticated, function(req, res){
-	var db = req.recode_db
+	var db = req.xenonnt_db
 
     var today = new Date();
     db.collection("shifts").find(
@@ -61,7 +61,7 @@ router.get('/get_current_shifters', ensureAuthenticated, function(req, res){
  * The arguments are fixed as 'start' and 'end', which are ISO dates 
  */
 router.get('/get_shifts', ensureAuthenticated, function(req, res){
-	var db = req.recode_db
+	var db = req.xenonnt_db
     var collection = db.collection("shifts");
 
     var q = url.parse(req.url, true).query;
@@ -94,27 +94,32 @@ router.get('/get_shifts', ensureAuthenticated, function(req, res){
 });
 
 router.get("/total_shift_aggregates", ensureAuthenticated, function(req, res){
-	var db = req.recode_db
+	var db = req.xenonnt_db
     db.collection('shifts').aggregate([
 	{"$match": {"institute": {"$ne": "none"}}}, 
 	{$group: { "_id": { "institute": "$institute", "yr": {"$year": "$start"}}, 
 		   "count": {"$sum": 1}}}, 
 	{$group: {"_id": "$_id.institute", "total": {"$sum": "$count"}, 
 		  "years": {$push: {"year": "$_id.yr", "count": "$count"}}}},
-        {$sort: {"total": -1}}]).toArray( 
-			 function(err, result){
-                //console.log(result)
-			    res.send(result);
-			 });
+        {$sort: {"total": -1}}]).toArray(function(err, result){
+			res.send(result);
+        });
     
 });
+
+router.post("/get_daqids", ensureAuthenticated, function(req, res){
+    var db = req.xenonnt_db
+    db.collection('users').distinct("daq_id", (e, docs) => {
+        res.send(docs)
+    })
+})
 
 router.post("/get_rules", ensureAuthenticated, function(req,res){
     //get form data
     var year = req.body.years
     console.log(typeof year)
 
-    var db = req.recode_db
+    var db = req.xenonnt_db
     db.collection('shift_ruls').find({"year": year}, {"$sort": {"institute": 1}}).toArray((err,result) => {
         // console.log(result)
         res.status(200).send(result)
@@ -128,7 +133,7 @@ function getNextDayOfWeek(date, dayOfWeek) {
     return resultDate;
 }
 router.post('/add_shifts', ensureAuthenticated, function(req, res){
-	var db = req.recode_db
+	var db = req.xenonnt_db
     
       // Get form data
       var start = new Date(Date.UTC(parseInt(req.body.start_date.substr(0, 4)), 
@@ -177,7 +182,7 @@ router.post('/add_shifts', ensureAuthenticated, function(req, res){
 });
 
 router.post('/remove_shifts', ensureAuthenticated, function(req, res){
-	   var db = req.recode_db
+	   var db = req.xenonnt_db
       var collection = db.collection("shifts");
     
        var start = new Date(req.body.start_date);
@@ -199,7 +204,7 @@ router.post('/remove_shifts', ensureAuthenticated, function(req, res){
 });
 
 router.post('/modify_shift', ensureAuthenticated, function(req, res){
-      var db = req.recode_db
+      var db = req.xenonnt_db
       var collection = db.collection("shifts");
 
       var start = new Date(req.body.start_date);

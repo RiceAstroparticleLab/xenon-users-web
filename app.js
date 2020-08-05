@@ -11,9 +11,10 @@ const MongoClient = require('mongodb').MongoClient
 const mongoURI = process.env.DAQ_MONGO_URI
 // const mongoURI = process.env.MONGO_LOCAL_URI
 var recode_db
+var xenonnt_db
 MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
-    // recode_db = db.db('xenon')
-    recode_db = db.db("xenonnt")
+    recode_db = db.db('recode')
+    xenonnt = db.db("xenonnt")
     console.log(`mongoDB is connected to remote mongo`),
     err => {console.log(err)}
 })
@@ -30,7 +31,7 @@ MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
         // Weizmann -> WIS
 global.array_of_institutes = [['Bologna'], ['Coimbra'], ['Columbia'], ['Freiburg', 'Bern/Freiburg'], ['KIT'], 
                               ['Kobe'], ["L'Aquila"], ['LAL'], ['LNGS-GSSI', 'LNGS'], ['LPNHE'], ['Mainz'],
-                              ['MPI Heidelberg', 'MPIK Heidelberg'], ['Munster', 'Muenster'], ['Nagoya'], 
+                              ['MPIK Heidelberg', 'MPI Heidelberg'], ['Muenster', 'Munster'], ['Nagoya'], 
                               ['Naples', 'INFN Naples'], ['Nikhef'], ['NYUAD'], ['Purdue'], ['Rensselear'], 
                               ['Rice'], ['Stockholm'], ['Subatech'], ['Tokyo'], ['Torino'], 
                               ['UChicago', 'Chicago'], ['UCSD', 'UC San Diego'], ['WIS', 'Weizmann'], ['Zurich']];
@@ -110,6 +111,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Make our db accessible to our router
 app.use((req,res,next) => {
     req.recode_db = recode_db
+    req.xenonnt_db = xenonnt_db
     req.transporter = transporter
     next()
 })

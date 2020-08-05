@@ -121,7 +121,7 @@
               <div class="row" style="margin-top:12px">
                 <label for="institute" style="padding-left:30px">Institute</label><br>
                 <div style="text-align:center;">
-                  <input id="institute" type="text" name="institute" readonly value=<%= page %> />
+                  <input id="institute" type="text" name="institute" readonly value="<%= page %>" />
                 </div>
               </div>
 
@@ -159,6 +159,7 @@
                   <input id="edate" type="date" name="expectedEnd" placeholder="YYYY-MM-DD"/>
                 </div>
               </div>
+              <input type="hidden" id="page" name="page" value="institutes/<%= page %>">
               <br>
               <div style="text-align:center;">
                 <input type="submit" value="Submit">

@@ -2,70 +2,76 @@
 <html lang="en">
 <head>
     <% include components/head %> 
+    <link rel="stylesheet" href="/shifts/stylesheets/bootstrap-social.css">
+    <script src="javascripts/admin_scripts.js", type="text/javascript"></script>
 </head>
 <body>
     <% include components/menu %>
     <div class="container-fluid bg-3">
         <br>
+        <br>
         <div class="row">
-            <div class="col-10">
-                <h4>User Account</h4>
+            <div class="col-sm-3 col-xs-12" style="padding-left:30px;">
+                <img src="<%=user.picture_url%>" style="width: 100%;">
+                <hr>
+                <h5> Member since: <%= user.start_date.toString().substring(4,15) %></h5>
             </div>
-            <div class="col-2">
-                <button type="button" class="btn btn-default" data-target="#updateModal" data-toggle="modal">Update Contact Info</button>
+            <div class="col-sm-9 col-xs-12" style="padding-left:40px;">
+                <h2 style="margin-top:0;"><%= title %></h2>
+                <h5 style="color:#355C99"><%= user.position %> at <%= user.institute %></h5>
+                <br>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" role="tab" href="#profiletab" style="border:0;border-bottom:2px solid #355C99;color:#555 !important;"><i class="fas fa-user"></i><strong>&nbsp;&nbsp;&nbsp;XENON Profile</strong></a></li>
+                </ul>
+                <div class="tab-content" id="tabContent">
+                    <div class="tab-pane fade in active" id="profiletab">
+                        <table>
+                            <h6 style="color:#aaa;letter-spacing:.7px;padding-top:10px;padding-bottom:10px">CONTACT INFO</h6>
+                            <tr>
+                                <td style="width:150px"><strong>E-mail:</strong></td>
+                                <td><%= user.email %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Skype:</strong></td>
+                                <td><%= user.skype %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cell:</strong></td>
+                                <td><%= user.cell %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Percent Xenon:</strong></td>
+                                <td><%= user.percent_xenon %>% </td>
+                            </tr>
+                        </table>
+                        <h6 style="color:#aaa;letter-spacing:.7px;padding-top:10px;padding-bottom:10px">ACCOUNTS</h6>
+                        <table>
+                            <tr>
+                                <td style="width:150px"><strong>GitHub ID:</strong></td>
+                                <td><%= user.github %></td>
+                            </tr>
+                            <tr>
+                                <td><strong>LNGS ID:</strong></td>
+                                <td><%= user.lngs_ldap_uid %></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>  
-        <hr>
+        </div>
+        <br>
         <div class="row">
-            <div class="col-sm-3 col-xs-12">
-                <img src="<%=user.picture_url%>" style="width: 100%; max-width:200px;">
-                <h5><%= title %></h5>
-                <h6><%= user.position %> at <%= user.institute %></h6>
-                <h6> Member since: <%= user.start_date.toString().substring(4,15) %></h6>
+            <div class="col-sm-3 col-xs-12" style="padding-left:30px;">
+                <button type="button" class="btn btn-primary" data-target="#updateModal" data-toggle="modal" style="padding-top:8px;padding-bottom:8px">Update Contact Info</button>
             </div>
-            <div class="col-sm-9 col-xs-12">
-                <table>
-                    <tr>
-                        <td style="width:150px">
-                            <strong>XENON Profile</strong>
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Email</td>
-                        <td><%= user.email %></td>
-                    </tr>
-                    <tr>
-                        <td>Skype</td>
-                        <td><%= user.skype %></td>
-                    </tr>
-                    <tr>
-                        <td>Cell</td>
-                        <td><%= user.cell %></td>
-                    </tr>
-                    <tr>
-                        <td>Percent Xenon</td>
-                        <td><%= user.percent_xenon %>% </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <strong>Accounts</strong>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Github ID</td>
-                        <td><%= user.github %></td>
-                    </tr>
-                    <tr>
-                        <td>LNGS ID</td>
-                        <td><%= user.lngs_ldap_uid %></td>
-                    </tr>
-                </table>
+            <div class="col-sm-9 col-xs-12" style="padding-left:30px;">
+                <a><button type="button" class="btn btn-slack"><i class="fab fa-slack" style="float:left;font-size:x-large;"></i>&nbsp;&nbsp;&nbsp;Request Slack Invite</button></a>
+                <a><button type="button" class="btn btn-github" onclick="ReqXenonGroup('xenon1t')"><i class="fab fa-github pr-1" style="float:left;font-size:x-large;"></i>&nbsp;&nbsp;&nbsp;Request XENON1T Access</button></a>
+                <a><button type="button" class="btn btn-github" onclick="ReqXenonGroup('xenonnt')"><i class="fab fa-github pr-1" style="float:left;font-size:x-large;"></i>&nbsp;&nbsp;&nbsp;Request XENONnT Access</button></a>
             </div>
         </div>
         <br>
         <br>
-        <a href="/shifts/">back to home page</a>
 
         <!-- Modal -->
         <div id="updateModal" class="modal fade" tabindex="-1" role="dialog">
@@ -96,14 +102,4 @@
         </div>
     </div>
 </body>
-<script>
-     $(document).ready(function(){
-    	DrawActiveLink("#laccount");
-        var userdoc = JSON.parse('!{JSON.stringify(user)}');      
-        FillAPIInfo(userdoc);
-        if('#{user.favorite_color}' != "not set"){
-            $("#form_color").val("#{user.favorite_color}");
-      }
-    });
-</script>
 </html>
