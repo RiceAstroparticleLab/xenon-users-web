@@ -35,6 +35,8 @@
   <head>
     <% include components/head %>
     <script src="/shifts/javascripts/directory_scripts.js" type="text/javascript"></script>
+    <script src="/shifts/javascripts/chart.js" type="text/javascript"></script>
+
   </head>
   <body>
     <% include components/menu %>
@@ -43,6 +45,9 @@
         <div class="col-sm-1"></div>
         <div class="col-sm-6">
           <h1><%= page %></h1>
+          <figure class="highcharts-figure">
+            <div id="stats"></div>
+        </figure>
           <h3><%=page%> XENON team at a glance </h3>
           <hr style="margin-top: 5px;">
           <p>Current Members: <%= curr.length%> <br> <br>
@@ -176,6 +181,7 @@
   <script>
     $(document).ready(function () {
       UpdateUserModal();
+      Chart('#stats', "<%= dict %>", "<%= PI %>")
     })
   </script>
 </html>

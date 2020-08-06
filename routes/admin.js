@@ -47,6 +47,7 @@ router.get('/get_roles', ensureAuthenticated, function(req, res) {
 
 router.get('/add_to_db', ensureAuthenticated, function(req,res) {
   var db = req.recode_db;
+  var dbx = req.xenonnt_db
   var add_db = [];
   db.collection('admin').find({}).forEach((doc) => {
     var name_arr = []
@@ -62,7 +63,7 @@ router.get('/add_to_db', ensureAuthenticated, function(req,res) {
 
     var name = name_arr
     var git = doc.github
-    db.collection('users').find({ 
+    dbx.collection('users').find({ 
       $or: [
         { $and: [{ first_name: {$in: regex}, last_name: {$in: name_arr}}] },
         { $and: [{ first_name: {$in: name_arr}, last_name: {$in: regex}}] },
@@ -83,6 +84,8 @@ router.get('/add_to_db', ensureAuthenticated, function(req,res) {
 })
 
 router.get('/gitremove_xenon1t', ensureAuthenticated, function(req, res) {
+  var db = req.recode_db;
+  var dbx = req.xenonnt_db
   var remove = []
   db.collection('admin').find({}).forEach((doc) => {
     var name_arr
@@ -101,7 +104,7 @@ router.get('/gitremove_xenon1t', ensureAuthenticated, function(req, res) {
     // console.log(name_arr)
     // users have an end date but are in the github
     
-    db.collection('users').find(
+    dbx.collection('users').find(
       { first_name: {$in: name_arr},
         last_name: {$in: name_arr},
         end_date: {$exists: true}}).toArray((e, docs) => {
@@ -117,8 +120,7 @@ router.get('/gitremove_xenon1t', ensureAuthenticated, function(req, res) {
 })
 
 router.post('/get_github', ensureAuthenticated, function(req, res) {
-  
-  db = req.recode_db
+  var db = req.recode_db
   async function getXenon1tUsernames() {
     let page1 = octokit.orgs.listMembers({
       org: "XENON1T",

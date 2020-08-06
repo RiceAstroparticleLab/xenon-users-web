@@ -14,7 +14,7 @@ var recode_db
 var xenonnt_db
 MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
     recode_db = db.db('recode')
-    xenonnt = db.db("xenonnt")
+    xenonnt_db = db.db("xenonnt")
     console.log(`mongoDB is connected to remote mongo`),
     err => {console.log(err)}
 })

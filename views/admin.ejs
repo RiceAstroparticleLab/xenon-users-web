@@ -3,13 +3,9 @@
 <style>
     .dash-panel > .panel-heading{
         height: 165px;
-        color: white;
     }
     .dash-panel > .panel-body{
         padding: 15px;
-        border: 1px solid lightgray;
-        border-top: none;
-        border-radius: 0px 0px 4px 4px;
     }
 
     .nav-pills>li.active>a{
@@ -27,7 +23,6 @@
         <div class="col-sm-2 sidebar">
             <ul class="nav nav-pills sidebar-pill nav-stacked">
                 <li class="active"><a data-toggle="pill" href="#github"><i class="fab fa-github pr-1"></i>&nbsp;&nbsp;&nbsp;GitHub</a></li>
-                <li><a data-toggle="pill" href="#mail"><i class="fas fa-envelope-open"></i>&nbsp;&nbsp;&nbsp;Mailing Lists</a></li>
                 <li><a data-toggle="pill" href="#users"><i class="fas fa-users"></i>&nbsp;&nbsp;&nbsp;User Roles</a></li>
                 <li><a data-toggle="pill" href="#lngs"><i class="fas fa-bars"></i>&nbsp;&nbsp;&nbsp;LNGS</a></li>
                 <li><a data-toggle="pill" href="#slack"><i class="fab fa-slack"></i>&nbsp;&nbsp;&nbsp;Slack</a></li>
@@ -41,18 +36,17 @@
                         <li class="active"><a data-toggle="pill" href="#xenon1t">XENON1T</a></li>
                         <li><a data-toggle="pill" href="#xenonnt">XENONnT</a></li>
                         <div class='pull-right'>
-                            <button class="btn btn-coral" style="margin-top:-2px;background-color:#8eaebd"><i class="fas fa-sync-alt"></i>&nbsp;&nbsp;&nbsp;Refresh</button>
+                            <button class="btn btn-coral" style="margin-top:-2px;"><i class="fas fa-sync-alt"></i>&nbsp;&nbsp;&nbsp;Refresh</button>
                             <p>Last Updated: </p>
                         </div>
                     </ul>
 
                     <div class="tab-content">
                         <div id="xenon1t" class="tab-pane fade in active">
-                            <div class="row" style="padding-top:30px">
-                                <div class="col-md-6">
-                                    <div class="panel dash-panel">
-                                        <div class="panel-heading" style="background-color: #c43e3e;">
-                                        <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;">0</h1>
+                                <div class="col-md-4">
+                                    <div class="panel panel-default dash-panel">
+                                        <div class="panel-heading">
+                                        <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;color:#ff3b30;">0</h1>
                                         <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">REMOVE FROM GITHUB</h3>
                                         </div>
                                         <div class="panel-body">
@@ -62,10 +56,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="panel dash-panel">
-                                        <div class="panel-heading" style="background-color:#2b3137;">
-                                            <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;">0</h1>
+                                <div class="col-md-4">
+                                    <div class="panel panel-default dash-panel">
+                                        <div class="panel-heading">
+                                            <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;color:#2b3137;">0</h1>
                                             <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">ADD TO GITHUB</h3>
                                         </div>
                                         <div class="panel-body">
@@ -73,42 +67,39 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                             
                         <div id="xenonnt" class="tab-pane fade">
-                            <div class="row" style="padding-top:30px">
-                                <div class="col-md-6">
-                                    <div class="panel dash-panel">
-                                        <div class="panel-heading" style="background-color: #c43e3e;">
-                                        <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;">0</h1>
-                                        <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">REMOVE FROM GITHUB</h3>
-                                        </div>
-                                        <div class="panel-body">
-                                            <table class="table">
-                                               
-                                            </table>
-                                        </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default dash-panel">
+                                    <div class="panel-heading">
+                                    <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;color:#ff3b30;">0</h1>
+                                    <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">REMOVE FROM GITHUB</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <table class="table">
+                                            
+                                        </table>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="panel dash-panel">
-                                        <div class="panel-heading" style="background-color:#2b3137;">
-                                            <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;">0</h1>
-                                            <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">ADD TO GITHUB</h3>
-                                        </div>
-                                        <div class="panel-body">
-                                        No users for now
-                                        </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-default dash-panel">
+                                    <div class="panel-heading">
+                                        <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;color:#2b3137">0</h1>
+                                        <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">ADD TO GITHUB</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                    No users for now
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="panel dash-panel">
-                            <div class="panel-heading" style="background-color:#3fa037">
-                                <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;">0</h1>
+                    <div class="col-md-4">
+                        <div class="panel panel-default dash-panel">
+                            <div class="panel-heading">
+                                <h1 style="font-weight:300;font-size:80px;text-align:right;margin-top:0px;padding-right:10px;color:#34c759">0</h1>
                                 <h3 style="letter-spacing:1px;font-weight:300;margin-top:0;">ADD TO DB</h3>
                             </div>
                             <div class="panel-body">
