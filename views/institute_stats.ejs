@@ -44,19 +44,15 @@
       <div class ="row">
         <div class="col-sm-1"></div>
         <div class="col-sm-6">
-          <h1><%= page %></h1>
-          <figure class="highcharts-figure">
-            <div id="stats"></div>
-        </figure>
           <h3><%=page%> XENON team at a glance </h3>
           <hr style="margin-top: 5px;">
+          <figure class="highcharts-figure">
+            <div id="stats" style="height:250px"></div>
+        </figure>
           <p>Current Members: <%= curr.length%> <br> <br>
             PI: <% for (i = 0; i < PI.length; i++) {%>
                   <%=PI[i].last_name + ", " + PI[i].first_name %> <br>
                 <%}%> <br>
-            <% for(var key in dict) {%>
-              <%=key%>: <%=dict[key]%> <br>
-            <%}%>
           </p>
         </div>
         <div class="col-sm-4">
@@ -181,7 +177,7 @@
   <script>
     $(document).ready(function () {
       UpdateUserModal();
-      Chart('#stats', "<%= dict %>", "<%= PI %>")
+      Chart('stats', '<%-JSON.stringify(dict)%>', '<%-JSON.stringify(PI)%>')
     })
   </script>
 </html>

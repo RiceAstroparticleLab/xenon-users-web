@@ -9,10 +9,10 @@
  * #355C99 blue
  * #30415d indigo
  * #031424 ultramarine
- * #cf6766 coral
+ * #d46260 coral
  */
 
- body {
+body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
 }
 
@@ -28,18 +28,23 @@
   padding-right: 40px;
 }
 
+.container-flex {
+  padding: 0px;
+  display: flex;
+}
+
 /* Buttons */
 .btn-coral { 
   padding: 10px 20px 10px 20px;
   border-radius: 4px; 
   margin: 8px;
-  background-color: #cf6766;
+  background-color: #d46260;
   color: white ;
 }
 
 .btn-coral:hover {
   color: white;
-  background-color: #ac5654;
+  background-color: #b85755;
 }
 
 /* Making the navbar colors */
@@ -153,27 +158,28 @@ details[open] summary {
 
 /* admin styles */
 .sidebar {
-  padding: 0px !important;
-  height: 1400px !important;
-  background-color: #3c4758;
+  min-height: calc(100vh);
+  background-color: #fff;
+  padding: 0;
+  padding-left:15px;
+  z-index: 11;
 }
 
 .sidebar-pill li.active a{
-  background-color: #ffffff2f !important;
-  border-radius: 0px;
+  background-color: #30415d !important;
   color: #f3f3f3 !important;
 }
 
 .sidebar-pill li a{
-  color: #f3f3f3;
-  padding: 15px 55px !important;
-  border-radius: 0px !important;
-  border-bottom: 1px solid #ffffff23;
+  color: #212121;
+  padding: 15px 20px !important;
+  border-radius: 3px !important;
 }
 
 .sidebar-pill li a:hover{
   border-radius: 0px;
-  background-color: #ffffff88 !important;
+  background-color: #0000000c !important;
+  color: #30415d;
 }
 
 /* buttons */

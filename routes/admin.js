@@ -22,11 +22,16 @@ router.get('/', ensureAuthenticated, function(req, res) {
   db.collection('admin').find({'roles_list': {$exists: true}}).toArray(function(e, docs) {
     var roles = docs[0].roles_list
     var dbx = req.xenonnt_db
+    var date
+    db.collection('admin').find({'page': 'github'}).toArray(function(e, docs) {
+      date = docs[0].last_synced
+    })
     dbx.collection('users').find({"groups": {$exists: true}}).toArray(function(e, docs) {
       res.render('admin', {page:'Admin Dashboard',
                            menuId:'home',
                            'roles': roles,
                            'users': docs,
+                           'last_synced': date,
                            user: req.user}) 
     })
   })
@@ -36,6 +41,7 @@ router.post('/add_role', ensureAuthenticated, function(req, res) {
   var db = req.recode_db;
   var new_role = req.body.role
   db.collection('admin').findOneAndUpdate({'roles_list': {$exists: true}}, {$push: {'roles_list': new_role}})
+  return res.redirect(base + '/admin');
 })
 
 router.get('/get_roles', ensureAuthenticated, function(req, res) {
@@ -80,14 +86,49 @@ router.get('/add_to_db', ensureAuthenticated, function(req,res) {
             }
           }
     })
-  }).then(() =>  res.send(add_db)) // does not wait for whole array
+  }).then(() => {
+    setTimeout(function(){ res.send(add_db); }, 6000)
+  })
 })
 
 router.get('/gitremove_xenon1t', ensureAuthenticated, function(req, res) {
   var db = req.recode_db;
   var dbx = req.xenonnt_db
   var remove = []
-  db.collection('admin').find({}).forEach((doc) => {
+  db.collection('admin').find({'xenon1t': true}).forEach((doc) => {
+    var name_arr
+    var regex = []
+    if(doc.first_name != null) {
+      name_arr = doc.first_name.split(/\s+/g)
+      for (var idx = 0; idx < name_arr.length; idx++) {
+        var pattern = name_arr[idx];
+        var reg = new RegExp(pattern)
+        regex.push(reg)
+      }
+    } else {
+      name_arr = []
+      regex = []
+    }
+
+    // users have an end date but are in the github
+    dbx.collection('users').find(
+      { first_name: {$in: name_arr},
+        last_name: {$in: name_arr},
+        end_date: {$exists: true}}).toArray((e, docs) => {
+          if(docs.length > 0) {
+            remove.push(docs)
+          }
+    })
+  }).then(() => {
+    setTimeout(function(){ res.send(remove);}, 6000);
+  })
+})
+
+router.get('/gitremove_xenonnt', ensureAuthenticated, function(req, res) {
+  var db = req.recode_db;
+  var dbx = req.xenonnt_db
+  var remove = []
+  db.collection('admin').find({'xenonnt': true}).forEach((doc) => {
     var name_arr
     var regex = []
     if(doc.first_name != null) {
@@ -115,7 +156,55 @@ router.get('/gitremove_xenon1t', ensureAuthenticated, function(req, res) {
         
     })
   }).then(() => {
-    res.send(remove)
+    setTimeout(function(){ res.send(remove);}, 6000);
+  })
+})
+
+/* FIX THIS FUNCTION */
+router.get('/gitadd_xenon1t', ensureAuthenticated, function(req,res){
+  db = req.recode_db
+  dbx = req.xenonnt_db
+  var add = []
+  dbx.collection('users').find({}).forEach((doc) => {
+    var name = doc.first_name + ' ' + doc.last_name;
+    var regex = new RegExp(name)
+//    console.log('REGEX GIT ADD XENON1T: ' + regex)
+    db.collection('admin').find({$or: [
+      { first_name: name },
+      { github: doc.github }]}).toArray((e, docs) => {
+        console.log("github: " + doc.github + " match: ")
+        console.log(docs)
+        if(docs.length < 1) {
+          // console.log(docs)
+          add.push(doc)
+        }
+    })
+  }).then(() => {
+    setTimeout(function(){ res.send(add);}, 6000);
+  })
+})
+
+/* FIX THIS FUNCTION */
+router.get('/gitadd_xenonnt', ensureAuthenticated, function(req,res){
+  db = req.recode_db
+  dbx = req.xenonnt_db
+  var add = []
+  dbx.collection('users').find({}).forEach((doc) => {
+    var name = doc.first_name + ' ' + doc.last_name;
+    var regex = new RegExp(name)
+//    console.log('REGEX GIT ADD XENON1T: ' + regex)
+    db.collection('admin').find({$or: [
+      { first_name: name },
+      { github: doc.github }]}).toArray((e, docs) => {
+        console.log("github: " + doc.github + " match: ")
+        console.log(docs)
+        if(docs.length < 1) {
+          // console.log(docs)
+          add.push(doc)
+        }
+    })
+  }).then(() => {
+    setTimeout(function(){ res.send(add);}, 6000);
   })
 })
 
@@ -191,7 +280,7 @@ router.post('/get_github', ensureAuthenticated, function(req, res) {
         await db.collection('admin').updateOne(
           { "github": users[j].login }, 
           { $set: {"github": users[j].login,
-            "xenon1t": true} }, 
+            "xenonnt": true} }, 
           { upsert: true }
         )
       }
@@ -231,17 +320,18 @@ router.post('/get_github', ensureAuthenticated, function(req, res) {
         db.collection('admin').updateOne(
           {"github": val[i].data.login}, 
           { $set: {"first_name": val[i].data.name}})
-        // names.push(val[i].data.name)
+        
+        /* update the 'last synced' time */
+        db.collection('admin').updateOne({"page": "github"}, {$set: {"last_synced": new Date()}}, {upsert: true})
       }
     } catch (e) {
       console.log(e)
     }
-
-    // console.log(names)
-    //return names
   }
 
-  listUsers()
+  listUsers().then(
+    res.redirect(base+ '/admin')
+  )
 })
 
 module.exports = router

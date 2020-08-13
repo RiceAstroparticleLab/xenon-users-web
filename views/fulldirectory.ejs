@@ -128,8 +128,8 @@
     $(document).ready(function() {
       InitializeTable("#currentMembersTable")
       InitializePrevTable("#previousMembersTable")
-      AutocompleteInstitutes("#update_institute")
-      AutocompleteInstitutes("#new_institute")
+      Autocomplete("#update_institute")
+      Autocomplete("#new_institute")
       Autocomplete(document.getElementById("position"), "<%= positions %>")
       Autocomplete("#new_position", "<%= positions %>")
     })
