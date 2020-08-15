@@ -8,7 +8,6 @@
 // logged in (myinstitute) and sets the header in the (headerdiv)
 function FillAggregates(tablediv, headerdiv, myinstitute) {
   $.getJSON('shifts/total_shift_aggregates', function(data) {
-    var countThisYear = 0;
     var html = '';
     var thisYear = (new Date()).getFullYear();
     var total = 0;
@@ -16,6 +15,7 @@ function FillAggregates(tablediv, headerdiv, myinstitute) {
 
     $(headerdiv).html('Shifts ' + thisYear.toString());
     for (let i = 0; i < data.length; i ++) {
+      var countThisYear = 0;
       let institute = data[i];
       let instituteYears = institute["years"];
       html += '<tr';
@@ -31,7 +31,7 @@ function FillAggregates(tablediv, headerdiv, myinstitute) {
       // set current year column
       for (let j = 0; j < instituteYears.length; j++) {
         let instituteYear = instituteYears[j];
-        if (instituteYear['year'] == thisYear) {
+        if (instituteYear['year'] === thisYear) {
           countThisYear = instituteYear["count"];
         }
       }

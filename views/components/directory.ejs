@@ -1,36 +1,43 @@
 <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#current">Current Members</a></li>
-    <li><a data-toggle="tab" href="#previous">Previous Members</a></li>
+  <li class="active"><a data-toggle="tab" href="#current">Current Members</a></li>
+  <li><a data-toggle="tab" href="#previous">Previous Members</a></li>
 </ul>
   
 <div class="tab-content">
-<div id="current" class="tab-pane fade in active">
+  <div id="current" class="tab-pane fade in active">
     <% for (i = 0; i < curr.length; i++) {%>
-        <details>
-            <summary> <%=curr[i].last_name + ", " + curr[i].first_name %></summary>
-            <p><b>Institute: </b><%= curr[i].institute %><br>
-                <b>Email: </b><%= curr[i].email%> <br>
-                <b>Position: </b><%= curr[i].position%> <br>
-
-                <b>Start Date: </b><%= curr[i].start_date%><br>
-                <b>End Date: </b><%= curr[i].end_date%></p><br>
-                <!-- make this button available only if authorized as admin/PI-->
-                <% if ((user.position == "PI" && user.institute == page) || (user.groups != undefined)) {%>
-                    <button id="btn-ManageAcct" type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#updateUserModal" data-id="<%= JSON.stringify(curr[i]) %>" >Manage Account</button>
-                <%}%>
-        </details>
+      <details>
+        <summary> <%=curr[i].last_name + ", " + curr[i].first_name %></summary>
+        <p>
+          <b>Institute: </b><%= curr[i].institute %><br>
+          <b>Email: </b><%= curr[i].email%> <br>
+          <b>Position: </b><%= curr[i].position%> <br>
+          <b>Start Date: </b><%= curr[i].start_date%><br>
+          <b>End Date: </b><%= curr[i].end_date%>
+        </p>
+        <br>
+        <!-- make this button available only if authorized as admin/PI-->
+        <% if ((user.position == "PI" && user.institute == page) || (user.groups != undefined)) {%>
+          <button id="btn-ManageAcct" type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#updateUserModal" data-id="<%= JSON.stringify(curr[i]) %>" >Manage Account</button>
+        <%}%>
+      </details>
     <%}%>
-</div>
-<div id="previous" class="tab-pane fade">
+  </div>
+  <div id="previous" class="tab-pane fade">
     <% for (i = 0; i < prev.length; i++) {%>
-        <details>
-            <summary> <%=prev[i].last_name + ", " + prev[i].first_name %></summary>
-            <p><b>Institute: </b><%= prev[i].institute %><br>
-                <b>Email: </b><%= prev[i].email%> <br>
-                <b>Position: </b><%= prev[i].position%> <br>
-                <b>Start Date: </b><%= prev[i].start_date%> <br>
-                <b>End Date: </b><%= prev[i].end_date%></p><br>
-        </details>
+      <details>
+        <summary>
+          <%=prev[i].last_name + ", " + prev[i].first_name %>
+        </summary>
+        <p>
+          <b>Institute: </b><%= prev[i].institute %><br>
+          <b>Email: </b><%= prev[i].email%> <br>
+          <b>Position: </b><%= prev[i].position%> <br>
+          <b>Start Date: </b><%= prev[i].start_date%> <br>
+          <b>End Date: </b><%= prev[i].end_date%>
+        </p>
+        <br>
+      </details>
     <%}%>
-</div>
+  </div>
 </div>
