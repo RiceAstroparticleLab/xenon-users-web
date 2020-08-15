@@ -15,7 +15,7 @@ function FillAggregates(tablediv, headerdiv, myinstitute) {
 
     $(headerdiv).html('Shifts ' + thisYear.toString());
     for (let i = 0; i < data.length; i ++) {
-      var countThisYear = 0;
+      let countThisYear = 0;
       let institute = data[i];
       let instituteYears = institute["years"];
       html += '<tr';
