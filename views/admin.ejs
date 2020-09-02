@@ -1,159 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <style>
-    .dash-panel > .panel-heading{
-        height: 165px;
-    }
-    .dash-panel > .panel-body{
-        padding: 15px;
-    }
-    .blue-pill, .red-pill, .green-pill{
-        background-color:#00000009;
-        margin:2px;
-        color:#333;
-        padding: 12.5px 0 12.5px 0;
-    }
-    li.active>.blue-pill{
-        background-color:#0366d6 !important;
-        color: white !important;
-    }
-    li.active>.green-pill{
-        background-color:#28a745 !important;
-        color: white !important;
-    }
-    li.active>.red-pill{
-        background-color:#d73a49 !important;
-        color: white !important;
-    }
+  .dash-panel > .panel-heading{
+      height: 165px;
+  }
+  .dash-panel > .panel-body{
+      padding: 15px;
+  }
+  .blue-pill, .red-pill, .green-pill{
+      background-color:#00000009;
+      margin:2px;
+      color:#333;
+      padding: 12.5px 0 12.5px 0;
+  }
+  li.active>.blue-pill{
+      background-color:#0366d6 !important;
+      color: white !important;
+  }
+  li.active>.green-pill{
+      background-color:#28a745 !important;
+      color: white !important;
+  }
+  li.active>.red-pill{
+      background-color:#d73a49 !important;
+      color: white !important;
+  }
+  .table .thead-light th {
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+  }
+  .table thead th {
+    vertical-align: bottom !important;
+    border-bottom: 2px solid #dee2e6 !important;
+    padding: 12px !important;
+  }
+  .table .roles td {
+    padding: 40px !important;
+  }
+  .overlap {
+    width: 40px;
+    height: 40px;
+    margin-right: -10px;
+    border: 2px solid #fff;
+  }
 </style>
 <head>
-    <% include components/head %> 
-    <script src="/shifts/javascripts/admin_scripts.js" type="text/javascript"></script>
+  <% include components/head %> 
+  <script src="/shifts/javascripts/admin_scripts.js" type="text/javascript"></script>
 </head>
 <body style="background-color:#ECF0F6">
-    <% include components/menu %>
-    <div class="row" style="height:100%;overflow:hidden;">
-        <div class="col-sm-2 col-xs-3 sidebar">
-            <div style="text-align:center;">
-                <img src="<%=user.picture_url%>" style="width:100%;border-radius:200px;padding:25px;">
-                <h4><%= user.first_name %> <%= user.last_name %></h4>
-                <h6 style="color:#355C99"><%= user.position %> at <%= user.institute %></h6>
-                <h6 style="color:#355C99"><%= user.email %></h6>
-            </div>
-            <ul class="nav nav-pills sidebar-pill nav-stacked">
-                <hr>
-                <h6 style="padding-left:15px"><strong>GENERAL</strong></h6>
-                <li class="active"><a data-toggle="pill" href="#users"><i class="fas fa-users"></i>&nbsp;&nbsp;&nbsp;User Roles</a></li>
-                <hr>
-                <h6 style="padding-left:15px"><strong>OTHER SERVICES</strong></h6>
-                <li><a data-toggle="pill" href="#github"><i class="fab fa-github pr-1"></i>&nbsp;&nbsp;&nbsp;GitHub</a></li>
-                <li><a data-toggle="pill" href="#lngs"><i class="fas fa-bars"></i>&nbsp;&nbsp;&nbsp;LNGS</a></li>
-                <li><a data-toggle="pill" href="#slack"><i class="fab fa-slack"></i>&nbsp;&nbsp;&nbsp;Slack</a></li>
-            </ul>
-        </div>
-
-        <div class="col-sm-10 col-xs-9" style="padding-top:20px;padding-right:55px;padding-left:40px;">
-            <div class="tab-content">
-                <div class="tab-pane fade in active" id="users">
-                    <div class="col-sm-8">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <div id="roles_table"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <h3 style="margin:0px;display:inline-block;">Roles&nbsp;&nbsp;&nbsp;<span class="badge" id="role_badge"></span></h3>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addRole" style="float:right;">Add Role</button>
-                                <hr>
-                                <div id="roles_list"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="github">
-                    <div class="col-xs-12">
-                        <ul class="nav nav-pills nav-justified" style="padding:10px 0 10px 0;">
-                            <li class="active"><a class="green-pill" data-toggle="pill" href="#xenonnt_add" style="margin-left:0px;">Add to XENONnT <span class="badge" id="nt_add_badge">0</span></a></li>
-                            <li><a class="red-pill" data-toggle="pill" href="#xenonnt_remove">Remove from XENONnT<span class="badge" id="nt_rmv_badge">0</span></a></li>
-                            <li><a class="green-pill" data-toggle="pill" href="#xenon1t_add">Add to XENON1T <span class="badge" id="1t_add_badge">0</span></a></li>
-                            <li><a class="red-pill" data-toggle="pill" href="#xenon1t_remove">Remove from XENON1T<span class="badge" id="1t_rmv_badge">0</span></a></li>
-                            <li><a class="blue-pill" data-toggle="pill" href="#add_to_db" style="margin-right:0px;">Add to db <span class="badge" id="db_add_badge">0</span></a></li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="panel panel-default">
-                            <div class="panel-body" style="min-height:350px;">
-                                <div class="tab-content">
-                                    <div id="xenon1t_remove" class="tab-pane fade">
-                                        <table id='remove_1t' class="table"></table>
-                                    </div>
-                                    <div id="xenon1t_add" class="tab-pane fade">
-                                        <table id='add_1t' class="table"></table>
-                                    </div>
-                                    <div id="xenonnt_remove" class="tab-pane fade">
-                                        <table id='remove_nt' class="table"></table>
-                                    </div>
-                                    <div id="xenon1t_add" class="tab-pane fade in active">
-                                        <table id='add_nt' class="table"></table>
-                                    </div>
-                                    <div id="add_to_db" class="tab-pane fade">
-                                        <table id="add_db" class="table"></table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12">
-                        <form action="admin/get_github" method="post" style="display:inline-block">
-                            <button type="submit" class="btn btn-primary" style="margin-top:-2px;"><i class="fas fa-sync-alt"></i>&nbsp;&nbsp;&nbsp;Sync with GitHub</button>
-                        </form>
-                        <h6 style="float:right;">Last synced with GitHub on: <%= last_synced.toString().substring(4,15) %></h6>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="lngs">
-                    <h3 style="letter-spacing:4px;font-weight:400;padding:10px 0 0 15px;">DASHBOARD:LNGS</h3>
-                </div>
-                <div class="tab-pane fade" id="slack">
-                    <h3 style="letter-spacing:4px;font-weight:400;padding:10px 0 0 15px;">DASHBOARD:SLACK</h3>
-                </div>
-            </div>
-        </div>
+  <% include components/menu %>
+  <div class="row" style="height:100%;overflow:hidden;">
+    <div class="col-sm-2 col-xs-3 sidebar">
+      <div style="text-align:center;">
+        <img src="<%=user.picture_url%>" style="width:100%;border-radius:200px;padding:25px;">
+        <h4><%= user.first_name %> <%= user.last_name %></h4>
+        <h6 style="color:#355C99"><%= user.position %> at <%= user.institute %></h6>
+        <h6 style="color:#355C99"><%= user.email %></h6>
+      </div>
+      <ul class="nav nav-pills sidebar-pill nav-stacked">
+        <hr>
+        <h6 style="padding-left:15px"><strong>GENERAL</strong></h6>
+        <li class="active"><a data-toggle="pill" href="#users"><i class="fas fa-users"></i>&nbsp;&nbsp;&nbsp;User Roles</a></li>
+        <hr>
+        <h6 style="padding-left:15px"><strong>OTHER SERVICES</strong></h6>
+        <li><a data-toggle="pill" href="#github"><i class="fab fa-github pr-1"></i>&nbsp;&nbsp;&nbsp;GitHub</a></li>
+        <li><a data-toggle="pill" href="#lngs"><i class="fas fa-bars"></i>&nbsp;&nbsp;&nbsp;LNGS</a></li>
+        <li><a data-toggle="pill" href="#slack"><i class="fab fa-slack"></i>&nbsp;&nbsp;&nbsp;Slack</a></li>
+      </ul>
     </div>
-    <!-- Add Role Modal -->
-    <div id="addRole" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-          <div class="modal-content" style="padding: 20px 35px 20px 35px;background-color:#fdfdfd;">
-            <div class="modal-header" style="padding-left:30px">
-              <h3 class="modal-title">Add New Role</h3>
-            </div>
-            <div class="modal-body">
-              <form id="formAddRole" name="addrole" method="post" action="admin/add_role">
-                <div class="row" style="margin-top:12px">
-                  <label for="role" style="padding-left:30px">Role Name</label><br>
-                  <div style="text-align:center;">
-                    <input id="role" type="text" name="role" required>
-                  </div>
-                </div>
-                <div style="text-align:center;">
-                  <input type="submit" value="Submit">
-                </div>
-              </form>
+
+    <div class="col-sm-10 col-xs-9" style="padding-top:20px;padding-right:55px;padding-left:40px;">
+      <div class="tab-content">
+        <div class="tab-pane fade in active" id="users">
+          <div class="col-sm-12">
+            <div class="panel panel-default" style="margin-top:30px;">
+              <div class="panel-body" style="padding:30px;padding-bottom:0px;">
+                <h3 style="margin:0px;display:inline-block;">Roles&nbsp;&nbsp;&nbsp;<span class="badge" id="role_badge"></span></h3>
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addRole" style="float:right;">Add Role</button>
+                <br>
+                <table class="table roles" style="margin-top:30px;">
+                  <thead class="thead-light">
+                    <tr>
+                      <th scope="col">ROLES</th>
+                      <th scope="col">USERS</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="roles_table"></tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
+        <div class="tab-pane fade" id="github">
+          <div class="col-xs-12">
+            <ul class="nav nav-pills nav-justified" style="padding:10px 0 10px 0;">
+              <li class="active"><a class="green-pill" data-toggle="pill" href="#xenonnt_add" style="margin-left:0px;">Add to XENONnT <span class="badge" id="nt_add_badge">0</span></a></li>
+              <li><a class="red-pill" data-toggle="pill" href="#xenonnt_remove">Remove from XENONnT<span class="badge" id="nt_rmv_badge">0</span></a></li>
+              <li><a class="green-pill" data-toggle="pill" href="#xenon1t_add">Add to XENON1T <span class="badge" id="1t_add_badge">0</span></a></li>
+              <li><a class="red-pill" data-toggle="pill" href="#xenon1t_remove">Remove from XENON1T<span class="badge" id="1t_rmv_badge">0</span></a></li>
+              <li><a class="blue-pill" data-toggle="pill" href="#add_to_db" style="margin-right:0px;">Add to db <span class="badge" id="db_add_badge">0</span></a></li>
+            </ul>
+          </div>
+          <div class="col-sm-12">
+            <div class="panel panel-default">
+              <div class="panel-body" style="min-height:350px;">
+                <div class="tab-content">
+                  <div id="xenon1t_remove" class="tab-pane fade">
+                    <table class="table">
+                      <thead class="thead-light">
+                        <tr>
+                          <th scope="col">NAME</th>
+                          <th scope="col">GITHUB</th>
+                          <th scope="col">ACTIONS</th>
+                        </tr>
+                      </thead>
+                      <tbody id='remove_1t'></tbody>
+                    </table>
+                  </div>
+                  <div id="xenon1t_add" class="tab-pane fade">
+                    <table class="table">
+                      <thead class="thead-light">
+                        <tr>
+                          <th scope="col">NAME</th>
+                          <th scope="col">EMAIL</th>
+                          <th scope="col">GITHUB</th>
+                          <th scope="col">ACTIONS</th>
+                        </tr>
+                      </thead>
+                      <tbody id='add_1t'></tbody>
+                    </table>
+                  </div>
+                  <div id="xenonnt_remove" class="tab-pane fade">
+                    <table class="table">
+                      <thead class="thead-light">
+                        <tr>
+                          <th scope="col">NAME</th>
+                          <th scope="col">GITHUB</th>
+                          <th scope="col">ACTIONS</th>
+                        </tr>
+                      </thead>
+                      <tbody id='remove_nt'></tbody>
+                    </table>
+                  </div>
+                  <div id="xenonnt_add" class="tab-pane fade in active">
+                    <table class="table">
+                      <thead class="thead-light">
+                        <tr>
+                          <th scope="col">NAME</th>
+                          <th scope="col">EMAIL</th>
+                          <th scope="col">GITHUB</th>
+                          <th scope="col">ACTIONS</th>
+                        </tr>
+                      </thead>
+                      <tbody id='add_nt'></tbody>
+                    </table>
+                  </div>
+                  <div id="add_to_db" class="tab-pane fade">
+                    <table class="table">
+                      <thead class="thead-light">
+                        <tr>
+                          <th scope="col">NAME</th>
+                          <th scope="col">ACTIONS</th>
+                        </tr>
+                      </thead>
+                      <tbody id='add_db'></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <form action="admin/get_github" method="post" style="display:inline-block">
+              <button type="submit" class="btn btn-primary" style="margin-top:-2px;"><i class="fas fa-sync-alt"></i>&nbsp;&nbsp;&nbsp;Sync with GitHub</button>
+            </form>
+            <h6 style="float:right;">Last synced with GitHub on: <%= last_synced.toString().substring(4,15) %></h6>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="lngs">
+          <h3 style="letter-spacing:4px;font-weight:400;padding:10px 0 0 15px;">DASHBOARD:LNGS</h3>
+        </div>
+        <div class="tab-pane fade" id="slack">
+          <h3 style="letter-spacing:4px;font-weight:400;padding:10px 0 0 15px;">DASHBOARD:SLACK</h3>
+        </div>
       </div>
+    </div>
+  </div>
+  <!-- Add Role Modal -->
+  <div id="addRole" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content" style="padding: 20px 35px 20px 35px;background-color:#fdfdfd;">
+          <div class="modal-header" style="padding-left:30px">
+            <h3 class="modal-title">Add New Role</h3>
+          </div>
+          <div class="modal-body">
+            <form id="formAddRole" name="addrole" method="post" action="admin/add_role">
+              <div class="row" style="margin-top:12px">
+                <label for="role" style="padding-left:30px">Role Name</label><br>
+                <div style="text-align:center;">
+                  <input id="role" type="text" name="role" required>
+                </div>
+              </div>
+              <div style="text-align:center;">
+                <input type="submit" value="Submit">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 </body>
 <script>
-    $(document).ready(function(){
-        loadAddToDB('#add_db', '#db_add_badge')
-        loadRemove('xenon1t','#remove_1t', "#1t_rmv_badge")
-        loadRemove('xenonnt','#remove_nt', "#nt_rmv_badge")
-        loadAdd('xenon1t', '#add_1t', '#1t_add_badge')
-        loadRoles('#roles_list', '#role_badge')
-        rolesTable('')
-    })
+  $(document).ready(function(){
+    loadAddToDB('#add_db', '#db_add_badge');
+    loadRemove('xenon1t','#remove_1t', "#1t_rmv_badge");
+    loadRemove('xenonnt','#remove_nt', "#nt_rmv_badge");
+    loadAdd('xenon1t', '#add_1t', '#1t_add_badge');
+    loadAdd('xenonnt', '#add_nt', '#nt_add_badge');
+    loadRoles('#roles_table', '#role_badge');
+  })
 </script>
 </html>

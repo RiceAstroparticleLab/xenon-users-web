@@ -63,10 +63,15 @@ router.post('/add_role', ensureAuthenticated, function(req, res) {
 // retrieves the document that holds the user roles in the db
 router.get('/get_roles', ensureAuthenticated, function(req, res) {
   var db = req.recode_db;
-  var collection = db.collection('admin');
-  collection.find({'roles_list': {$exists: true}}).toArray(function(e, docs) {
-    res.send(docs);
-  })
+  var dbx = req.xenonnt_db;
+  var admin = db.collection('admin');
+  var users = dbx.collection('users');
+  users.find({'groups': {$exists: true}}).toArray(function(e, docs) {
+    admin.find({'roles_list': {$exists: true}}).toArray(function(e, doc) {
+      docs.push(doc[0])
+      res.send(docs)    
+    });  
+  }); 
 })
 
 // checks which users are either in the XENON1T or XENONnT organizations on 
@@ -189,18 +194,20 @@ router.get('/gitadd_xenon1t', ensureAuthenticated, function(req,res) {
   var admin = db.collection('admin');
   var users = dbx.collection('users');
   var add = [];
-  users.find({}).forEach((doc) => {
+  users.find({end_date: {$exists: false}}).forEach((doc) => {
     var name = doc.first_name + ' ' + doc.last_name;
     var regex = new RegExp(name);
-    admin.find({$or: [
-      { first_name: name },
-      { github: doc.github }]}
+
+    var missing = doc;
+    admin.find({
+      first_name: regex,
+      xenon1t: {$exists: true}}
     ).toArray((e, docs) => {
-      // console.log("github: " + doc.github + " match: ")
-      // console.log(docs)
+      console.log("github: " + doc.github + " match: ")
+      console.log(docs)
       if (docs.length < 1) {
-        // console.log(docs)
-        add.push(doc);
+        console.log("missing:" + missing);
+        add.push(missing);
       }
     });
   }).then(waitOnInternalQuery(res, add));
@@ -212,19 +219,23 @@ router.get('/gitadd_xenon1t', ensureAuthenticated, function(req,res) {
 router.get('/gitadd_xenonnt', ensureAuthenticated, function(req,res) {
   db = req.recode_db;
   dbx = req.xenonnt_db;
+  var admin = db.collection('admin');
+  var users = dbx.collection('users');
   var add = [];
-  dbx.collection('users').find({}).forEach((doc) => {
+  users.find({end_date: {$exists: false}}).forEach((doc) => {
     var name = doc.first_name + ' ' + doc.last_name;
     var regex = new RegExp(name);
-    db.collection('admin').find({$or: [
-      { first_name: name },
-      { github: doc.github }]}
+
+    var missing = doc;
+    admin.find({
+      first_name: regex,
+      xenonnt: {$exists: true}}
     ).toArray((e, docs) => {
-      // console.log("github: " + doc.github + " match: ")
-      // console.log(docs)
-      if(docs.length < 1) {
-        // console.log(docs)
-        add.push(doc);
+      console.log("github: " + doc.github + " match: ")
+      console.log(docs)
+      if (docs.length < 1) {
+        console.log("missing:" + missing);
+        add.push(missing);
       }
     });
   }).then(waitOnInternalQuery(res, add));

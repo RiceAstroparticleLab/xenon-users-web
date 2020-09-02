@@ -63,9 +63,10 @@ router.get('/profile', ensureAuthenticated, function(req, res){
   var name = req.user.first_name + ' ' + req.user.last_name;
   res.render('profile', 
     { page: 'Profile', 
-      menuId: 'home', 
+      menuId: 'home',
+      slackLink: process.env.SLACK_INVITE, 
       title: name, 
-      user: req.user 
+      user: req.user, 
     }
   );
 });
