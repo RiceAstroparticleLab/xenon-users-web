@@ -207,7 +207,7 @@ router.post('/adduser', ensureAuthenticated, function(req, res) {
   }
 });
 
-router.post('/pendinguser', ensureAuthenticated, function(req, res) {
+router.post('/pendinguser', function(req, res) {
   var db = req.xenonnt_db;
   var idoc = {};
   var mailing_lists = '';
@@ -238,7 +238,7 @@ router.post('/pendinguser', ensureAuthenticated, function(req, res) {
   }    
 
   try {
-    // make sure email alerting of new membet can be sent before actually
+    // make sure email alerting of new member can be sent before actually
     // adding the new member to the database
     PendingUserMail(req, mailing_lists, function(success){
       if (success) {

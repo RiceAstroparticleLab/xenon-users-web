@@ -22,7 +22,7 @@ router.get('/', ensureAuthenticated, function(req, res) {
 
 // external form.
 router.get('/request_new_member', function(req, res) {
-  res.render('request', {page: 'Request New Member', title: 'Request New Member'})
+  res.render('request', {page: 'Request New Member', menuId: 'home', title: 'Request New Member'})
 })
 
 // GET Userlist page. 
