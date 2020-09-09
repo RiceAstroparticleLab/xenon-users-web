@@ -13,6 +13,10 @@ const octokit = new Octokit({
     baseUrl: "https://api.github.com",
   });
 
+/* Set up LDAP API for Node.js */
+var ldap = require('ldapjs');
+var server = ldap.createServer();
+
 // everything except login on this website requires the user to be logged in
 // otherwise the user gets redirected to the login page
 function ensureAuthenticated(req, res, next) {

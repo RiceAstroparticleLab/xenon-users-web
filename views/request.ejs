@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <% include components/head %>
+  <link rel="stylesheet" href="/shifts/stylesheets/bootstrap-social.css">
+</head>
+<body style="background-color: #30415d;">
+  <div class="text-center">
+    <div class="row" style="height: 50px;"></div>
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4 bg-3" style="padding: 40px 50px 40px 50px;  border-radius: 3px;">
+        <h3>Request a New Member</h3>
+        <h5>Please fill out the following form to request a new member for your institute. 
+          The request should be approved soon by an admin.</h5>
+        <br>
+        <form id="formPendingUser" name="pendinguser" method="post" action="/shifts/users/pendinguser">
+          <div class="row" style="margin-top:12px">
+            <label for="fname" style="padding-left:30px">First Name</label><br>
+            <div style="text-align:center;">
+              <input id="fname" type="text" name="FirstName" required>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="lname" style="padding-left:30px">Last Name</label><br>
+            <div style="text-align:center;">
+              <input id="lname" type="text" name="LastName" required>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="email" style="padding-left:30px">Email</label><br>
+            <div style="text-align:center;">
+              <input id="email" type="email" name="Email" required>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="position" style="padding-left:30px">Position</label><br>
+            <div style="padding-left:30px">
+              <select name="position" id="position"> 
+                <option selected disabled hidden>Please select</option>
+                <option value="Engineer">Engineer</option>
+                <option value="Master Student">Master Student</option>
+                <option value="Non-permanent Scientist">Non-permanent Scientist</option>
+                <option value="Other Student">Other Student</option>
+                <option value="Permanent Scientist">Permanent Scientist</option>
+                <option value="PhD Stident">PhD Student</option>
+                <option value="PI">PI</option>
+                <option value="Postdoc">Postdoc</option>
+                <option value="Staff">Staff</option>
+                <option value="Thesis Student">Thesis Student</option>
+                <option value="XENON Student">XENON Student</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="institute" style="padding-left:30px">Institute</label><br>
+            <div style="text-align:center;">
+              <input id="institute" type="text" name="institute" required/>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="time" style="padding-left:30px">Percent Xenon</label><br>
+            <div style="text-align:center;">
+              <input id="time" type="number" name="Time" required>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="tasks" style="padding-left:30px">Tasks</label><br>
+            <div style="text-align:center;">
+              <input id="tasks" type="text" name="Tasks">
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px;padding-left:30px">
+            <label for="mlists">Mailing Lists</label><br>
+              <input type="checkbox" id="mlist1" name="mlist1" value="Calibration">&nbsp;&nbsp;&nbsp;Calibration<br>
+              <input type="checkbox" id="mlist2" name="mlist2" value="Analysis">&nbsp;&nbsp;&nbsp;Analysis<br>
+              <input type="checkbox" id="mlist3" name="mlist3" value="TPC">&nbsp;&nbsp;&nbsp;TPC<br>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="sdate" style="padding-left:30px">Start Date</label><br>
+            <div style="text-align:center;">
+              <input id="sdate" type="date" name="StartDate" placeholder="YYYY-MM-DD" required>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="edate" style="padding-left:30px">End Date</label><br>
+            <div style="text-align:center;">
+              <input id="edate" type="date" name="expectedEnd" placeholder="YYYY-MM-DD"/>
+            </div>
+          </div>
+          <br>
+          <div style="text-align:center;">
+            <input type="submit" value="Submit">
+          </div>
+        </form>
+      </div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+</body>
+</html>

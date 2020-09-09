@@ -20,6 +20,11 @@ router.get('/', ensureAuthenticated, function(req, res) {
   );
 });
 
+// external form.
+router.get('/request_new_member', function(req, res) {
+  res.render('request', {page: 'Request New Member', title: 'Request New Member'})
+})
+
 // GET Userlist page. 
 router.get('/fulldirectory', ensureAuthenticated, function(req, res) {
   // array declares positions for autocomplete

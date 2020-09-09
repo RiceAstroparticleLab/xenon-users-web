@@ -26,7 +26,8 @@ function loadRoles(tablediv, numdiv) {
                   '" style="border-radius:200px;">';
         }
       }
-      html += '</td><td><button class="btn btn-default">Edit Role</button></td></tr>';
+      html += '</td><td><button class="btn btn-default" data-toggle="modal"' + 
+              ' data-target="#editRole">Edit Role</button></td></tr>';
     }
     $(numdiv).html(roles.length);
     $(tablediv).html(html);

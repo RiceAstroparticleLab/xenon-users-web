@@ -189,29 +189,45 @@
       </div>
     </div>
   </div>
-  <!-- Add Role Modal -->
-  <div id="addRole" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content" style="padding: 20px 35px 20px 35px;background-color:#fdfdfd;">
-          <div class="modal-header" style="padding-left:30px">
-            <h3 class="modal-title">Add New Role</h3>
-          </div>
-          <div class="modal-body">
-            <form id="formAddRole" name="addrole" method="post" action="admin/add_role">
-              <div class="row" style="margin-top:12px">
-                <label for="role" style="padding-left:30px">Role Name</label><br>
-                <div style="text-align:center;">
-                  <input id="role" type="text" name="role" required>
-                </div>
-              </div>
-              <div style="text-align:center;">
-                <input type="submit" value="Submit">
-              </div>
-            </form>
-          </div>
+  <!-- Edit Role Modal -->
+  <div id="editRole" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content" style="padding: 20px 35px 20px 35px;background-color:#fdfdfd;">
+        <div class="modal-header" style="padding-left:30px">
+          <h3 class="modal-title" id="role_name"></h3>
+        </div>
+        <div class="modal-body">
+          <h4 style="margin:0px;display:inline-block;">USERS</h4>
+          <button class="btn btn-primary" style="float:right;">Add User</button>
+          <hr>
+          <div id="users_list"></div>
         </div>
       </div>
     </div>
+  </div>
+  <!-- Add Role Modal -->
+  <div id="addRole" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content" style="padding: 20px 35px 20px 35px;background-color:#fdfdfd;">
+        <div class="modal-header" style="padding-left:30px">
+          <h3 class="modal-title">Add New Role</h3>
+        </div>
+        <div class="modal-body">
+          <form id="formAddRole" name="addrole" method="post" action="admin/add_role">
+            <div class="row" style="margin-top:12px">
+              <label for="role" style="padding-left:30px">Role Name</label><br>
+              <div style="text-align:center;">
+                <input id="role" type="text" name="role" required>
+              </div>
+            </div>
+            <div style="text-align:center;">
+              <input type="submit" value="Submit">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 <script>
   $(document).ready(function(){

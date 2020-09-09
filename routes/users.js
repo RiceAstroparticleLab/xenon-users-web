@@ -43,6 +43,38 @@ function NewUserMail(req, mailing_lists, callback) {
   });
 }
 
+function PendingUserMail(req, mailing_lists, callback) {
+  var transporter = req.transporter;
+  var message = {
+    from: process.env.NOTIFS_ACCOUNT,
+    to: process.env.MAILING_LIST,
+    subject: 'New Member Confirmation: ' + req.body.FirstName + ' ' + 
+      req.body.LastName,
+    html: '<p>Hi,</p>' + 
+      '<p>A new member has been requested for ' + req.body.institute + ' <br>' +
+      'a) Name: ' + req.body.FirstName + ' ' + req.body.LastName + '<br>' +
+      'b) email: ' + req.body.Email + '<br>' +
+      'c) Position: ' + req.body.position + '<br>' +
+      'd) Time: ' + req.body.Time + '%<br>' +
+      'e) Tasks: ' + req.body.Tasks + '<br>' +
+      'f) Mailing lists: ' + mailing_lists + '<br>' +
+      'g) Start date: ' + req.body.StartDate + '<br>' +
+      'h) End date: ' + req.body.expectedEnd + '<br>' +
+      'Please approve or reject the user at https://xenon1t-daq.lngs.infn.it/shifts/ <br>' +
+      '<p>Thank you!<br>XENON User Management</p>'
+  };
+  
+  transporter.sendMail(message, function(error, info) {
+    if (error) {
+      console.log(error);
+      callback(false);
+    } else {
+      console.log('Message sent ' + info.message);
+      callback(true);
+    }
+  });
+}
+
 router.post('/updateContactInfo', ensureAuthenticated, function(req, res) {
   var db = req.xenonnt_db;
   var collection = db.collection('users');
@@ -157,13 +189,60 @@ router.post('/adduser', ensureAuthenticated, function(req, res) {
   }    
 
   try {
-    // make sure email alerting of new membet can be sent before actually
+    // make sure email alerting of new member can be sent before actually
     // adding the new member to the database
     NewUserMail(req, mailing_lists, function(success){
       if (success) {
         db.collection('users').insertOne(idoc);
         console.log('success. Added' + req.body.FirstName + ' ' +
           req.body.LastName);
+        res.redirect(base + '/' + req.body.page);
+      } else {
+        console.log("error. Could not send email.");
+        res.redirect(base + '/' + req.body.page);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+router.post('/pendinguser', ensureAuthenticated, function(req, res) {
+  var db = req.xenonnt_db;
+  var idoc = {};
+  var mailing_lists = '';
+
+  idoc['pending'] = true;
+  idoc['first_name'] = req.body.FirstName;
+  idoc['last_name'] = req.body.LastName;
+  idoc['email'] = req.body.Email;
+  idoc['institute'] = req.body.institute;
+  idoc['position'] = req.body.position;
+  idoc['percent_xenon'] = req.body.Time;
+  idoc['mailing_lists'] = [req.body.mlist1, req.body.mlist2, req.body.mlist3];
+  if(req.body.StartDate != '') {
+    idoc['start_date'] = new Date(req.body.StartDate);
+  }
+
+  if (req.body.mlist1 != null) {
+    mailing_lists += req.body.mlist1;
+    mailing_lists += " ";
+  }
+  if (req.body.mlist2 != null) {
+    mailing_lists += req.body.mlist2;
+    mailing_lists += " ";
+  }
+  if (req.body.mlist3 != null) {
+    mailing_lists += req.body.mlist3;
+    mailing_lists += " ";
+  }    
+
+  try {
+    // make sure email alerting of new membet can be sent before actually
+    // adding the new member to the database
+    PendingUserMail(req, mailing_lists, function(success){
+      if (success) {
+        db.collection('users').insertOne(idoc);
         res.redirect(base + '/' + req.body.page);
       } else {
         console.log("error. Could not send email.");
