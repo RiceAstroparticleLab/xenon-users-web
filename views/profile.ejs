@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    .fa {
+    float: right;
+    }
+</style>
 <head>
     <% include components/head %> 
     <link rel="stylesheet" href="/shifts/stylesheets/bootstrap-social.css">
@@ -22,6 +27,9 @@
                 <br>
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" role="tab" href="#profiletab" style="border:0;border-bottom:2px solid #355C99;color:#555 !important;"><i class="fas fa-user"></i><strong>&nbsp;&nbsp;&nbsp;XENON Profile</strong></a></li>
+                    <% if (user.first_name === 'Yvette') {%>
+                        <li><a data-toggle="tab" role="tab" href="#requesttab" style="border:0;border-bottom:2px solid #355C99;color:#555 !important;"><i class="fas fa-hourglass-half"></i><strong>&nbsp;&nbsp;&nbsp;Pending Requests</strong></a></li>
+                    <%}%>
                 </ul>
                 <div class="tab-content" id="tabContent">
                     <div class="tab-pane fade in active" id="profiletab">
@@ -55,6 +63,71 @@
                                 <td><%= user.lngs_ldap_uid %></td>
                             </tr>
                         </table>
+                    </div>
+                    <div class="tab-pane fade" id="requesttab">
+                        <h5>The following requests are awaiting your approval:</h5>
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            <% for (i = 0; i < pending.length; i ++) {%>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="heading<%=i%>">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse<%=i%>" aria-expanded="true" aria-controls="collapse<%=i%>">
+                                            <%=pending[i].first_name%>  <%=pending[i].last_name%><i class="accordion_icon fa fa-plus"></i>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse<%=i%>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading<%=i%>">
+                                        <div class="panel-body">
+                                            <table>
+                                                <tr>
+                                                    <td style="width:150px"><strong>Institute:</strong></td>
+                                                    <td><%=pending[i].institute%></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Email:</strong></td>
+                                                    <td><%=pending[i].email%></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Position:</strong></td>
+                                                    <td><%=pending[i].position%></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Percent Xenon:</strong></td>
+                                                    <td><%= pending[i].percent_xenon %>% </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Tasks:</strong></td>
+                                                    <td><%= pending[i].tasks %> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><strong>Start Date:</strong></td>
+                                                    <td><%= pending[i].start_date.toString().substring(4,15) %> </td>
+                                                </tr>
+                                            </table>
+                                            <br>
+                                            <form action="users/deny_req" method="post" style="display:inline-block">
+                                                <input id="objectId<%=i%>" name="objectId" type="hidden" value="<%= pending[i]._id %>">
+                                                <input id="fName<%=i%>" name="fName" type="hidden" value="<%= pending[i].first_name %>">
+                                                <input id="lName<%=i%>" name="lName" type="hidden" value="<%= pending[i].last_name %>">
+                                                <input id="institute<%=i%>" name="institute" type="hidden" value="<%= pending[i].institute %>">
+                                                <a><button type="submit" class="btn btn-default">Deny Request</button></a>
+                                            </form>
+                                            <form action="users/approve_req" method="post" style="display:inline-block">
+                                                <input id="objectId<%=i%>" name="objectId" type="hidden" value="<%= pending[i]._id %>">
+                                                <input id="fName<%=i%>" name="fName" type="hidden" value="<%= pending[i].first_name %>">
+                                                <input id="lName<%=i%>" name="lName" type="hidden" value="<%= pending[i].last_name %>">
+                                                <input id="institute<%=i%>" name="institute" type="hidden" value="<%= pending[i].institute %>">
+                                                <input id="position<%=i%>" name="position" type="hidden" value="<%= pending[i].position %>">
+                                                <input id="time<%=i%>" name="time" type="hidden" value="<%= pending[i].percent_xenon %>">
+                                                <input id="tasks<%=i%>" name="tasks" type="hidden" value="<%= pending[i].tasks %>">
+                                                <input id="start<%=i%>" name="start" type="hidden" value="<%= pending[i].start_date %>">
+                                                <a><button type="submit" class="btn btn-primary">Approve Request</button></a>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>   
+                            <%}%>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,4 +175,14 @@
         </div>
     </div>
 </body>
+<script>
+    $(document).ready(function(){
+        $('.panel-title > a').click(function() {
+        $(this).find('i').toggleClass('fa-plus fa-minus')
+                .closest('panel').siblings('panel')
+                .find('i')
+                .removeClass('fa-minus').addClass('fa-plus');
+        });
+    })
+</script>
 </html>

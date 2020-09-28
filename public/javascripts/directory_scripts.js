@@ -188,6 +188,77 @@ function InitializePrevTable(tablediv) {
   });
 }
 
+// Makes DataTables table of previous technicians in the fulldirectory page in 
+// selected div (tablediv)
+function PrevTechTable(tablediv) {
+  var table = $(tablediv).DataTable({       
+    dom: 'flrtip',                                  
+    order: [[7, 'asc']],
+    pageResize: true,
+    paging: false,
+    language: {
+      search: '',
+      searchPlaceholder: 'Search...',
+    },
+    ajax: {
+      url: 'prev_tech_table',
+      type: 'POST',
+    },
+    columns: [	    
+      { data: null, defaultContent: '', orderable: false },
+      { data: "last_name", searchable: true },
+      { data: "first_name", searchable: true },
+      { data: "email", orderable: false, searchable: true },
+      { data: "position", searchable: true },
+      { data: "percent_xenon", orderable: false },
+      { data: "start_date", type: 'datetime', orderable: false },
+      { data: "end_date", type: 'datetime', orderable: false }, 
+      { data: "username", defaultContent: '', orderable: false },
+      { title: '', orderable: false }
+    ],
+    columnDefs: [
+      { title: 'Institute', targets: 0 },
+      { title: 'Last Name', targets: 1 },
+      { title: 'First Name', targets: 2 },
+      { title: 'Email', targets: 3 },
+      { title: 'Position', targets: 4 },
+      { title: 'Time', targets: 5 },
+      { title: 'Start Date', targets: 6 },
+      { title: 'End Date', targets: 7 },
+      { title: 'Username', targets: 8 },
+      { targets: -1,
+        data: null,
+        defaultContent: "<button type='button' class='btn-circle'>" + 
+                        "<i class='fas fa-pen'></i></button>"
+      },
+      { targets: [7],
+        render: function(data) {
+          if (typeof(data) === 'undefined') {
+            return '';
+          }
+          if (typeof(data) === String) {
+            return data
+          }
+          return moment(data).tz('Atlantic/St_Helena').format('MMM YYYY');
+        }
+      }
+    ],
+  });
+
+  // set permisions for the edit button on the right hand side of each row
+  $(tablediv + ' tbody').on('click', 'button', function(e) {
+    e.preventDefault();
+    var data = table.row($(this).parents('tr')).data();
+    var user = data.current_user;
+    if((user.position === 'PI' && user.institute === data.institute) ||
+        user.groups !== 'not set' || user.last_name == 'Matias-Lopes') {
+      openModal(data, 'fulldirectory');
+    } else {
+      alert("Sorry, you don't have the correct permissions.");
+    }
+  });
+}
+
 // Makes DataTables table of previous members in the authors page in 
 // selected div (tablediv)
 function PrevAuthorsTable(tablediv) {
@@ -336,6 +407,7 @@ function openModal(userInfo, page) {
     modal.find('.modal-body input[name="Tasks"]').val(userInfo.tasks);
     modal.find('.modal-body input[name="position"]').val(userInfo.position);
     modal.find('.modal-body input[name="institute"]').val(userInfo.institute);
+    modal.find('.modal-body input[name="lngs_id"]').val(userInfo.lngs_ldap_uid);
     modal
       .find('.modal-body input[name="prevTime"]')
       .val(userInfo.previous_time);

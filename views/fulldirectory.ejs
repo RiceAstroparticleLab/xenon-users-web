@@ -1,3 +1,5 @@
+<!-- I AM IN THE MIDDLE OF MAKING THE NEW TABS FOR FULLDIRECTORY!!!! -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -11,6 +13,8 @@
       <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#tableview">Current Members</a></li>
         <li><a data-toggle="tab" href="#previous">Previous Members</a></li>
+        <li><a data-toggle="tab" href="#engitech">Eng & Tech</a></li>
+        <li><a data-toggle="tab" href="#prevtech">Previous Eng & Tech</a></li>
       </ul>
       
       <div class="tab-content">
@@ -24,6 +28,13 @@
         <div id="previous" class="tab-pane fade">
           <h4 style="margin-bottom: -20px;padding-bottom: 0px;">People that left the collaboration</h4>
           <table id="previousMembersTable" style="width:100%"></table>
+        </div>
+        <div id="engitech" class="tab-pane fade">
+          <table id="engineeringTechTable" style="width:100%"></table>
+        </div>
+        <div id="prevtech" class="tab-pane fade">
+          <h4 style="margin-bottom: -20px;padding-bottom: 0px;">Technicians that left the collaboration</h4>
+          <table id="previousTechTable" style="width:100%"></table>
         </div>
       </div>
     </div>
@@ -57,6 +68,13 @@
                 <label for="email" style="padding-left:30px">Email</label><br>
                 <div style="text-align:center;">
                   <input id="email" type="email" name="Email" required>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:12px">
+                <label for="lngs_id" style="padding-left:30px">LNGS ID</label><br>
+                <div style="text-align:center;">
+                  <input id="lngs_id" type="lngs_id" name="lngs_id" required>
                 </div>
               </div>
 
@@ -128,6 +146,8 @@
     $(document).ready(function() {
       InitializeTable("#currentMembersTable")
       InitializePrevTable("#previousMembersTable")
+      TechTable("#engineeringTechTable")
+      PrevTechTable("#previousTechTable")
       Autocomplete("#update_institute")
       Autocomplete("#new_institute")
       Autocomplete(document.getElementById("position"), "<%= positions %>")

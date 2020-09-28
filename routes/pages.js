@@ -23,7 +23,12 @@ router.get('/', ensureAuthenticated, function(req, res) {
 // external form.
 router.get('/request_new_member', function(req, res) {
   res.render('request', {page: 'Request New Member', menuId: 'home', title: 'Request New Member'})
-})
+});
+
+// confirmation of external form
+router.get('/confirmation', function(req, res) {
+  res.render('confirmation_lander', {page: 'Request Confirmed', menuId: 'home', title: 'Request Confirmed'})
+});
 
 // GET Userlist page. 
 router.get('/fulldirectory', ensureAuthenticated, function(req, res) {
@@ -65,15 +70,20 @@ router.get('/authors', ensureAuthenticated, function(req, res) {
 
 // GET profile page
 router.get('/profile', ensureAuthenticated, function(req, res){
+  var db = req.xenonnt_db;
+  var collection = db.collection('users');
   var name = req.user.first_name + ' ' + req.user.last_name;
-  res.render('profile', 
+  collection.find({"pending": true}).toArray(function(err, doc) {
+    res.render('profile', 
     { page: 'Profile', 
       menuId: 'home',
+      pending: doc,
       slackLink: process.env.SLACK_INVITE, 
       title: name, 
       user: req.user, 
     }
   );
+  });
 });
 
 // get the information about all current users from mongo for fulldirectory
@@ -83,7 +93,7 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
   var users = [];
   var order = [
     'PI', 'Permanent Scientist', 'Non-permanent Sci.', 'PhD Student', 
-    'Thesis Student', 'XENON Student', 'Engineer'
+    'Thesis Student', 'XENON Student', 'Engineer', 'Technician', '?'
   ];
   // This particular search is done with nested queries because I couldn't
   // figure out a good way to sort the positions the way I wanted. Probably
@@ -91,7 +101,8 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
   collection.find(
     { 
       "position": "PI", 
-      "end_date": {$exists: false}
+      "end_date": {$exists: false},
+      "pending": {$exists: false}
     }, 
     {"sort": "institute"}
   ).toArray(function(err, pi) {
@@ -102,7 +113,8 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
     collection.find(
       { 
         "position": "Permanent Scientist", 
-        "end_date": {$exists: false}
+        "end_date": {$exists: false},
+        "pending": {$exists: false}
       }, 
       {"sort": "institute"}
     ).toArray(function(err, ps) {
@@ -113,7 +125,8 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
       collection.find(
         { 
           "position": "Non-permanent Sci.", 
-          "end_date": {$exists: false}
+          "end_date": {$exists: false},
+          "pending": {$exists: false}
         }, 
         {"sort": "institute"}
       ).toArray(function(err, nps) {
@@ -124,7 +137,8 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
         collection.find(
           {
             "position": "PhD Student", 
-            "end_date": {$exists: false}
+            "end_date": {$exists: false},
+            "pending": {$exists: false}
           }, 
           {"sort": "institute"}
         ).toArray(function(err, phd) {
@@ -135,7 +149,8 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
           collection.find(
             {
               "position": "Thesis Student", 
-              "end_date": {$exists: false}
+              "end_date": {$exists: false},
+              "pending": {$exists: false}
             }, 
             {"sort": "institute"}
           ).toArray(function(err, ts) {
@@ -146,7 +161,8 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
             collection.find(
               {
                 "position": "XENON Student", 
-                "end_date": {$exists: false}
+                "end_date": {$exists: false},
+                "pending": {$exists: false}
               }, 
               {"sort": "institute"}
             ).toArray(function(err, xs) {
@@ -157,7 +173,8 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
               collection.find(
                 { 
                   "position": {$not: {$in: order}}, 
-                  "end_date": {$exists: false}
+                  "end_date": {$exists: false},
+                  "pending": {$exists: false}
                 }, 
                 {"sort": "institute"}
               ).toArray(function(err, o) {
@@ -180,13 +197,59 @@ router.post("/prev_table_info", ensureAuthenticated, function(req, res){
   var db = req.xenonnt_db;
   var collection = db.collection('users');
   collection.find(
-    {"end_date": {$exists: true}}, 
+    {"position": {$not: {$in: ["Technician", "Engineer", "?"]}},
+    "end_date": {$exists: true}}, 
     {"sort": "institute"}
   ).toArray(function(err, result) {
     for (let i = 0; i < result.length; i++) {
       result[i]['current_user'] = req.user;
     }
 		res.send(JSON.stringify({"data": result}));
+  });
+});
+
+// get the information about all engineers and technicians from mongo for fulldirectory
+router.post("/tech_table", ensureAuthenticated, function(req, res) {
+  var db = req.xenonnt_db;
+  var collection = db.collection('users');
+  var users = [];
+  // This particular search is done with nested queries because I couldn't
+  // figure out a good way to sort the positions the way I wanted. Probably
+  // not the best way to go about it.
+  collection.find(
+    { 
+      "position": {$in: ["Engineer", "Technician", "?"]}, 
+      "end_date": {$exists: false},
+      "pending": {$exists: false}
+    }, 
+    {"sort": "institute"}
+  ).toArray(function(err, result) {
+    for (let i = 0; i < result.length; i++) {
+      result[i]['current_user'] = req.user;
+    }
+		res.send(JSON.stringify({"data": result}));
+  });
+});
+
+router.post("/prev_tech_table", ensureAuthenticated, function(req, res) {
+  var db = req.xenonnt_db;
+  var collection = db.collection('users');
+  var users = [];
+  // This particular search is done with nested queries because I couldn't
+  // figure out a good way to sort the positions the way I wanted. Probably
+  // not the best way to go about it.
+  collection.find(
+    { 
+      "position": {$in: ["Engineer", "Technician", "?"]}, 
+      "end_date": {$exists: true},
+      "pending": {$exists: false}
+    }, 
+    {"sort": "institute"}
+  ).toArray(function(err, result) {
+    for (let i = 0; i < result.length; i++) {
+      result[i]['current_user'] = req.user;
+    }
+    res.send(JSON.stringify({"data": result}));
   });
 });
 
