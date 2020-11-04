@@ -1,96 +1,126 @@
 <div id="updateUserModal" class="modal fade" role="dialog" tabindex="-1">
-    <div class="modal-dialog" role="document">
-
-        <div class="modal-content" style="padding: 20px 35px 20px 35px; background-color: #fdfdfd;">
-            <div class="modal-header" style="padding-left:30px">
-              <button id="updateCloseButton" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title">Update User</h3>
-            </div>
-            <div class="modal-body">
-                <form id="formUpdateUser" name="updateuser" method="post">
-                  <div class="row" style="margin-top:12px">
-                    <label for="fname" style="padding-left:30px">First Name</label><br>
-                    <div style="text-align:center;">
-                      <input id="fname" type="text" name="FirstName" />
-                    </div>
-                  </div>
-    
-                  <div class="row" style="margin-top:12px">
-                    <label for="lname" style="padding-left:30px">Last Name</label><br>
-                    <div style="text-align:center;">
-                      <input id="lname" type="text" name="LastName" />
-                    </div>
-                  </div>
-    
-                  <div class="row" style="margin-top:12px">
-                    <label for="email" style="padding-left:30px">Email</label><br>
-                    <div style="text-align:center;">
-                      <input id="email" type="email" name="Email" />
-                    </div>
-                  </div>
-
-                  <div class="row" style="margin-top:12px">
-                    <label for="lngs_id" style="padding-left:30px">LNGS ID</label><br>
-                    <div style="text-align:center;">
-                      <input id="lngs_id" type="lngs_id" name="lngs_id" required>
-                    </div>
-                  </div>
-    
-                  <div class="row" style="margin-top:12px">
-                    <label for="position" style="padding-left:30px">Position</label><br>
-                    <div style="text-align:center;">
-                      <input type="text" name="position" id="position">
-                    </div>
-                  </div>
-    
-                  <div class="row" style="margin-top:12px">
-                    <label for="institute" style="padding-left:30px">Institute</label><br>
-                    <div style="text-align:center;">
-                      <input type="text" name="institute" id="update_institute">
-                    </div>
-                  </div>
-
-                  <div class="row" style="margin-top:12px">
-                    <label for="prevTime" style="padding-left:30px">Previous Time Info</label><br>
-                    <div style="text-align:center;">
-                      <input id="prevTime" type="text" name="prevTime" />
-                    </div>
-                  </div>
-    
-                  <div class="row" style="margin-top:12px">
-                    <label for="time" style="padding-left:30px">Percent Xenon</label><br>
-                    <div style="text-align:center;">
-                      <input id="time" type="number" name="Time" />
-                    </div>
-                  </div>
-    
-                  <div class="row" style="margin-top:12px;padding-left:30px">
-                    <label for="mlists">Mailing Lists</label><br>
-                      <input type="checkbox" id="mlist1" name="mlist1" value="Calibration">&nbsp;&nbsp;&nbsp;Calibration<br>
-                      <input type="checkbox" id="mlist2" name="mlist2" value="Analysis">&nbsp;&nbsp;&nbsp;Analysis<br>
-                      <input type="checkbox" id="mlist3" name="mlist3" value="TPC">&nbsp;&nbsp;&nbsp;TPC<br>
-                  </div>
-    
-                  <div class="row" style="margin-top:12px">
-                    <label for="sdate" style="padding-left:30px">Start Date</label><br>
-                    <div style="text-align:center;">
-                      <input id="sdate" type="date" name="StartDate" placeholder="YYYY-MM-DD">
-                    </div>
-                  </div>
-    
-                  <div class="row" style="margin-top:12px">
-                    <label for="edate" style="padding-left:30px">End Date</label><br>
-                    <div style="text-align:center;">
-                      <input id="edate" type="date" name="EndDate" placeholder="YYYY-MM-DD">
-                    </div>
-                  </div>
-    
-                  <br>
-                  <div style="text-align:center;">
-                    <input type="submit" value="Submit">
-                  </div>
-                </form>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="padding: 20px 35px 20px 35px; background-color: #fdfdfd;">
+        <div class="modal-header" style="padding-left:30px">
+          <button id="updateCloseButton" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h3 class="modal-title">Update User</h3>
+        </div>
+        <div class="modal-body">
+          <form id="formUpdateUser" name="updateuser" method="post">
+            <div class="row" style="margin-top:12px">
+              <label for="fname" style="padding-left:30px">First Name</label><br>
+              <div style="text-align:center;">
+                <input id="fname" type="text" name="FirstName" />
               </div>
+            </div>
+
+            <div class="row" style="margin-top:12px">
+              <label for="lname" style="padding-left:30px">Last Name</label><br>
+              <div style="text-align:center;">
+                <input id="lname" type="text" name="LastName" />
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px">
+              <label for="email" style="padding-left:30px">Work Email</label><br>
+              <div style="text-align:center;">
+                <input id="email" type="email" name="Email" required>
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px">
+              <label for="lngs_id" style="padding-left:30px">LNGS ID</label><br>
+              <div style="text-align:center;">
+                <input id="lngs_id" type="lngs_id" name="lngs_id" required>
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px">
+              <label for="position" style="padding-left:30px">Position</label><br>
+              <div style="text-align:center;">
+                <input type="text" name="position" id="position">
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px">
+              <label for="institute" style="padding-left:30px">Institute</label><br>
+              <div style="text-align:center;">
+                <input type="text" name="institute" id="update_institute">
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px">
+              <label for="prevTime" style="padding-left:30px">Previous Time Info</label><br>
+              <div style="text-align:center;">
+                <input id="prevTime" type="text" name="prevTime" />
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px">
+              <label for="time" style="padding-left:30px">Percentage FTE on XENON</label><br>
+              <div style="text-align:center;">
+                <input id="time" type="number" name="Time" />
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px;padding-left:30px">
+              <label for="mlists">Mailing Lists</label><br>
+              <div class="col-sm-6">
+                <input type="checkbox" id="mlist1" checked disabled>&nbsp;&nbsp;&nbsp;xe-all<br>
+                <input type="hidden" name="mlist1" value="xe-all">
+                <input type="checkbox" id="mlist2" name="mlist" value="xe-analysis">&nbsp;&nbsp;&nbsp;xe-analysis<br>
+                <input type="checkbox" id="mlist3" name="mlist" value="xe-calibration">&nbsp;&nbsp;&nbsp;xe-calibration<br>
+                <input type="checkbox" id="mlist4" name="mlist" value="xe-clean">&nbsp;&nbsp;&nbsp;xe-clean<br>
+                <input type="checkbox" id="mlist5" name="mlist" value="xe-commissioning">&nbsp;&nbsp;&nbsp;xe-commissioning<br>
+                <input type="checkbox" id="mlist6" name="mlist" value="xe-computing">&nbsp;&nbsp;&nbsp;xe-computing<br>
+                <input type="checkbox" id="mlist7" name="mlist" value="xe-cryogenics">&nbsp;&nbsp;&nbsp;xe-cryogenics<br>
+                <input type="checkbox" id="mlist8" name="mlist" value="xe-cryostat">&nbsp;&nbsp;&nbsp;xe-cryostat<br>
+                <input type="checkbox" id="mlist9" name="mlist" value="xe-daq">&nbsp;&nbsp;&nbsp;xe-daq<br>
+                <input type="checkbox" id="mlist10" name="mlist" value="xe-detector">&nbsp;&nbsp;&nbsp;xe-detector<br>
+                <input type="checkbox" id="mlist11" name="mlist" value="xe-infrastructure">&nbsp;&nbsp;&nbsp;xe-infrastructure<br>
+                <input type="checkbox" id="mlist12" name="mlist" value="xe-montecarlo">&nbsp;&nbsp;&nbsp;xe-montecarlo<br>
+              </div>
+              <div class="col-sm-6">
+                <input type="checkbox" id="mlist13" name="mlist" value="xe-muonveto">&nbsp;&nbsp;&nbsp;xe-muonveto<br>
+                <input type="checkbox" id="mlist14" name="mlist" value="xe-nveto">&nbsp;&nbsp;&nbsp;xe-nveto<br>
+                <input type="checkbox" id="mlist15" name="mlist" value="xe-operations">&nbsp;&nbsp;&nbsp;xe-operations<br>
+                <input type="checkbox" id="mlist16" name="mlist" value="xe-pmts">&nbsp;&nbsp;&nbsp;xe-pmts<br>
+                <input type="checkbox" id="mlist17" name="mlist" value="xe-purity">&nbsp;&nbsp;&nbsp;xe-purity<br>
+                <input type="checkbox" id="mlist18" name="mlist" value="xe-purification">&nbsp;&nbsp;&nbsp;xe-purification<br>
+                <input type="checkbox" id="mlist19" name="mlist" value="xe-restox">&nbsp;&nbsp;&nbsp;xe-restox<br>
+                <input type="checkbox" id="mlist20" name="mlist" value="xe-screening">&nbsp;&nbsp;&nbsp;xe-screening<br>
+                <input type="checkbox" id="mlist21" name="mlist" value="xe-slowcontrol">&nbsp;&nbsp;&nbsp;xe-slowcontrol<br>
+                <input type="checkbox" id="mlist22" name="mlist" value="xe-tpc">&nbsp;&nbsp;&nbsp;xe-tpc<br>
+                <input type="checkbox" id="mlist23" name="mlist" value="xe-watertank">&nbsp;&nbsp;&nbsp;xe-watertank<br>
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px">
+              <label for="sdate" style="padding-left:30px">Start Date</label><br>
+              <div style="text-align:center;">
+                <input id="sdate" type="date" name="StartDate" placeholder="YYYY-MM-DD">
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px">
+              <label for="exEndDate" style="padding-left:30px">Expected End Date</label><br>
+              <div style="text-align:center;">
+                <input id="exEndDate" type="date" name="ExEndDate" placeholder="YYYY-MM-DD">
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px">
+              <label for="edate" style="padding-left:30px">End Date</label><br>
+              <div style="text-align:center;">
+                <input id="edate" type="date" name="EndDate" placeholder="YYYY-MM-DD">
+              </div>
+            </div>
+            <br>
+            <div style="text-align:center;">
+              <input type="submit" value="Submit">
+            </div>
+          </form>
         </div>
     </div>
+  </div>
 </div>

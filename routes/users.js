@@ -16,22 +16,22 @@ function NewUserMail(req, mailing_lists, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.MAILING_LIST,
+    to: process.env.YVETTE_EMAIL,
+    cc: process.env.CHRIS_EMAIL,
     subject: 'New Member Confirmation: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
-    html: '<p>Hi,</p>' + 
+    html: '<p>Dear Collaboration Board,</p>' + 
       '<p>A new member has been added by ' + req.user.first_name + ' ' +
-        req.user.last_name + ' at ' + req.body.institute + 
-        ' that needs access to midway: <br>' +
-      'a) Name: ' + req.body.FirstName + ' ' + req.body.LastName + '<br>' +
+        req.user.last_name + ' at ' + req.body.institute + '</p>' +
+      '<p>a) Name: ' + req.body.FirstName + ' ' + req.body.LastName + '<br>' +
       'b) email: ' + req.body.Email + '<br>' +
       'c) Position: ' + req.body.position + '<br>' +
       'd) Time: ' + req.body.Time + '%<br>' +
       'e) Tasks: ' + req.body.Tasks + '<br>' +
       'f) Mailing lists: ' + mailing_lists + '<br>' +
       'g) Start date: ' + req.body.StartDate + '<br>' +
-      'h) End date: ' + req.body.expectedEnd + '<br>' +
-      '<p>Thanks!<br>XENON User Management</p>'
+      'h) End date: ' + req.body.expectedEnd + '</p>' +
+      '<p>Regards,<br>XENON User Management System</p>'
   };
   
   transporter.sendMail(message, function(error, info) {
@@ -49,21 +49,26 @@ function PendingUserMail(req, mailing_lists, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.MAILING_LIST,
+    to: process.env.YVETTE_EMAIL,
+    cc: process.env.CHRIS_EMAIL,
     subject: 'New Member Request: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
-    html: '<p>Hi,</p>' + 
-      '<p>A new member has been requested for ' + req.body.institute + ' <br>' +
-      'a) Name: ' + req.body.FirstName + ' ' + req.body.LastName + '<br>' +
+    html: '<p>Dear Collaboration Board,</p>' + 
+      '<p>Please review the new membership request for ' + req.body.institute + ' that was made.</p>' +
+      '<p>a) Name: ' + req.body.FirstName + ' ' + req.body.LastName + '<br>' +
       'b) email: ' + req.body.Email + '<br>' +
       'c) Position: ' + req.body.position + '<br>' +
       'd) Time: ' + req.body.Time + '%<br>' +
       'e) Tasks: ' + req.body.Tasks + '<br>' +
       'f) Mailing lists: ' + mailing_lists + '<br>' +
       'g) Start date: ' + req.body.StartDate + '<br>' +
-      'h) End date: ' + req.body.expectedEnd + '<br>' +
-      'Please approve or reject the user at https://xenon1t-daq.lngs.infn.it/shifts/ <br>' +
-      '<p>Thank you!<br>XENON User Management</p>'
+      'h) End date: ' + req.body.expectedEnd + '</p>' +
+      '<p>Collaboration board: If you would like more information or would like to request,' +
+        'please reply to all in this email thread.  If you agree with the new member, do nothing.' +
+        'For instructions on how to use this system to submit your own members or other user management' +
+        ' tasks, please see https://xe1t-wiki.lngs.infn.it/doku.php?id=xenon:xenonnt:userlist_management.<br><br>' +
+      'Ze or admin: please approve or reject the user at https://xenon1t-daq.lngs.infn.it/shifts/profile.</p>' + 
+      '<p>Regards,<br>XENON User Management System</p>'
   };
   
   transporter.sendMail(message, function(error, info) {
@@ -81,7 +86,8 @@ function ApproveUserMail(req, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.MAILING_LIST,
+    to: process.env.YVETTE_EMAIL,
+    cc: process.env.CHRIS_EMAIL,
     subject: 'Request Approved: ' + req.body.fName + ' ' + 
       req.body.lName,
     html:
@@ -110,7 +116,8 @@ function DenyUserMail(req, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.MAILING_LIST,
+    to: process.env.YVETTE_EMAIL,
+    cc: process.env.CHRIS_EMAIL,
     subject: 'Request Denied: ' + req.body.fName + ' ' + 
       req.body.lName,
     html:
@@ -131,6 +138,36 @@ function DenyUserMail(req, callback) {
   });
 }
 
+function UpdateUserMail(req, previous, current, callback) {
+  var transporter = req.transporter;
+  var message = {
+    from: process.env.NOTIFS_ACCOUNT,
+    to: process.env.YVETTE_EMAIL,
+    cc: process.env.CHRIS_EMAIL,
+    subject: 'User Information Updated: ' + req.body.FirstName + ' ' + 
+      req.body.LastName,
+    html: '<p>Dear all,</p>' + 
+      "<p>A member's information has been updated by " + req.user.first_name + ' ' +
+        req.user.last_name + ' at ' + req.body.institute + '</p>' +
+      '<p>Please review the following changes:<br>' +
+      'Previous information:<br>' +
+      previous +
+      '<br>Current information:<br>' +
+      current + '</p>' +
+      '<p>Regards,<br>XENON User Management System</p>'
+  };
+  
+  transporter.sendMail(message, function(error, info) {
+    if (error) {
+      console.log(error);
+      callback(false);
+    } else {
+      console.log('Message sent ' + info.message);
+      callback(true);
+    }
+  });
+}
+
 router.post('/updateContactInfo', ensureAuthenticated, function(req, res) {
   var db = req.xenonnt_db;
   var collection = db.collection('users');
@@ -138,6 +175,14 @@ router.post('/updateContactInfo', ensureAuthenticated, function(req, res) {
   if (req.body.email != "") {
     idoc['email'] = req.body.email;
     req.user.email = req.body.email;
+  }
+  if (req.body.git != "") {
+    idoc['github'] = req.body.git;
+    req.user.github = req.body.git;
+  }
+  if (req.body.lngs != "") {
+    idoc['lngs_ldap_uid'] = req.body.lngs;
+    req.user.lngs_ldap_uid = req.body.lngs;
   }
   if (req.body.skype != "") {
     idoc["skype"] = req.body.skype;
@@ -172,56 +217,102 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
   var user_id = new ObjectId(req.params.userid);
   var page = req.params.page;
   var idoc = {};
-  idoc['first_name'] = req.body.FirstName;
-  idoc['last_name'] = req.body.LastName;
-  idoc['email'] = req.body.Email;
+  var previous_doc;
 
-  if (req.body.institute != null) {
-    idoc['institute'] = req.body.institute;
-  }
-  if (req.body.position != null) {
-    idoc['position'] = req.body.position;
-  }
-  if (req.body.lngs_id != null) {
-    idoc['lngs_ldap_uid'] = req.body.lngs_id;
-  }
-  if (req.body.Time != "" && req.body.Time != null) {
-    idoc['percent_xenon'] = Number(req.body.Time);
-  }
-  if (req.body.prevTime != null) {
-    idoc['previous_time'] = req.body.prevTime;
-  }
-  if (req.body.addInst != null) {
-    idoc['additional_institutes'] = req.body.addInst;
-  }
-  if (req.body.mlist1 != null || req.body.mlist2 != null || 
-     req.body.mlist3 != null) {
-    idoc['mailing_lists'] = [
-      req.body.mlist1, req.body.mlist2, req.body.mlist3
-    ];
-  }
-  if (req.body.StartDate != "" && req.body.StartDate != null) {
-    idoc['start_date'] = new Date(`${req.body.StartDate}`);
-  }
-  if (req.body.EndDate != "" && req.body.EndDate != null) {
-    idoc["end_date"] = new Date(req.body.EndDate);
-  }
+  collection.find({"_id": user_id}).toArray(function(e, data) {
+    console.log(data)
+    previous_doc = data[0];
 
-  collection.findOneAndUpdate({"_id": user_id}, {$set: idoc});
-  console.log(`success. Modified ${req.body.FirstName} ${req.body.LastName}`);
+    var mailing_lists = '';
+    if (req.body.mlist != null && Array.isArray(req.body.mlist)) {
+      var lists = req.body.mlist;
+    } else {
+      if (req.body.mlist != null) {
+        var lists = [req.body.mlist]
+      } else {
+        var lists = []
+      }
+    }
+    console.log(lists);
+    lists.push('xe-all');
+    mailing_lists += lists.join(", ")
 
-  if (page.toString().includes('Institute')) {
-    var split = page.toString().split('_')[1];
-    page = 'institutes/' + split;
-  }
-      
-  return res.redirect(base + '/' + page)
+    idoc['first_name'] = req.body.FirstName;
+    idoc['last_name'] = req.body.LastName;
+    idoc['email'] = req.body.Email;
+    idoc['mailing_lists'] = lists;
+
+    if (req.body.institute != null) {
+      idoc['institute'] = req.body.institute;
+    }
+    if (req.body.position != null) {
+      idoc['position'] = req.body.position;
+    }
+    if (req.body.lngs_id != null) {
+      idoc['lngs_ldap_uid'] = req.body.lngs_id;
+    }
+    if (req.body.Time != "" && req.body.Time != null) {
+      idoc['percent_xenon'] = Number(req.body.Time);
+    }
+    if (req.body.prevTime != null) {
+      idoc['previous_time'] = req.body.prevTime;
+    }
+    if (req.body.addInst != null) {
+      idoc['additional_institutes'] = req.body.addInst;
+    }
+    if (req.body.StartDate != "" && req.body.StartDate != null) {
+      idoc['start_date'] = new Date(`${req.body.StartDate}`);
+    }
+    if (req.body.EndDate != "" && req.body.EndDate != null) {
+      idoc['end_date'] = new Date(req.body.EndDate);
+    }
+    if (req.body.ExEndDate != "" && req.body.ExEndDate != null) {
+      idoc['expected_end_date'] = new Date(req.body.ExEndDate);
+    }
+
+    if (page.toString().includes('Institute')) {
+      var split = page.toString().split('_')[1];
+      page = 'institutes/' + split;
+    }
+
+    idoc_str = "" + JSON.stringify(idoc, null, 4) + "";
+    prev_str = "" + JSON.stringify(previous_doc, null, 4) + "";
+
+    try {
+      // make sure email alerting of new member can be sent before actually
+      // adding the new member to the database
+      UpdateUserMail(req, prev_str, idoc_str, function(success){
+        if (success) {
+          collection.findOneAndUpdate({"_id": user_id}, {$set: idoc});
+          console.log(`success. Modified ${req.body.FirstName} ${req.body.LastName}`);
+          res.redirect(base + '/' + page);
+        } else {
+          console.log("error. Could not send email.");
+          res.redirect(base + '/' + page);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  });
 });
 
 router.post('/adduser', ensureAuthenticated, function(req, res) {
   var db = req.xenonnt_db;
   var idoc = {};
   var mailing_lists = '';
+  if (req.body.mlist != null && Array.isArray(req.body.mlist)) {
+    var lists = req.body.mlist;
+  } else {
+    if (req.body.mlist != null) {
+      var lists = [req.body.mlist]
+    } else {
+      var lists = []
+    }
+  }
+  console.log(lists);
+  lists.push('xe-all');
+  mailing_lists += lists.join(", ")
 
   idoc['first_name'] = req.body.FirstName;
   idoc['last_name'] = req.body.LastName;
@@ -229,23 +320,10 @@ router.post('/adduser', ensureAuthenticated, function(req, res) {
   idoc['institute'] = req.body.institute;
   idoc['position'] = req.body.position;
   idoc['percent_xenon'] = req.body.Time;
-  idoc['mailing_lists'] = [req.body.mlist1, req.body.mlist2, req.body.mlist3];
+  idoc['mailing_lists'] = lists;
   if(req.body.StartDate != '') {
     idoc['start_date'] = new Date(req.body.StartDate);
-  }
-
-  if (req.body.mlist1 != null) {
-    mailing_lists += req.body.mlist1;
-    mailing_lists += " ";
-  }
-  if (req.body.mlist2 != null) {
-    mailing_lists += req.body.mlist2;
-    mailing_lists += " ";
-  }
-  if (req.body.mlist3 != null) {
-    mailing_lists += req.body.mlist3;
-    mailing_lists += " ";
-  }    
+  }  
 
   try {
     // make sure email alerting of new member can be sent before actually
@@ -255,10 +333,10 @@ router.post('/adduser', ensureAuthenticated, function(req, res) {
         db.collection('users').insertOne(idoc);
         console.log('success. Added' + req.body.FirstName + ' ' +
           req.body.LastName);
-        res.redirect(base + '/' + req.body.page);
+        res.redirect(base + '/fulldirectory');
       } else {
         console.log("error. Could not send email.");
-        res.redirect(base + '/' + req.body.page);
+        res.redirect(base + '/fulldirectory');
       }
     });
   } catch (e) {
@@ -270,8 +348,17 @@ router.post('/pendinguser', function(req, res) {
   var db = req.xenonnt_db;
   var idoc = {};
   var mailing_lists = '';
-  var lists = ['xe-all'];
-
+  if (req.body.mlist != null && Array.isArray(req.body.mlist)) {
+    var lists = req.body.mlist;
+  } else {
+    if (req.body.mlist != null) {
+      var lists = [req.body.mlist]
+    } else {
+      var lists = []
+    }
+  }
+  console.log(lists);
+  lists.push('xe-all');
   idoc['pending'] = true;
   idoc['first_name'] = req.body.FirstName;
   idoc['last_name'] = req.body.LastName;
@@ -282,18 +369,16 @@ router.post('/pendinguser', function(req, res) {
   if(req.body.StartDate != '') {
     idoc['start_date'] = new Date(req.body.StartDate);
   }
+  if (req.body.ExEndDate != "" && req.body.ExEndDate != null) {
+    idoc['expected_end_date'] = new Date(req.body.exEndDate);
+  }
 
   if (req.body.position === "PhD Student") {
     lists.push('xe-junior');
   }
-
-  $.each($("input[name='mlist']:checked"), function(){
-      lists.push($(this).val());
-  });
-
   idoc['mailing_lists'] = lists;
 
-  mailing_lists += lists.join(", ") 
+  mailing_lists += lists.join(", ")
 
   try {
     // make sure email alerting of new member can be sent before actually

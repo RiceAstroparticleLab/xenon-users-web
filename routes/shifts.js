@@ -127,16 +127,17 @@ router.post("/get_daqids", ensureAuthenticated, function(req, res) {
 });
 
 // not currently in use
-router.post("/get_rules", ensureAuthenticated, function(req,res) {
+router.get("/get_rules", ensureAuthenticated, function(req,res) {
   var db = req.xenonnt_db;
-  var collection = db.collection('shift_ruls')
-  //get form data
-  var year = req.body.years;
+  var collection = db.collection('shifts');
+  var d = new Date()
+  var year = d.getFullYear().toString();
+  var dat = new Date("2020-01-01")
   collection.find(
-    {"year": year}, 
-    {"$sort": {"institute": 1}}
-  ).toArray(function(err,result) {
-    res.status(200).send(result);
+    {start: {$gte: ISODate("2020-01-01T00:00:00.000Z")}}
+  ).toArray(function(err, result) {
+    l = result.length
+    res.send(l.toString());
   });
 });
 

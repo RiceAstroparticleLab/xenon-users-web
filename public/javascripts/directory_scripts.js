@@ -92,8 +92,7 @@ function InitializeTable(tablediv) {
     e.preventDefault();
     var data = table.row($(this).parents('tr')).data();
     var user = data.current_user;
-    if((user.position === 'PI' && user.institute === data.institute) ||
-        user.groups !== 'not set' || user.last_name == 'Matias-Lopes') {
+    if(user.groups.includes("directory")) {
       openModal(data, 'fulldirectory');
     } else {
       alert("Sorry, you don't have the correct permissions.");
@@ -179,8 +178,97 @@ function InitializePrevTable(tablediv) {
     e.preventDefault();
     var data = table.row($(this).parents('tr')).data();
     var user = data.current_user;
-    if ((user.position === 'PI' && user.institute === data.institute) ||
-        user.groups !== 'not set' || user.last_name === 'Matias-Lopes') {
+    if (user.groups.includes("directory")) {
+      openModal(data, 'fulldirectory');
+    } else {
+      alert("Sorry, you don't have the correct permissions.");
+    }
+  });
+}
+
+// Makes DataTables table of previous members in the fulldirectory page in 
+// selected div (tablediv)
+function TechTable(tablediv) {
+  var groupColumn = 1;
+  var table = $(tablediv).DataTable({
+    dom: 'flrtip',               
+    order: [[groupColumn, 'asc']],
+    pageResize: true,
+    paging: false,
+    language: {
+      search: '',
+      searchPlaceholder: 'Search...',
+    },
+    ajax: {
+      url: 'tech_table',
+      type: 'POST',
+    },
+    columns: [
+      { data: null, defaultContent: '', orderable: false },
+      { data: "institute", searchable: true },
+      { data: "last_name", searchable: true },
+      { data: "first_name", searchable: true },
+      { data: "email", orderable: false, searchable: true },
+      { data: "position", searchable: true },
+      { data: "percent_xenon", orderable: false },
+      { data: "start_date", type: 'datetime', orderable: false },
+      { data: "previous_time", defaultContent: '', orderable: false },
+      { data: "username", defaultContent: '', orderable: false },
+      { title: '', orderable: false }
+    ],
+    columnDefs: [
+      { title: 'Institute', targets: 0 },
+      { title: 'Institute', targets: 1 },
+      { title: 'Last Name', targets: 2 },
+      { title: 'First Name', targets: 3 },
+      { title: 'Email', targets: 4 },
+      { title: 'Position', targets: 5 },
+      { title: 'Time', targets: 6 },
+      { title: 'Start Date', targets: 7 },
+      { title: 'Previous Time Info', targets: 8 },
+      { title: 'Username', targets: 9 },
+      { targets: -1,
+        data: null,
+        defaultContent: "<button type='button' class='btn-circle'>" +
+                        "<i class='fas fa-pen'></i></button>"
+      },
+      { visible: false, targets: groupColumn },
+      { targets: [7],
+        render: function(data) {
+          if (typeof(data) === 'undefined') {
+            return '';
+          }
+          if (typeof(data) === String) {
+            return data
+          }
+          return moment(data).tz('Atlantic/St_Helena').format('MMM YYYY');
+        }
+      }
+    ],
+    // groups rows so that each group of members has a header row that has the 
+    // name of the institute (like Ze's list)
+    drawCallback: function(settings) {
+      var api = this.api();
+      var rows = api.rows({page: 'current'}).nodes();
+      var last = null;
+
+      api.column(groupColumn, {page: 'current'}).data().each(function(group,i) {
+        if (last !== group) {
+          $(rows).eq(i).before(
+            '<tr class="group"><td colspan="10"><strong>' + group +
+              '</strong></td></tr>'
+          )
+          last = group;
+        }
+      })
+    }
+  });
+  // set permisions for the edit button on the right hand side of each row
+  $(tablediv + ' tbody').on('click', 'button', function(e) {
+    e.preventDefault();
+    var data = table.row($(this).parents('tr')).data();
+    var user = data.current_user;
+    if(user.groups.includes("directory")) {
       openModal(data, 'fulldirectory');
     } else {
       alert("Sorry, you don't have the correct permissions.");
@@ -204,7 +292,7 @@ function PrevTechTable(tablediv) {
       url: 'prev_tech_table',
       type: 'POST',
     },
-    columns: [	    
+    columns: [
       { data: null, defaultContent: '', orderable: false },
       { data: "last_name", searchable: true },
       { data: "first_name", searchable: true },
@@ -231,7 +319,7 @@ function PrevTechTable(tablediv) {
         defaultContent: "<button type='button' class='btn-circle'>" + 
                         "<i class='fas fa-pen'></i></button>"
       },
-      { targets: [7],
+      { targets: [6, 7],
         render: function(data) {
           if (typeof(data) === 'undefined') {
             return '';
@@ -244,14 +332,12 @@ function PrevTechTable(tablediv) {
       }
     ],
   });
-
   // set permisions for the edit button on the right hand side of each row
   $(tablediv + ' tbody').on('click', 'button', function(e) {
     e.preventDefault();
     var data = table.row($(this).parents('tr')).data();
     var user = data.current_user;
-    if((user.position === 'PI' && user.institute === data.institute) ||
-        user.groups !== 'not set' || user.last_name == 'Matias-Lopes') {
+    if(user.groups.includes("directory")) {
       openModal(data, 'fulldirectory');
     } else {
       alert("Sorry, you don't have the correct permissions.");
@@ -311,8 +397,7 @@ function PrevAuthorsTable(tablediv) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
       var user = data.current_user;
-      if ((user.position === 'PI' && user.institute === data.institute) ||
-          user.groups !== 'not set' || user.last_name === 'Matias-Lopes') {
+      if (user.groups.includes("directory")) {
         openModal(data, 'authors');
       } else {
         alert("Sorry, you don't have the correct permissions.")
@@ -370,8 +455,7 @@ function CurrAuthorsTable(tablediv) {
     e.preventDefault();
     var data = table.row($(this).parents('tr')).data();
     var user = data.current_user;
-    if ((user.position === "PI" && user.institute === data.institute) ||
-        (user.groups !== "not set") || user.last_name === "Matias-Lopes") {
+    if (user.groups.includes("directory")) {
       openModal(data, 'authors');
     } else {
       alert("Sorry, you don't have the correct permissions.")
@@ -396,7 +480,7 @@ function openModal(userInfo, page) {
       }
     }
     
-    // Update the modal's content based on data from user_info
+    // Update the modal's content based on data from user info
     var modal = $(this);
     document.getElementById('formUpdateUser').action = 
       'users/' + page + '/' + userInfo._id + '/updateContactInfoAdmin';
@@ -414,6 +498,11 @@ function openModal(userInfo, page) {
     modal
       .find('.modal-body input[name="StartDate"]')
       .val(new Date(userInfo.start_date).toISOString().slice(0,10));
+    if (userInfo.expected_end_date != "" && userInfo.expected_end_date != null) {
+      modal
+        .find('.modal-body input[name="ExEndDate"]')
+        .val(new Date(userInfo.expected_end_date).toISOString().slice(0,10));
+    }
     
     // select only the checkboxes that correspond to the mailing lists for
     // this user
@@ -460,30 +549,30 @@ function UpdateUserModal() {
     var modal = $(this);
     // Update the modal's content to match the data for the user
     document.getElementById('formUpdateUser').action = 
-      'users/Institute_'+institute+'/'+userInfo._id+'/updateContactInfoAdmin';
+      '/shifts/users/Institute_'+institute+'/'+userInfo._id+'/updateContactInfoAdmin';
     modal.find('.modal-body input[name="FirstName"]').val(userInfo.first_name);
     modal.find('.modal-body input[name="LastName"]').val(userInfo.last_name);
     modal.find('.modal-body input[name="Email"]').val(userInfo.email);
     modal.find('.modal-body input[name="institute"]').val(institute);
     modal.find('.modal-body input[name="Time"]').val(userInfo.percent_xenon);
     modal.find('.modal-body input[name="Tasks"]').val(userInfo.tasks);
+    modal.find('.modal-body input[name="lngs_id"]').val(userInfo.lngs_ldap_uid);
+    modal.find('.modal-body input[name="position"]').val(userInfo.position);
     modal
       .find('.modal-body input[name="prevTime"]')
       .val(userInfo.previous_time);
     modal
       .find('.modal-body input[name="StartDate"]')
-      .val(new Date(useInfo.start_date).toISOString().slice(0,10));
+      .val(new Date(userInfo.start_date).toISOString().slice(0,10));
 
-    // select correct position from dropdown
-    var positionMatch = 
-      modal.find('.modal-body option[value="'+ userInfo.position +'"]');
-    if (positionMatch.length) {
-      modal.find('.modal-body option[id="selected"]').attr('selected', false);
-      positionMatch.attr('selected', true);
+    if (userInfo.expected_end_date != "" && userInfo.expected_end_date != null) {
+      modal
+        .find('.modal-body input[name="ExEndDate"]')
+        .val(new Date(userInfo.expected_end_date).toISOString().slice(0,10));
     }
     
     // check only correct mailing list checkbox
-    var lists = user_info.mailing_lists;
+    var lists = userInfo.mailing_lists;
     if (lists) {
       for (i = 0; i < lists.length; i++) {
         if (lists[i] != null) {

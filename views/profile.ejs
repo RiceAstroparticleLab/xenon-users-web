@@ -4,6 +4,13 @@
     .fa {
     float: right;
     }
+    li.views a{
+        border: 0 !important;
+        color: #555 !important;
+    }
+    li.active > .views > a{
+        border-bottom: 2px solid #355C99 !important;
+    }
 </style>
 <head>
     <% include components/head %> 
@@ -26,9 +33,9 @@
                 <h5 style="color:#355C99"><%= user.position %> at <%= user.institute %></h5>
                 <br>
                 <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" role="tab" href="#profiletab" style="border:0;border-bottom:2px solid #355C99;color:#555 !important;"><i class="fas fa-user"></i><strong>&nbsp;&nbsp;&nbsp;XENON Profile</strong></a></li>
-                    <% if (user.first_name === 'Yvette') {%>
-                        <li><a data-toggle="tab" role="tab" href="#requesttab" style="border:0;border-bottom:2px solid #355C99;color:#555 !important;"><i class="fas fa-hourglass-half"></i><strong>&nbsp;&nbsp;&nbsp;Pending Requests</strong></a></li>
+                    <li class="active views"><a data-toggle="tab" role="tab" href="#profiletab"><i class="fas fa-user"></i><strong>&nbsp;&nbsp;&nbsp;XENON Profile</strong></a></li>
+                    <% if (user.groups.includes("approval")) {%>
+                        <li class="views"><a data-toggle="tab" role="tab" href="#requesttab"><i class="fas fa-hourglass-half"></i><strong>&nbsp;&nbsp;&nbsp;Pending Requests</strong></a></li>
                     <%}%>
                 </ul>
                 <div class="tab-content" id="tabContent">
@@ -155,6 +162,14 @@
                             <div class="form-group">
                                 <label class="form-label" for="email">Email</label>
                                 <input class="form-control" type="email" value="<%= user.email %>" name="email">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="git">Github</label>
+                                <input class="form-control" type="text" value="<%= user.github %>" name="git">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="lngs">LNGS ID</label>
+                                <input class="form-control" type="text" value="<%= user.lngs_ldap_uid %>" name="lngs">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="skype">Skype</label>

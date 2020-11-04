@@ -60,114 +60,11 @@
             <!-- make this button available only if authorized as admin/PI-->
             <!-- Button triggers newUserModal -->
             <% if ((user.position == "PI" && user.institute == page) || (user.groups !== undefined)) {%>
-              <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#newUserModal" style="float:right;margin-top:20px">Add Member</button>
+              <a href="https://xenon1t-daq.lngs.infn.it/shifts/request_new_member" target="_blank"><button type="button" class="btn btn-secondary btn-sm" style="color:#333;float:right;margin-top:20px">Request New Member</button></a>
             <%}%>  
           <% include components/directory %>
         </div>
         <div class="col-sm-1"></div>
-      </div>
-    </div>
-
-    <!-- New User Modal -->
-    <div id="newUserModal" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-
-        <div class="modal-content" style="padding: 20px 35px 20px 35px; background-color: #fdfdfd;">
-          <div class="modal-header" style="padding-left:30px">
-            <h3 class="modal-title">Add New User</h3>
-          </div>
-          <div class="modal-body">
-            <form id="formAddUser" name="adduser" method="post" action="/shifts/users/adduser">
-              <div class="row" style="margin-top:12px">
-                <label for="fname" style="padding-left:30px">First Name</label><br>
-                <div style="text-align:center;">
-                  <input id="fname" type="text" name="FirstName" required>
-                </div>
-              </div>
-
-              <div class="row" style="margin-top:12px">
-                <label for="lname" style="padding-left:30px">Last Name</label><br>
-                <div style="text-align:center;">
-                  <input id="lname" type="text" name="LastName" required>
-                </div>
-              </div>
-
-              <div class="row" style="margin-top:12px">
-                <label for="email" style="padding-left:30px">Email</label><br>
-                <div style="text-align:center;">
-                  <input id="email" type="email" name="Email" required>
-                </div>
-              </div>
-
-              <div class="row" style="margin-top:12px">
-                <label for="position" style="padding-left:30px">Position</label><br>
-                <div style="padding-left:30px">
-                  <select name="position" id="position"> 
-                    <option selected disabled hidden>Please select</option>
-                    <option value="Engineer">Engineer</option>
-                    <option value="Master Student">Master Student</option>
-                    <option value="Non-permanent Scientist">Non-permanent Scientist</option>
-                    <option value="Other Student">Other Student</option>
-                    <option value="Permanent Scientist">Permanent Scientist</option>
-                    <option value="PhD Stident">PhD Student</option>
-                    <option value="PI">PI</option>
-                    <option value="Postdoc">Postdoc</option>
-                    <option value="Staff">Staff</option>
-                    <option value="Thesis Student">Thesis Student</option>
-                    <option value="XENON Student">XENON Student</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="row" style="margin-top:12px">
-                <label for="institute" style="padding-left:30px">Institute</label><br>
-                <div style="text-align:center;">
-                  <input id="institute" type="text" name="institute" readonly value="<%= page %>" />
-                </div>
-              </div>
-
-              <div class="row" style="margin-top:12px">
-                <label for="time" style="padding-left:30px">Percent Xenon</label><br>
-                <div style="text-align:center;">
-                  <input id="time" type="number" name="Time" required>
-                </div>
-              </div>
-
-              <div class="row" style="margin-top:12px">
-                <label for="tasks" style="padding-left:30px">Tasks</label><br>
-                <div style="text-align:center;">
-                  <input id="tasks" type="text" name="Tasks">
-                </div>
-              </div>
-
-              <div class="row" style="margin-top:12px;padding-left:30px">
-                <label for="mlists">Mailing Lists</label><br>
-                  <input type="checkbox" id="mlist1" name="mlist1" value="Calibration">&nbsp;&nbsp;&nbsp;Calibration<br>
-                  <input type="checkbox" id="mlist2" name="mlist2" value="Analysis">&nbsp;&nbsp;&nbsp;Analysis<br>
-                  <input type="checkbox" id="mlist3" name="mlist3" value="TPC">&nbsp;&nbsp;&nbsp;TPC<br>
-              </div>
-
-              <div class="row" style="margin-top:12px">
-                <label for="sdate" style="padding-left:30px">Start Date</label><br>
-                <div style="text-align:center;">
-                  <input id="sdate" type="date" name="StartDate" placeholder="YYYY-MM-DD" required>
-                </div>
-              </div>
-
-              <div class="row" style="margin-top:12px">
-                <label for="edate" style="padding-left:30px">End Date</label><br>
-                <div style="text-align:center;">
-                  <input id="edate" type="date" name="expectedEnd" placeholder="YYYY-MM-DD"/>
-                </div>
-              </div>
-              <input type="hidden" id="page" name="page" value="institutes/<%= page %>">
-              <br>
-              <div style="text-align:center;">
-                <input type="submit" value="Submit">
-              </div>
-            </form>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -177,6 +74,10 @@
   <script>
     $(document).ready(function () {
       UpdateUserModal();
+      Autocomplete("#update_institute");
+      $( "#sdate" ).datepicker({dateFormat: "yy-mm-dd"});
+      $( "#edate" ).datepicker({dateFormat: "yy-mm-dd"});
+      $( "#exEndDate" ).datepicker({dateFormat: "yy-mm-dd"});
       Chart('stats', '<%-JSON.stringify(dict)%>', '<%-JSON.stringify(PI)%>')
     })
   </script>

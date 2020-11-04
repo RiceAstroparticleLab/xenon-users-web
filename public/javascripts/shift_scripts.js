@@ -6,14 +6,13 @@
 // Fills in table in (tablediv) which displays the stats for number of shifts
 // done by each institute while highlighting the institute of the user who is 
 // logged in (myinstitute) and sets the header in the (headerdiv)
-function FillAggregates(tablediv, headerdiv, myinstitute) {
+function FillAggregates(tablediv, inputYear, myinstitute) {
   $.getJSON('shifts/total_shift_aggregates', function(data) {
     var html = '';
-    var thisYear = (new Date()).getFullYear();
+    var thisYear = parseInt(inputYear);
     var total = 0;
     var totalThisYear = 0;
 
-    $(headerdiv).html('Shifts ' + thisYear.toString());
     for (let i = 0; i < data.length; i ++) {
       let countThisYear = 0;
       let institute = data[i];
@@ -47,48 +46,93 @@ function FillAggregates(tablediv, headerdiv, myinstitute) {
   });
 }
 
+function FillTable(tablediv, myinstitute) {
+  $('#tableForm').on('submit', function(e) {
+    console.log("In submit");
+    e.preventDefault();
+    console.log("In FillTable");
+    $.getJSON('shifts/total_shift_aggregates', function(data) {
+      var html = '';
+      var thisYear = document.getElementById("year").value;
+      var total = 0;
+      var totalThisYear = 0;
+      console.log(thisYear);
+
+      for (let i = 0; i < data.length; i ++) {
+        let countThisYear = 0;
+        let institute = data[i];
+        let instituteYears = institute["years"];
+        html += '<tr';
+        // highlight user's institute
+        if (institute['_id'].includes(myinstitute)) {
+          html += ' style="background-color:#cf6766;color:white"';
+        }
+        // set all time shift column
+        html += '><td>' + institute['_id'] + '</td><td>' + 
+                institute['total'].toString() + '</td>';
+        total += institute['total'];
+
+        // set current year column
+        for (let j = 0; j < instituteYears.length; j++) {
+          let instituteYear = instituteYears[j];
+          if (instituteYear['year'] === thisYear) {
+            countThisYear = instituteYear["count"];
+          }
+        }
+        totalThisYear += countThisYear;
+        html += '<td>' + countThisYear.toString() + '</td></tr>';
+      }
+      // column with total counts
+      html += "<tr style='border-bottom:1px solid black'><td colspan='100%'>" +
+              "</td></tr>";
+      html += "<tr><td></td><td><strong>" + total.toString() + "</strong></td>"
+              "<td><strong>" + totalThisYear.toString() + "</strong></td></tr>";
+      $(tablediv).html(html);
+    });
+  });
+}
+
 // Is meant to handle shift rules - owed shifts, etc. Currently not in use and
 // will probably be updated later
-function ShiftRules(tablediv) {
-  $('#shift_rules_form').submit(function(e){
-    e.preventDefault();
-    $.ajax({
-      url: 'shifts/get_rules',
-      type: 'post',
-      data: $('#shift_rules_form').serialize(),
-      success: function(jsonData) {
-        var data
-        data = jsonData[0]
-        html = ""
-        if (typeof data != "undefined") {
-          console.log(`JSON: ${JSON.stringify(data)}`)
-          var institutes = Object.keys(data['shifts'])
-          console.log(institutes)
+function FillCalculator(tablediv, myinstitute) {
+  var totalShifts = 406
+  var inputYear = '2020'
+  $.getJSON('shifts/total_shift_aggregates', function(data) {
+    var html = '';
+    var thisYear = parseInt(inputYear);
+    var total = 0;
+    var totalThisYear = 0;
 
-          html+= "<tr><td>Institute</td>"
-          for (const [key, value] of Object.entries(data['shifts']['Zurich'])) {
-            html+= "<td>" + key + "</td>"
-          }
-          html += "</tr>"
-
-          for (var i in institutes) {
-            var institute = institutes[i]
-            var shifts = Object.keys(data['shifts'][institute])
-            html+="<tr>"
-            html+="<td>" + institute + "</td>"
-            for (var j in shifts) {
-              var shift = shifts[j]
-              html+="<td>" + data['shifts'][institute][shift] + "</td>"
-            }
-            html+="</tr>"
-          }
-        } else {
-          html += "<h5 style='color:#d21404'>No data for the selected year.</h5>"
-        }
-        console.log(`HTML: ${html}`)
-        $(tablediv).html(html)
+    for (let i = 0; i < data.length; i ++) {
+      let countThisYear = 0;
+      let institute = data[i];
+      let instituteYears = institute["years"];
+      html += '<tr';
+      // highlight user's institute
+      if (institute['_id'].includes(myinstitute)) {
+        html += ' style="background-color:#cf6766;color:white"';
       }
-    });
+      // set all time shift column
+      html += '><td>' + institute['_id'] + '</td><td>' + 
+              institute['total'].toString() + '</td>';
+      total += institute['total'];
+
+      // set current year column
+      for (let j = 0; j < instituteYears.length; j++) {
+        let instituteYear = instituteYears[j];
+        if (instituteYear['year'] === thisYear) {
+          countThisYear = instituteYear["count"];
+        }
+      }
+      totalThisYear += countThisYear;
+      html += '<td>' + countThisYear.toString() + '</td></tr>';
+    }
+    // column with total counts
+    html += "<tr style='border-bottom:1px solid black'><td colspan='100%'>" + 
+            "</td></tr>";
+    html += "<tr><td></td><td><strong>" + total.toString() + "</strong></td>" +
+            "<td><strong>" + totalThisYear.toString() + "</strong></td></tr>";
+    $(tablediv).html(html);
   });
 }
 

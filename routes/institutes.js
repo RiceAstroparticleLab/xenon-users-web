@@ -41,7 +41,7 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
   if (alternateInstitute) {
     findInstitute = 
       collection.find(
-        { "end_date": {$exists: false}, 
+        {
           $or: [
             {"institute": givenInstitute}, 
             {"institute": alternateInstitute}
@@ -52,9 +52,7 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
   } else {
     findInstitute = 
       collection.find(
-        { "institute": givenInstitute, 
-          "end_date": {$exists: false}
-        }, 
+        { "institute": givenInstitute}, 
         {"sort": "last_name"}
       );
   }
@@ -67,13 +65,15 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
     for (let i = 0; i < docs.length; i++) {
       let positionStr = (docs[i].position).toString();
       // PI treated differently because we want their name(s)
-      if (positionStr === 'PI') {
-        pi.push(docs[i]);
-      } else {
-        if (dict[positionStr]) {
-          dict[positionStr] += 1;
+      if(!docs[i].end_date) {
+        if (positionStr === 'PI') {
+          pi.push(docs[i]);
         } else {
-          dict[positionStr] = 1;
+          if (dict[positionStr]) {
+            dict[positionStr] += 1;
+          } else {
+            dict[positionStr] = 1;
+          }
         }
       }
     }
@@ -82,7 +82,6 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
     var prev = [];
     for (let i = 0; i < docs.length; i++) {
       if(!docs[i].end_date) {
-        if(docs)
         current.push(docs[i]);
       } else {
         prev.push(docs[i]);
