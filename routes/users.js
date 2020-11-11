@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var ObjectId = require('mongodb').ObjectId; 
 var jsdom = require('jsdom');
+var moment = require('moment');
 $ = require('jquery')(new jsdom.JSDOM().window);
 var base = '/shifts';
 
@@ -43,7 +44,7 @@ function NewUserMail(req, mailing_lists, callback) {
       callback(true);
     }
   });
-}
+}a
 
 function PendingUserMail(req, mailing_lists, callback) {
   var transporter = req.transporter;
@@ -54,17 +55,17 @@ function PendingUserMail(req, mailing_lists, callback) {
     subject: 'New Member Request: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
     html: '<p>Dear Collaboration Board,</p>' + 
-      '<p>Please review the new membership request for ' + req.body.institute + ' that was made.</p>' +
+      '<p>Please review the new membership request for ' + req.body.institute + ' that was made. The information is as follows: </p>' +
       '<p>a) Name: ' + req.body.FirstName + ' ' + req.body.LastName + '<br>' +
-      'b) email: ' + req.body.Email + '<br>' +
+      'b) Email: ' + req.body.Email + '<br>' +
       'c) Position: ' + req.body.position + '<br>' +
       'd) Time: ' + req.body.Time + '%<br>' +
       'e) Tasks: ' + req.body.Tasks + '<br>' +
       'f) Mailing lists: ' + mailing_lists + '<br>' +
       'g) Start date: ' + req.body.StartDate + '<br>' +
       'h) End date: ' + req.body.expectedEnd + '</p>' +
-      '<p>Collaboration board: If you would like more information or would like to request,' +
-        'please reply to all in this email thread.  If you agree with the new member, do nothing.' +
+      '<p>Collaboration board: If you would like more information or would like to request, ' +
+        'please reply to all in this email thread.  If you agree with the new member, do nothing. ' +
         'For instructions on how to use this system to submit your own members or other user management' +
         ' tasks, please see https://xe1t-wiki.lngs.infn.it/doku.php?id=xenon:xenonnt:userlist_management.<br><br>' +
       'Ze or admin: please approve or reject the user at https://xenon1t-daq.lngs.infn.it/shifts/profile.</p>' + 
@@ -138,7 +139,7 @@ function DenyUserMail(req, callback) {
   });
 }
 
-function UpdateUserMail(req, previous, current, callback) {
+function UpdateUserMail(req, changes, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
@@ -147,13 +148,9 @@ function UpdateUserMail(req, previous, current, callback) {
     subject: 'User Information Updated: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
     html: '<p>Dear all,</p>' + 
-      "<p>A member's information has been updated by " + req.user.first_name + ' ' +
-        req.user.last_name + ' at ' + req.body.institute + '</p>' +
-      '<p>Please review the following changes:<br>' +
-      'Previous information:<br>' +
-      previous +
-      '<br>Current information:<br>' +
-      current + '</p>' +
+      "<p>" + req.body.FirstName + ' ' + req.body.LastName +"'s information has been updated by " + req.user.first_name + ' ' +
+        req.user.last_name + ' at ' + req.body.institute + '. Please review the following changes:</p>' +
+      '<p>' + changes + '</p>' +
       '<p>Regards,<br>XENON User Management System</p>'
   };
   
@@ -218,6 +215,7 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
   var page = req.params.page;
   var idoc = {};
   var previous_doc;
+  var changes = "";
 
   collection.find({"_id": user_id}).toArray(function(e, data) {
     console.log(data)
@@ -238,36 +236,80 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
     mailing_lists += lists.join(", ")
 
     idoc['first_name'] = req.body.FirstName;
+    if (idoc['first_name'] != previous_doc['first_name']) {
+      changes += 'First Name: ' + req.body.FirstName + '<br>';
+    }
     idoc['last_name'] = req.body.LastName;
+    if (idoc['last_name'] != previous_doc['last_name']) {
+      changes += 'Last Name: ' + req.body.LastName + '<br>';
+    }
     idoc['email'] = req.body.Email;
+    if (idoc['email'] != previous_doc['email']) {
+      changes += 'Email: ' + req.body.Email + '<br>';
+    }
     idoc['mailing_lists'] = lists;
+    if (idoc['mailing_lists'] != previous_doc['mailing_lists']) {
+      changes += 'Mailing Lists: ' + lists + '<br>';
+    }
 
     if (req.body.institute != null) {
       idoc['institute'] = req.body.institute;
+      if (idoc['institute'] != previous_doc['institute']) {
+        changes += 'Institute: ' + req.body.institute + '<br>';
+        prevtimestr = req.body.prevTime + "Was at " + previous_doc['institute'] + " until " + moment().format("MMM YYYY");
+        idoc['previous_time'] = prevtimestr;
+        changes += 'Previous Time: ' + prevtimestr + '<br>';
+      } else {
+        if (req.body.prevTime != null && req.body.prevTime != "") {
+          idoc['previous_time'] = req.body.prevTime;
+          if (idoc['previous_time'] != previous_doc['previous_time']) {
+            changes += 'Previous Time: ' + req.body.prevTime + '<br>';
+          }
+        }
+      }
     }
     if (req.body.position != null) {
       idoc['position'] = req.body.position;
+      if (idoc['position'] != previous_doc['position']) {
+        changes += 'Position: ' + req.body.position + '<br>';
+      }
     }
-    if (req.body.lngs_id != null) {
+    if (req.body.lngs_id != null && req.body.lngs_id != "") {
       idoc['lngs_ldap_uid'] = req.body.lngs_id;
+      if (idoc['lngs_ldap_uid'] != previous_doc['lngs_ldap_uid']) {
+        changes += 'LNGS ID: ' + req.body.lngs_id + '<br>';
+      }
     }
     if (req.body.Time != "" && req.body.Time != null) {
       idoc['percent_xenon'] = Number(req.body.Time);
+      if (idoc['percent_xenon'] != previous_doc['percent_xenon']) {
+        changes += 'Percent XENON: ' + Number(req.body.Time) + '<br>';
+      }
     }
-    if (req.body.prevTime != null) {
-      idoc['previous_time'] = req.body.prevTime;
-    }
-    if (req.body.addInst != null) {
+
+    if (req.body.addInst != null && req.body.addInst != "") {
       idoc['additional_institutes'] = req.body.addInst;
+      if (idoc['additional_institutes'] != previous_doc['additional_institutes']) {
+        changes += 'Additional Institutes: ' + req.body.addInst + '<br>';
+      }
     }
     if (req.body.StartDate != "" && req.body.StartDate != null) {
       idoc['start_date'] = new Date(`${req.body.StartDate}`);
+      if (idoc['start_date'] != previous_doc['start_date']) {
+        changes += 'Start Date: ' + req.body.StartDate + '<br>';
+      }
     }
     if (req.body.EndDate != "" && req.body.EndDate != null) {
       idoc['end_date'] = new Date(req.body.EndDate);
+      if (idoc['end_date'] != previous_doc['end_date']) {
+        changes += 'End Date: ' + req.body.EndDate + '<br>';
+      }
     }
     if (req.body.ExEndDate != "" && req.body.ExEndDate != null) {
       idoc['expected_end_date'] = new Date(req.body.ExEndDate);
+      if (idoc['expected_end_date'] != previous_doc['expected_end_date']) {
+        changes += 'Expected End Date: ' + req.body.ExEndDate + '<br>';
+      }
     }
 
     if (page.toString().includes('Institute')) {
@@ -275,13 +317,10 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
       page = 'institutes/' + split;
     }
 
-    idoc_str = "" + JSON.stringify(idoc, null, 4) + "";
-    prev_str = "" + JSON.stringify(previous_doc, null, 4) + "";
-
     try {
       // make sure email alerting of new member can be sent before actually
       // adding the new member to the database
-      UpdateUserMail(req, prev_str, idoc_str, function(success){
+      UpdateUserMail(req, changes, function(success){
         if (success) {
           collection.findOneAndUpdate({"_id": user_id}, {$set: idoc});
           console.log(`success. Modified ${req.body.FirstName} ${req.body.LastName}`);
