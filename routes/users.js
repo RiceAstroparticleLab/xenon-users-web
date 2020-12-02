@@ -44,7 +44,7 @@ function NewUserMail(req, mailing_lists, callback) {
       callback(true);
     }
   });
-}a
+}
 
 function PendingUserMail(req, mailing_lists, callback) {
   var transporter = req.transporter;
@@ -256,7 +256,7 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
       idoc['institute'] = req.body.institute;
       if (idoc['institute'] != previous_doc['institute']) {
         changes += 'Institute: ' + req.body.institute + '<br>';
-        prevtimestr = req.body.prevTime + "Was at " + previous_doc['institute'] + " until " + moment().format("MMM YYYY");
+        prevtimestr = req.body.prevTime + "Was at " + previous_doc['institute'] + " until " + moment().format("MMM YYYY") + ". ";
         idoc['previous_time'] = prevtimestr;
         changes += 'Previous Time: ' + prevtimestr + '<br>';
       } else {

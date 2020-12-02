@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <% include components/head %>
+  <script src="/shifts/javascripts/directory_scripts.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="/shifts/stylesheets/bootstrap-social.css">
+</head>
+<body style="background-color: #30415d;">
+  <div class="row" style="height: 50px;"></div>
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6 bg-3" style="padding: 40px 50px 40px 50px;  border-radius: 3px;">
+      <h3>Remove an Existing Member</h3>
+      <h5>Please fill out the following form to remove a member from your institute.</h5>
+      <br>
+      <form id="formRemoveUser" name="removeuser" method="post" action="/shifts/users/removeuser">
+        <div class="row" style="margin-top:12px">
+          <label for="fname" style="padding-left:30px">First Name</label><br>
+          <div style="text-align:center;">
+            <input id="fname" type="text" name="FirstName" required>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <label for="lname" style="padding-left:30px">Last Name</label><br>
+          <div style="text-align:center;">
+            <input id="lname" type="text" name="LastName" required>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <label for="institute" style="padding-left:30px">Institute</label><br>
+          <div style="text-align:center;">
+            <input id="institute" type="text" name="institute" required/>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+            <label for="institute" style="padding-left:30px">LNGS ID</label><br>
+            <div style="text-align:center;">
+              <input id="lngsid" type="text" name="lngsid" required/>
+            </div>
+          </div>
+
+        <div class="row" style="margin-top:12px">
+        <label for="email" style="padding-left:30px">Personal Email</label><br>
+        <button type="button" class="btn btn-sm" data-html="true" data-toggle="tooltip" data-placement="right" id="right" title="" 
+        data-original-title="Please input an email where this person can be contacted when (s)he leaves the collaboration" 
+        style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
+        <div style="text-align:center;">
+            <input id="email" type="email" name="Email" required>
+        </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <label for="edate" style="padding-left:30px">End Date</label><br>
+          <div style="text-align:center;">
+            <input id="edate" type="date" name="edate" placeholder="YYYY-MM-DD" required>
+          </div>
+        </div>
+        <br>
+        <div style="text-align:center;">
+          <input type="submit" value="Submit">
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-3"></div>
+  </div>
+</body>
+<script>
+  $(document).ready(function() {
+    Autocomplete("#institute");
+    $('#right').tooltip();
+    $( "#edate" ).datepicker({dateFormat: "yy-mm-dd"});
+  });
+</script>
+</html>

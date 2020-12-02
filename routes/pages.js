@@ -30,6 +30,11 @@ router.get('/confirmation', function(req, res) {
   res.render('confirmation_lander', {page: 'Request Confirmed', menuId: 'home', title: 'Request Confirmed'})
 });
 
+// external form.
+router.get('/remove_user', ensureAuthenticated, function(req, res) {
+  res.render('removeUser', {page: 'Remove a User', menuId: 'home', title: 'Remove a User'})
+});
+
 // GET Userlist page. 
 router.get('/fulldirectory', ensureAuthenticated, function(req, res) {
   // array declares positions for autocomplete
