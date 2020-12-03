@@ -15,45 +15,48 @@
       <br>
       <form id="formRemoveUser" name="removeuser" method="post" action="/shifts/users/removeuser">
         <div class="row" style="margin-top:12px">
-          <label for="fname" style="padding-left:30px">First Name</label><br>
-          <div style="text-align:center;">
-            <input id="fname" type="text" name="FirstName" required>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <label for="lname" style="padding-left:30px">Last Name</label><br>
-          <div style="text-align:center;">
-            <input id="lname" type="text" name="LastName" required>
+          <label for="fname" style="padding-left:30px">Name</label><br>
+          <div style="padding-left:30px">
+              <select id="selectedUser" name="selectedUser" required>
+                <option value="" selected disabled hidden>Please select</option>
+                <% for (i = 0; i < data.length; i++) {%>
+                  <option value="<%= data[i]._id %>"><%= data[i].first_name %> <%= data[i].last_name %></option>
+                <%}%>
+              </select>
           </div>
         </div>
 
         <div class="row" style="margin-top:12px">
           <label for="institute" style="padding-left:30px">Institute</label><br>
           <div style="text-align:center;">
-            <input id="institute" type="text" name="institute" required/>
+            <input id="institute" type="text" name="institute" disabled/>
           </div>
         </div>
 
         <div class="row" style="margin-top:12px">
             <label for="institute" style="padding-left:30px">LNGS ID</label><br>
             <div style="text-align:center;">
-              <input id="lngsid" type="text" name="lngsid" required/>
+              <input id="lngsid" type="text" name="lngsid" disabled/>
             </div>
           </div>
 
         <div class="row" style="margin-top:12px">
-        <label for="email" style="padding-left:30px">Personal Email</label><br>
-        <button type="button" class="btn btn-sm" data-html="true" data-toggle="tooltip" data-placement="right" id="right" title="" 
-        data-original-title="Please input an email where this person can be contacted when (s)he leaves the collaboration" 
-        style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
-        <div style="text-align:center;">
-            <input id="email" type="email" name="Email" required>
-        </div>
+          <label for="email" style="padding-left:30px">Personal Email</label>
+          <button type="button" class="btn btn-sm" data-html="true" data-toggle="tooltip" data-placement="right" id="right" title="" 
+          data-original-title="Please input an email where this person can be contacted when (s)he leaves the collaboration" 
+          style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
+          <br>
+          <div style="text-align:center;">
+              <input id="email" type="email" name="Email" required>
+          </div>
         </div>
 
         <div class="row" style="margin-top:12px">
-          <label for="edate" style="padding-left:30px">End Date</label><br>
+          <label for="edate" style="padding-left:30px">Leave Date</label>
+          <button type="button" class="btn btn-sm" data-html="true" data-toggle="tooltip" data-placement="right" id="right" title="" 
+          data-original-title="Please enter the date that this member left the collaboration" 
+          style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
+          <br>
           <div style="text-align:center;">
             <input id="edate" type="date" name="edate" placeholder="YYYY-MM-DD" required>
           </div>

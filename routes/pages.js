@@ -32,7 +32,21 @@ router.get('/confirmation', function(req, res) {
 
 // external form.
 router.get('/remove_user', ensureAuthenticated, function(req, res) {
-  res.render('removeUser', {page: 'Remove a User', menuId: 'home', title: 'Remove a User'})
+  var db = req.xenonnt_db;
+  var collection = db.collection('users');
+
+  collection.find(
+    {end_date: {$exists: false}}
+  ).toArray(function(e, docs) {
+    res.render('removeUser', 
+      { page: 'Remove a User', 
+        menuId: 'home', 
+        title: 'Remove a User',
+        data: docs,
+        user: req.user
+      }
+    );
+  });
 });
 
 // GET Userlist page. 
