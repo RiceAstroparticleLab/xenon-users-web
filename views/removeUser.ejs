@@ -20,9 +20,18 @@
               <select id="selectedUser" name="selectedUser" required>
                 <option value="" selected disabled hidden>Please select</option>
                 <% for (i = 0; i < data.length; i++) {%>
-                  <option value="<%= data[i]._id %>"><%= data[i].first_name %> <%= data[i].last_name %></option>
+                  <option id="<%= i %>" value="<%= data[i]._id %>"><%= data[i].first_name %> <%= data[i].last_name %></option>
                 <%}%>
               </select>
+          </div>
+        </div>
+
+        <input id="name" type="text" name="name" hidden/>
+
+        <div class="row" style="margin-top:12px">
+          <label for="position" style="padding-left:30px">Position</label><br>
+          <div style="text-align:center;">
+            <input id="position" type="text" name="position" disabled/>
           </div>
         </div>
 
@@ -34,11 +43,18 @@
         </div>
 
         <div class="row" style="margin-top:12px">
-            <label for="institute" style="padding-left:30px">LNGS ID</label><br>
-            <div style="text-align:center;">
-              <input id="lngsid" type="text" name="lngsid" disabled/>
-            </div>
+          <label for="time" style="padding-left:30px">Time</label><br>
+          <div style="text-align:center;">
+            <input id="time" type="text" name="time" disabled/>
           </div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <label for="sdate" style="padding-left:30px">Start Date</label><br>
+          <div style="text-align:center;">
+            <input id="sdate" type="text" name="sdate" disabled/>
+          </div>
+        </div>
 
         <div class="row" style="margin-top:12px">
           <label for="email" style="padding-left:30px">Personal Email</label>
@@ -72,6 +88,16 @@
 </body>
 <script>
   $(document).ready(function() {
+    $("#selectedUser").change(function() {
+      var optionId = $(this).children(":selected").attr("id");
+      var data = JSON.parse(`<%- JSON.stringify(data) %>`);
+      var name = `${data[optionId].first_name} ${data[optionId].last_name}`;
+      $('#institute').val(data[optionId].institute);
+      $('#position').val(data[optionId].position);
+      $('#time').val(data[optionId].percent_xenon);
+      $('#sdate').val(data[optionId].start_date);
+      $('#name').val(name);
+    });
     Autocomplete("#institute");
     $('#right').tooltip();
     $( "#edate" ).datepicker({dateFormat: "yy-mm-dd"});

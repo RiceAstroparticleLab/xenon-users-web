@@ -165,6 +165,37 @@ function UpdateUserMail(req, changes, callback) {
   });
 }
 
+function LeaveCollaborationMail(req, callback) {
+  var transporter = req.transporter;
+  var message = {
+    from: process.env.NOTIFS_ACCOUNT,
+    to: process.env.YVETTE_EMAIL,
+    cc: process.env.CHRIS_EMAIL,
+    subject: `${req.body.name} left the collaboration.`,
+    html: '<p>Dear all,</p>' + 
+      `<p>${req.user.first_name} ${req.user.last_name} is removing ${req.body.name}. ` + 
+      'Please review the following information:</p>' +
+      `<p>a) Name: ${req.body.name}<br>` +
+      `b) Email: ${req.body.email}<br>` +
+      `c) Position: ${req.body.position}<br>` +
+      `d) Institute: ${req.body.institute}<br>` +
+      `d) Time: ${req.body.time}%<br>` +
+      `g) Start date: ${req.body.sdate}<br>` +
+      `h) End date: ${req.body.edate}</p>` +
+      '<p>Regards,<br>XENON User Management System</p>'
+  };
+  
+  transporter.sendMail(message, function(error, info) {
+    if (error) {
+      console.log(error);
+      callback(false);
+    } else {
+      console.log('Message sent ' + info.message);
+      callback(true);
+    }
+  });
+}
+
 router.post('/updateContactInfo', ensureAuthenticated, function(req, res) {
   var db = req.xenonnt_db;
   var collection = db.collection('users');
@@ -473,4 +504,26 @@ router.post('/deny_req', function(req, res) {
   });
 });
 
+router.post('/removeuser', function(req, res) {
+  var db = req.xenonnt_db;
+  var collection = db.collection('users');
+  var user_id = new ObjectId(req.body.selectedUser);
+
+  try {
+    // make sure email alerting of new member can be sent before actually
+    // adding the new member to the database
+    LeaveCollaborationMail(req, function(success){
+      if (success) {
+        collection.findOneAndUpdate({"_id": user_id}, {$set: {email: req.body.email, end_date: new Date(req.body.edate)}});
+        console.log(`success. Modified ${req.body.selectedUser}`);
+        res.redirect(base + '/' + page);
+      } else {
+        console.log("error. Could not send email.");
+        res.redirect(base + '/' + page);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+  }
+})
 module.exports = router;
