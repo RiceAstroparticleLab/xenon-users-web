@@ -22,7 +22,21 @@ router.get('/', ensureAuthenticated, function(req, res) {
 
 // external form.
 router.get('/request_new_member', function(req, res) {
-  res.render('request', {page: 'Request New Member', menuId: 'home', title: 'Request New Member'})
+  var db = req.xenonnt_db;
+  var collection = db.collection('users');
+
+  collection.distinct(
+    "institute", 
+    {$exists: {end_date: false}}
+  ).toArray(function(e, docs) {
+    res.render('request', 
+      { page: 'Request New Member', 
+        menuId: 'home', 
+        title: 'Request New Member',
+        insitutes: docs
+      }
+    );
+  });
 });
 
 // confirmation of external form

@@ -65,8 +65,13 @@
 
         <div class="row" style="margin-top:12px">
           <label for="institute" style="padding-left:30px">Institute</label><br>
-          <div style="text-align:center;">
-            <input id="institute" type="text" name="institute" required/>
+          <div style="padding-left:30px">
+            <select id="institute" name="institute" required>
+              <option value="" selected disabled hidden>Please select</option>
+              <% for (i = 0; i < institutes.length; i++) {%>
+                <option value="<%= data[i] %>"><%= data[i] %></option>
+              <%}%>
+            </select>
           </div>
         </div>
 
@@ -128,7 +133,11 @@
         </div>
 
         <div class="row" style="margin-top:12px">
-          <label for="edate" style="padding-left:30px">Expected End Date</label><br>
+          <label for="edate" style="padding-left:30px">Expected End Date</label>
+          <button type="button" class="btn btn-sm" data-html="true" data-toggle="tooltip" data-placement="right" id="edate_ttip" title="" 
+          data-original-title="If you are unsure of the end date, estimate to the best of your ability. This can be changed later." 
+          style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
+          <br>
           <div style="text-align:center;">
             <input id="edate" type="date" name="expectedEnd" placeholder="YYYY-MM-DD" required>
           </div>
@@ -144,9 +153,9 @@
 </body>
 <script>
   $(document).ready(function() {
-    Autocomplete("#institute");
     $('#right').tooltip();
     $('#task_ttip').tooltip();
+    $('#edate_ttip').tooltip();
     $( "#sdate" ).datepicker({dateFormat: "yy-mm-dd"});
     $( "#edate" ).datepicker({dateFormat: "yy-mm-dd"});
   });
