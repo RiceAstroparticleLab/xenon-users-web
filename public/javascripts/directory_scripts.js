@@ -618,3 +618,32 @@ function Autocomplete(id, arr) {
     }
   });
 }
+
+// Checks that date is in YYYY-MM-DD format
+function ValiDate(elem) {
+  $(elem).on('input', function() {
+    // regex for YYYY-MM-DD
+    var re = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/;
+    if (re.test($(this).val())) {
+      $(this).removeClass("invalid");
+    }
+    else{
+      $(this).addClass("invalid");
+    }
+  });
+}
+
+function ValidateForm(elem, list) {
+  $(elem).on('submit', function(event) {
+    var valid = true;
+    for (let input in list) {
+      if (input.hasClass('invalid')) {
+        valid = false
+        $(input + '_error').removeAttr('hidden');
+      }
+    }
+    if (!valid) {
+      event.preventDefault();
+    }
+  });
+}

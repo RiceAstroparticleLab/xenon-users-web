@@ -27,13 +27,15 @@ router.get('/request_new_member', function(req, res) {
 
   collection.distinct(
     "institute", 
-    {$exists: {end_date: false}}
-  ).toArray(function(e, docs) {
+    { end_date: {$exists: false},
+      pending: {$exists: false}
+    }
+  ).then(function(docs) {
     res.render('request', 
       { page: 'Request New Member', 
         menuId: 'home', 
         title: 'Request New Member',
-        insitutes: docs
+        institutes: docs
       }
     );
   });

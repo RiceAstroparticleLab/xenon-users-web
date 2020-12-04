@@ -110,7 +110,7 @@ color: #2f2f2f !important;;
   border: solid 1px #cccccc;
 }
 
-input:not([type=checkbox], [type=search]) {
+input:not([type=search]) {
   width: 90%;
   padding: 12px 20px;
   margin: 8px;
@@ -130,6 +130,11 @@ input[type=submit] {
   text-decoration: none;
   margin: 4px 2px;
   cursor: pointer;
+}
+
+input[type=checkbox] {
+  width: 13px !important;
+  margin: 4px !important;
 }
 
 details {
@@ -237,4 +242,9 @@ details[open] summary {
   /*when navigating through the items using the arrow keys:*/
   background-color: DodgerBlue !important; 
   color: #ffffff; 
+}
+
+/* Error messages */
+input.invalid, textarea.invalid {
+	border: 1px solid red;
 }

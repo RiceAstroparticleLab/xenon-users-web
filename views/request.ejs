@@ -69,7 +69,7 @@
             <select id="institute" name="institute" required>
               <option value="" selected disabled hidden>Please select</option>
               <% for (i = 0; i < institutes.length; i++) {%>
-                <option value="<%= data[i] %>"><%= data[i] %></option>
+                <option value="<%= institutes[i] %>"><%= institutes[i] %></option>
               <%}%>
             </select>
           </div>
@@ -156,8 +156,8 @@
     $('#right').tooltip();
     $('#task_ttip').tooltip();
     $('#edate_ttip').tooltip();
-    $( "#sdate" ).datepicker({dateFormat: "yy-mm-dd"});
-    $( "#edate" ).datepicker({dateFormat: "yy-mm-dd"});
+    ValiDate('#sdate');
+    ValiDate('#edate');
   });
 </script>
 </html>

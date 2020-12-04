@@ -31,30 +31,35 @@
         <div class="row" style="margin-top:12px">
           <label for="position" style="padding-left:30px">Position</label><br>
           <div style="text-align:center;">
-            <input id="position" type="text" name="position" disabled/>
+            <input id="position_dis" type="text" name="position_dis" disabled/>
           </div>
         </div>
+        <input id="position" type="text" name="position" hidden/>
 
         <div class="row" style="margin-top:12px">
           <label for="institute" style="padding-left:30px">Institute</label><br>
           <div style="text-align:center;">
-            <input id="institute" type="text" name="institute" disabled/>
+            <input id="institute_dis" type="text" name="institute_dis" disabled/>
           </div>
         </div>
+        <input id="institute" type="text" name="institute" hidden/>
 
         <div class="row" style="margin-top:12px">
           <label for="time" style="padding-left:30px">Time</label><br>
           <div style="text-align:center;">
-            <input id="time" type="text" name="time" disabled/>
+            <input id="time_dis" type="text" name="time_dis" disabled/>
           </div>
         </div>
+        <input id="time" type="text" name="time" hidden/>
+
 
         <div class="row" style="margin-top:12px">
           <label for="sdate" style="padding-left:30px">Start Date</label><br>
           <div style="text-align:center;">
-            <input id="sdate" type="text" name="sdate" disabled/>
+            <input id="sdate_dis" type="text" name="sdate_dis" disabled/>
           </div>
         </div>
+        <input id="sdate" type="text" name="sdate" hidden/>
 
         <div class="row" style="margin-top:12px">
           <label for="email" style="padding-left:30px">Personal Email</label>
@@ -74,7 +79,8 @@
           style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
           <br>
           <div style="text-align:center;">
-            <input id="edate" type="date" name="edate" placeholder="YYYY-MM-DD" required>
+            <input id="edate" type="text" name="edate" placeholder="YYYY-MM-DD" required>
+            <span id="edate_hidden" style="color:red" hidden>Please use the format YYYY-MM-DD</span>
           </div>
         </div>
         <br>
@@ -87,20 +93,28 @@
   </div>
 </body>
 <script>
+  // autofill disabled fields when user is selected
   $(document).ready(function() {
     $("#selectedUser").change(function() {
       var optionId = $(this).children(":selected").attr("id");
       var data = JSON.parse(`<%- JSON.stringify(data) %>`);
       var name = `${data[optionId].first_name} ${data[optionId].last_name}`;
+      // hidden fields for req.body and email
       $('#institute').val(data[optionId].institute);
       $('#position').val(data[optionId].position);
       $('#time').val(data[optionId].percent_xenon);
       $('#sdate').val(data[optionId].start_date);
       $('#name').val(name);
+      // disabled fields don't get passed into req.body but still need them for user
+      // to view the displayed information.
+      $('#institute_dis').val(data[optionId].institute);
+      $('#position_dis').val(data[optionId].position);
+      $('#time_dis').val(data[optionId].percent_xenon);
+      $('#sdate_dis').val(data[optionId].start_date);
     });
-    Autocomplete("#institute");
     $('#right').tooltip();
-    $( "#edate" ).datepicker({dateFormat: "yy-mm-dd"});
+    ValiDate('#edate');
+    ValidateForm('#formRemoveUser', ['#edate']);
   });
 </script>
 </html>
