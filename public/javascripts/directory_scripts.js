@@ -636,12 +636,17 @@ function ValiDate(elem) {
 function ValidateForm(elem, list) {
   $(elem).on('submit', function(event) {
     var valid = true;
-    for (let input in list) {
-      if (input.hasClass('invalid')) {
+    for (let i = 0; i < list.length; i++) {
+      var hasClass = $(list[i]).hasClass('invalid');
+      console.log(hasClass);
+      if ($(list[i]).hasClass('invalid')) {
         valid = false
-        $(input + '_error').removeAttr('hidden');
+        var hiddenClass = list[i] + '_hidden';
+        console.log(hiddenClass)
+        $(hiddenClass).show();
       }
     }
+    console.log(valid)
     if (!valid) {
       event.preventDefault();
     }

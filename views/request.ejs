@@ -129,6 +129,7 @@
           <label for="sdate" style="padding-left:30px">Start Date</label><br>
           <div style="text-align:center;">
             <input id="sdate" type="date" name="StartDate" placeholder="YYYY-MM-DD" required>
+            <span id="sdate_hidden" style="color:red;display:none;">Please use the format YYYY-MM-DD</span>
           </div>
         </div>
 
@@ -140,6 +141,7 @@
           <br>
           <div style="text-align:center;">
             <input id="edate" type="date" name="expectedEnd" placeholder="YYYY-MM-DD" required>
+            <span id="edate_hidden" style="color:red;display:none;">Please use the format YYYY-MM-DD</span>
           </div>
         </div>
         <br>
@@ -158,6 +160,7 @@
     $('#edate_ttip').tooltip();
     ValiDate('#sdate');
     ValiDate('#edate');
+    ValidateForm('#formPendingUser', ['#edate', '#sdate']);
   });
 </script>
 </html>

@@ -8,6 +8,7 @@ var base = '/shifts';
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
+  req.session.returnTo = req.originalUrl;
   return res.redirect(base + '/auth/login');
 }
 
@@ -514,12 +515,15 @@ router.post('/removeuser', function(req, res) {
     // adding the new member to the database
     LeaveCollaborationMail(req, function(success){
       if (success) {
-        collection.findOneAndUpdate({"_id": user_id}, {$set: {email: req.body.email, end_date: new Date(req.body.edate)}});
+        collection.findOneAndUpdate(
+          {"_id": user_id}, 
+          {$set: {email: req.body.email, end_date: new Date(req.body.edate)}}
+        );
         console.log(`success. Modified ${req.body.selectedUser}`);
-        res.redirect(base + '/' + page);
+        res.redirect(base + '/remove_user');
       } else {
         console.log("error. Could not send email.");
-        res.redirect(base + '/' + page);
+        res.redirect(base + '/remove_user');
       }
     });
   } catch (e) {

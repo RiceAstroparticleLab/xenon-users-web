@@ -61,11 +61,10 @@ router.get('/github',
 // LNGS login
 router.post('/ldap',
 	passport.authenticate('ldapauth', {
-		successRedirect: base + '/profile',
     failureRedirect: base + '/auth/login_attempt_3poiux93jxm023'
   }), 
 	function(req, res){
-		res.redirect(base + '/profile');
+    res.redirect(req.session.returnTo || base + '/profile');
   }
 );
 
@@ -75,7 +74,7 @@ router.post('/password',
     failureRedirect: base + '/auth/login_attempt_1vn9ub480ng49'
   }),
   function(req, res) {
-    res.redirect(base + '/profile');
+    res.redirect(req.session.returnTo || base + '/profile');
   }
 );
 
@@ -85,7 +84,7 @@ router.get('/github/callback',
     failureRedirect: base + '/auth/login_attempt_2cn9rbu94gi4n'
   }),
   function(req, res) {
-    res.redirect(base + '/profile');
+    res.redirect(req.session.returnTo || base + '/profile');
 });
 
 // auth logout page

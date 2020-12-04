@@ -21,6 +21,7 @@ var server = ldap.createServer();
 // otherwise the user gets redirected to the login page
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
+  req.session.returnTo = req.originalUrl;
   return res.redirect(base + '/auth/login');
 }
 

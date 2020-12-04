@@ -6,6 +6,7 @@ var oneYearAgo = new Date(Number(today) - 31556952000);
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
+  req.session.returnTo = req.originalUrl;
   return res.redirect(base + '/auth/login');
 }
 
@@ -52,7 +53,7 @@ router.get('/remove_user', ensureAuthenticated, function(req, res) {
   var collection = db.collection('users');
 
   collection.find(
-    {end_date: {$exists: false}, position: {$ne: "PI"}}
+    {end_date: {$exists: false}, position: {$ne: "PI"}, pending: {$exists: false}}
   ).toArray(function(e, docs) {
     res.render('removeUser', 
       { page: 'Remove a User', 
