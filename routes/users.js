@@ -18,8 +18,8 @@ function NewUserMail(req, mailing_lists, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.YVETTE_EMAIL,
-    cc: process.env.CHRIS_EMAIL,
+    to: process.env.TEST_EMAIL,
+    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_MAIL],
     subject: 'New Member Confirmation: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
     html: '<p>Dear Collaboration Board,</p>' + 
@@ -51,8 +51,8 @@ function PendingUserMail(req, mailing_lists, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.YVETTE_EMAIL,
-    cc: process.env.CHRIS_EMAIL,
+    to: process.env.TEST_EMAIL,
+    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_MAIL],
     subject: 'New Member Request: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
     html: '<p>Dear Collaboration Board,</p>' + 
@@ -88,8 +88,8 @@ function ApproveUserMail(req, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.YVETTE_EMAIL,
-    cc: process.env.CHRIS_EMAIL,
+    to: process.env.TEST_EMAIL,
+    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_MAIL],
     subject: 'Request Approved: ' + req.body.fName + ' ' + 
       req.body.lName,
     html:
@@ -118,8 +118,8 @@ function DenyUserMail(req, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.YVETTE_EMAIL,
-    cc: process.env.CHRIS_EMAIL,
+    to: process.env.TEST_EMAIL,
+    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_MAIL],
     subject: 'Request Denied: ' + req.body.fName + ' ' + 
       req.body.lName,
     html:
@@ -144,8 +144,8 @@ function UpdateUserMail(req, changes, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.YVETTE_EMAIL,
-    cc: process.env.CHRIS_EMAIL,
+    to: process.env.TEST_EMAIL,
+    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_MAIL],
     subject: 'User Information Updated: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
     html: '<p>Dear all,</p>' + 
@@ -170,8 +170,8 @@ function LeaveCollaborationMail(req, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.YVETTE_EMAIL,
-    cc: process.env.CHRIS_EMAIL,
+    to: process.env.TEST_EMAIL,
+    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_MAIL],
     subject: `${req.body.name} left the collaboration.`,
     html: '<p>Dear all,</p>' + 
       `<p>${req.user.first_name} ${req.user.last_name} is removing ${req.body.name}. ` + 

@@ -53,7 +53,10 @@ router.get('/remove_user', ensureAuthenticated, function(req, res) {
   var collection = db.collection('users');
 
   collection.find(
-    {end_date: {$exists: false}, position: {$ne: "PI"}, pending: {$exists: false}}
+    { end_date: {$exists: false}, 
+      position: {$ne: "PI"}, 
+      pending: {$exists: false},
+      institute: req.user.institute}
   ).toArray(function(e, docs) {
     res.render('removeUser', 
       { page: 'Remove a User', 
