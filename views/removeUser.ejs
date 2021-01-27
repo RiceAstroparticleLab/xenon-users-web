@@ -62,7 +62,7 @@
         <input id="sdate" type="text" name="sdate" hidden/>
 
         <div class="row" style="margin-top:12px">
-          <label for="email" style="padding-left:30px">Personal Email</label>
+          <label for="email" style="padding-left:30px">Future Email</label>
           <button type="button" class="btn btn-sm" data-html="true" data-toggle="tooltip" data-placement="right" id="right" title="" 
           data-original-title="Please input an email where this person can be contacted when (s)he leaves the collaboration" 
           style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
@@ -74,13 +74,12 @@
 
         <div class="row" style="margin-top:12px">
           <label for="edate" style="padding-left:30px">Leave Date</label>
-          <button type="button" class="btn btn-sm" data-html="true" data-toggle="tooltip" data-placement="right" id="right" title="" 
-          data-original-title="Please enter the date that this member left the collaboration" 
-          style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
           <br>
           <div style="text-align:center;">
             <input id="edate" type="text" name="edate" placeholder="YYYY-MM-DD" required>
-            <span id="edate_hidden" style="color:red;display:none;">Please use the format YYYY-MM-DD</span>
+            <span id="edate_hidden" style="color:red;display:none;">Please use the format YYYY-MM-DD.</span>
+            <span id="valid_edate_range" style="color:red;display:none;">Please select a date within the past year or less than ten years from today.</span>
+            <span id="valid_edate" style="color:red;display:none;">Please choose a date that comes after the start date</span>
           </div>
         </div>
         <br>

@@ -12,13 +12,14 @@
     <div class="col-sm-6 bg-3" style="padding: 40px 50px 40px 50px;  border-radius: 3px;">
       <h3>Request a New Member</h3>
       <h5>Please fill out the following form to request a new member for your institute. 
-        The request should be approved soon by an admin.</h5>
+        The request should be approved soon by an admin.<br> Please note that this form should only be used by PIs.</h5>
       <br>
       <form id="formPendingUser" name="pendinguser" method="post" action="/shifts/users/pendinguser">
         <div class="row" style="margin-top:12px">
           <label for="fname" style="padding-left:30px">First Name</label><br>
           <div style="text-align:center;">
             <input id="fname" type="text" name="FirstName" required>
+            <span id="fname_hidden" style="color:red;display:none;">Please only use extended ASCII characters</span>
           </div>
         </div>
 
@@ -26,6 +27,7 @@
           <label for="lname" style="padding-left:30px">Last Name</label><br>
           <div style="text-align:center;">
             <input id="lname" type="text" name="LastName" required>
+            <span id="lname_hidden" style="color:red;display:none;">Please only use extended ASCII characters</span>
           </div>
         </div>
 
@@ -42,8 +44,8 @@
           data-original-title="<b>Permanent scientists:</b>  Contributes common fund and shifts.<br><br>
           <b>Non-permanent scientists:</b> Primarily postdocs and soft-money researchers.  Contribute to common fund and shifts.<br><br>
           <b>PhD students:</b> Students whose terminal degree is a PhD (incl. American combined MS/PhD programs).  Count for shifts but not common fund<br><br>
-          <b>Thesis students:</b> Performing 1 or 2 year degrees, where if they move to a PhD, this time counts for authorship.  (Don't count toward common fund but does for shifts)<br><br>
-          <b>XENON students:</b> Undergraduate students (don't count for shifts or common fund)." style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
+          <b>Thesis students:</b> Students working for ca. 1 year 100% on XENON and write a research thesis. The time as thesis student counts towards waiting time if a student continues as a PhD student. Counts for shifts and not for common funds).<br><br>
+          <b>XENON students:</b> Exceptional cases where people work with a PI who controls information usage." style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
           <br>
           <div style="padding-left:30px">
             <select name="position" id="position" required> 
@@ -78,7 +80,7 @@
         <div class="row" style="margin-top:12px">
           <label for="time" style="padding-left:30px">Percentage FTE on XENON</label><br>
           <div style="text-align:center;">
-            <input id="time" type="number" name="Time" min="0" max="100" required>
+            <input id="time" type="number" name="Time" min="10" max="100" value="100" required>
           </div>
         </div>
 
@@ -130,11 +132,12 @@
           <div style="text-align:center;">
             <input id="sdate" type="date" name="StartDate" placeholder="YYYY-MM-DD" required>
             <span id="sdate_hidden" style="color:red;display:none;">Please use the format YYYY-MM-DD</span>
+            <span id="valid_sdate_range" style="color:red;display:none;">Please select a date within the past year or less than ten years from today</span>
           </div>
         </div>
 
         <div class="row" style="margin-top:12px">
-          <label for="edate" style="padding-left:30px">Expected End Date</label>
+          <label for="edate" style="padding-left:30px">End Date</label>
           <button type="button" class="btn btn-sm" data-html="true" data-toggle="tooltip" data-placement="right" id="edate_ttip" title="" 
           data-original-title="If you are unsure of the end date, estimate to the best of your ability. This can be changed later." 
           style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
@@ -142,11 +145,13 @@
           <div style="text-align:center;">
             <input id="edate" type="date" name="expectedEnd" placeholder="YYYY-MM-DD" required>
             <span id="edate_hidden" style="color:red;display:none;">Please use the format YYYY-MM-DD</span>
+            <span id="valid_edate_range" style="color:red;display:none;">Please select a date within the past year or less than ten years from today.</span>
+            <span id="valid_edate" style="color:red;display:none;">Please choose a date that comes after the start date</span>
           </div>
         </div>
         <br>
         <div style="text-align:center;">
-          <input type="submit" value="Submit">
+          <input type="submit" name="submitButton" value="Submit">
         </div>
       </form>
     </div>

@@ -104,7 +104,7 @@ router.get("/total_shift_aggregates", ensureAuthenticated, function(req, res) {
   var collection = db.collection('shifts');
 
   collection.aggregate([
-    {"$match": {"institute": {"$ne": "none"}}}, 
+    {"$match": {"institute": {"$ne": "none"}}},
     {$group: {
       "_id": { "institute": "$institute", "yr": {"$year": "$start"}}, 
       "count": {"$sum": 1}
@@ -120,9 +120,9 @@ router.get("/total_shift_aggregates", ensureAuthenticated, function(req, res) {
 });
 
 // list of DAQ id's for the autocomplete suggestions on the shift calendar
-router.post("/get_daqids", ensureAuthenticated, function(req, res) {
+router.get("/get_lngsids", ensureAuthenticated, function(req, res) {
     var db = req.xenonnt_db;
-    db.collection('users').distinct("daq_id", function(e, docs) {
+    db.collection('users').distinct("lngs_ldap_uid",  { "lngs_ldap_uid" : { $ne : null } }, function(e, docs) {
         res.send(docs);
     });
 });

@@ -19,7 +19,7 @@ function NewUserMail(req, mailing_lists, callback) {
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
     to: process.env.TEST_EMAIL,
-    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_MAIL],
+    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
     subject: 'New Member Confirmation: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
     html: '<p>Dear Collaboration Board,</p>' + 
@@ -52,7 +52,7 @@ function PendingUserMail(req, mailing_lists, callback) {
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
     to: process.env.TEST_EMAIL,
-    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_MAIL],
+    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
     subject: 'New Member Request: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
     html: '<p>Dear Collaboration Board,</p>' + 
@@ -65,11 +65,11 @@ function PendingUserMail(req, mailing_lists, callback) {
       'f) Mailing lists: ' + mailing_lists + '<br>' +
       'g) Start date: ' + req.body.StartDate + '<br>' +
       'h) End date: ' + req.body.expectedEnd + '</p>' +
-      '<p>Collaboration board: If you would like more information or would like to request, ' +
-        'please reply to all in this email thread.  If you agree with the new member, do nothing. ' +
+      '<p>Collaboration board: Please reply to all in this email thread if you would ' +
+        'like a discussion in CB or more information on this member proposal. If you agree with the new member, do nothing. ' +
         'For instructions on how to use this system to submit your own members or other user management' +
         ' tasks, please see https://xe1t-wiki.lngs.infn.it/doku.php?id=xenon:xenonnt:userlist_management.<br><br>' +
-      'Ze or admin: please approve or reject the user at https://xenon1t-daq.lngs.infn.it/shifts/profile.</p>' + 
+      'Our members admin (Ze) will approve or reject the new member after discussion or no request for information.</p>' + 
       '<p>Regards,<br>XENON User Management System</p>'
   };
   
@@ -89,7 +89,7 @@ function ApproveUserMail(req, callback) {
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
     to: process.env.TEST_EMAIL,
-    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_MAIL],
+    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
     subject: 'Request Approved: ' + req.body.fName + ' ' + 
       req.body.lName,
     html:
@@ -119,7 +119,7 @@ function DenyUserMail(req, callback) {
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
     to: process.env.TEST_EMAIL,
-    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_MAIL],
+    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
     subject: 'Request Denied: ' + req.body.fName + ' ' + 
       req.body.lName,
     html:
@@ -145,7 +145,7 @@ function UpdateUserMail(req, changes, callback) {
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
     to: process.env.TEST_EMAIL,
-    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_MAIL],
+    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
     subject: 'User Information Updated: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
     html: '<p>Dear all,</p>' + 
@@ -171,7 +171,7 @@ function LeaveCollaborationMail(req, callback) {
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
     to: process.env.TEST_EMAIL,
-    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_MAIL],
+    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
     subject: `${req.body.name} left the collaboration.`,
     html: '<p>Dear all,</p>' + 
       `<p>${req.user.first_name} ${req.user.last_name} is removing ${req.body.name}. ` + 
@@ -333,14 +333,9 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
     }
     if (req.body.EndDate != "" && req.body.EndDate != null) {
       idoc['end_date'] = new Date(req.body.EndDate);
+      idoc['active'] = "false";
       if (idoc['end_date'] != previous_doc['end_date']) {
         changes += 'End Date: ' + req.body.EndDate + '<br>';
-      }
-    }
-    if (req.body.ExEndDate != "" && req.body.ExEndDate != null) {
-      idoc['expected_end_date'] = new Date(req.body.ExEndDate);
-      if (idoc['expected_end_date'] != previous_doc['expected_end_date']) {
-        changes += 'Expected End Date: ' + req.body.ExEndDate + '<br>';
       }
     }
 
@@ -392,6 +387,7 @@ router.post('/adduser', ensureAuthenticated, function(req, res) {
   idoc['position'] = req.body.position;
   idoc['percent_xenon'] = req.body.Time;
   idoc['mailing_lists'] = lists;
+  idoc['active'] = "true";
   if(req.body.StartDate != '') {
     idoc['start_date'] = new Date(req.body.StartDate);
   }  
@@ -440,8 +436,8 @@ router.post('/pendinguser', function(req, res) {
   if(req.body.StartDate != '') {
     idoc['start_date'] = new Date(req.body.StartDate);
   }
-  if (req.body.ExEndDate != "" && req.body.ExEndDate != null) {
-    idoc['expected_end_date'] = new Date(req.body.exEndDate);
+  if (req.body.expectedEnd != "" && req.body.expectedEnd != null) {
+    idoc['end_date'] = new Date(req.body.expectedEnd);
   }
 
   if (req.body.position === "PhD Student") {
@@ -473,7 +469,7 @@ router.post('/approve_req', function(req, res) {
   var collection = db.collection('users');
   var id = new ObjectId(req.body.objectId);
   collection
-  .findOneAndUpdate({'_id': id}, {$unset: {'pending': ""}})
+  .findOneAndUpdate({'_id': id}, {$set: {"active": "true"}, $unset: {'pending': ""}})
   .then(() => {
     ApproveUserMail(req, function(success) {
       if(success) {
@@ -517,13 +513,13 @@ router.post('/removeuser', function(req, res) {
       if (success) {
         collection.findOneAndUpdate(
           {"_id": user_id}, 
-          {$set: {email: req.body.email, end_date: new Date(req.body.edate)}}
+          {$set: {email: req.body.email, active: "false", end_date: new Date(req.body.edate)}}
         );
         console.log(`success. Modified ${req.body.selectedUser}`);
-        res.redirect(base + '/remove_user');
+        res.redirect(base + '/remove_member');
       } else {
         console.log("error. Could not send email.");
-        res.redirect(base + '/remove_user');
+        res.redirect(base + '/remove_member');
       }
     });
   } catch (e) {

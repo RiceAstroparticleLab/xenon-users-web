@@ -66,7 +66,7 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
     for (let i = 0; i < docs.length; i++) {
       let positionStr = (docs[i].position).toString();
       // PI treated differently because we want their name(s)
-      if(!docs[i].end_date) {
+      if(docs[i].active === "true") {
         if (positionStr === 'PI') {
           pi.push(docs[i]);
         } else {
@@ -82,7 +82,7 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
     var current = [];
     var prev = [];
     for (let i = 0; i < docs.length; i++) {
-      if(!docs[i].end_date) {
+      if(docs[i].active === "true") {
         current.push(docs[i]);
       } else {
         prev.push(docs[i]);

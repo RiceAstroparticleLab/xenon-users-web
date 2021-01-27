@@ -12,13 +12,53 @@ function ensureAuthenticated(req, res, next) {
 
 // GET home page.
 router.get('/', ensureAuthenticated, function(req, res) {
-  res.render('shifts', 
-    { page: 'Shift Management', 
-      menuId: 'home', 
-      user: req.user, 
-      institutes: array_of_institutes
-    }
-  );
+  var db = req.xenonnt_db;
+  var collection = db.collection('users');
+
+  collection.aggregate([
+    {$match: {$and: [{start_date: {$exists: true, $ne: null}}, {institute: {$ne: "Other"}}]}},
+    {$project: {
+      "_id": 0, 
+      "institute": 1,
+      "first_name": 1,
+      "position": 1,
+      "start_date": 1,
+      "start": 
+      {
+        $cond: { if: { $and: [{$eq: [{$month: "$start_date"}, 1]}, {$eq: [{$dayOfMonth: "$start_date"}, 1]}] }, then: {$year: "$start_date"}, else: {$sum: [{$year: "$start_date"}, 1]} }
+      },
+      "end": {$sum: [{$year: { $ifNull: [ "$end_date", new Date() ] }}, 1]},
+    }},
+    {$project: {
+      "_id": 0, 
+      "institute": 1,
+      "first_name": 1,
+      "position":
+      {
+        $cond: {if: {$in: ["$position", ["PI", "Non-permanent Scientist", "Permanent Scientist", "PhD Student"]]}, then: 1, else: 0}
+      },
+      "years": {$range: ["$start", "$end"]}
+    }},
+    { $unwind : { path: "$years", preserveNullAndEmptyArrays: true }},
+    {$group: {
+      "_id": { "institute": "$institute", "yr": "$years"},
+      "count": {"$sum": 1},
+      "cfcount": {"$sum": "$position"}
+    }},
+    {$group: {
+      "_id": "$_id.institute", "total": {"$sum": "$count"}, "totalphd": {"$sum": "$phdcount"},
+      "years": {$push: {"year": "$_id.yr", "count": "$count", "phdcount": "$phdcount"}}
+    }}
+  ]).toArray(function(e, data) {
+    res.render('shifts', 
+      { page: 'Shift Management', 
+        menuId: 'home', 
+        user: req.user, 
+        institutes: array_of_institutes,
+        instInfo: data
+      }
+    );
+  })
 });
 
 // external form.
@@ -28,8 +68,9 @@ router.get('/request_new_member', function(req, res) {
 
   collection.distinct(
     "institute", 
-    { end_date: {$exists: false},
-      pending: {$exists: false}
+    { active: "true",
+      pending: {$exists: false},
+      institute: {$ne: "Common Fund"}
     }
   ).then(function(docs) {
     res.render('request', 
@@ -48,12 +89,12 @@ router.get('/confirmation', function(req, res) {
 });
 
 // external form.
-router.get('/remove_user', ensureAuthenticated, function(req, res) {
+router.get('/remove_member', ensureAuthenticated, function(req, res) {
   var db = req.xenonnt_db;
   var collection = db.collection('users');
 
   collection.find(
-    { end_date: {$exists: false}, 
+    { active: "true",
       position: {$ne: "PI"}, 
       pending: {$exists: false},
       institute: req.user.institute}
@@ -140,7 +181,7 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
   collection.find(
     { 
       "position": "PI", 
-      "end_date": {$exists: false},
+      "active": "true",
       "pending": {$exists: false}
     }, 
     {"sort": "institute"}
@@ -152,7 +193,7 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
     collection.find(
       { 
         "position": "Permanent Scientist", 
-        "end_date": {$exists: false},
+        "active": "true",
         "pending": {$exists: false}
       }, 
       {"sort": "institute"}
@@ -164,7 +205,7 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
       collection.find(
         { 
           "position": "Non-permanent Sci.", 
-          "end_date": {$exists: false},
+          "active": "true",
           "pending": {$exists: false}
         }, 
         {"sort": "institute"}
@@ -176,7 +217,7 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
         collection.find(
           {
             "position": "PhD Student", 
-            "end_date": {$exists: false},
+            "active": "true",
             "pending": {$exists: false}
           }, 
           {"sort": "institute"}
@@ -188,7 +229,7 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
           collection.find(
             {
               "position": "Thesis Student", 
-              "end_date": {$exists: false},
+              "active": "true",
               "pending": {$exists: false}
             }, 
             {"sort": "institute"}
@@ -200,7 +241,7 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
             collection.find(
               {
                 "position": "XENON Student", 
-                "end_date": {$exists: false},
+                "active": "true",
                 "pending": {$exists: false}
               }, 
               {"sort": "institute"}
@@ -212,7 +253,7 @@ router.post("/curr_table_info", ensureAuthenticated, function(req, res){
               collection.find(
                 { 
                   "position": {$not: {$in: order}}, 
-                  "end_date": {$exists: false},
+                  "active": "true",
                   "pending": {$exists: false}
                 }, 
                 {"sort": "institute"}
@@ -237,7 +278,7 @@ router.post("/prev_table_info", ensureAuthenticated, function(req, res){
   var collection = db.collection('users');
   collection.find(
     {"position": {$not: {$in: ["Technician", "Engineer", "?"]}},
-    "end_date": {$exists: true}}, 
+    "active": "false"},
     {"sort": "institute"}
   ).toArray(function(err, result) {
     for (let i = 0; i < result.length; i++) {
@@ -258,7 +299,7 @@ router.post("/tech_table", ensureAuthenticated, function(req, res) {
   collection.find(
     { 
       "position": {$in: ["Engineer", "Technician", "?"]}, 
-      "end_date": {$exists: false},
+      "active": "true",
       "pending": {$exists: false}
     }, 
     {"sort": "institute"}
@@ -280,7 +321,7 @@ router.post("/prev_tech_table", ensureAuthenticated, function(req, res) {
   collection.find(
     { 
       "position": {$in: ["Engineer", "Technician", "?"]}, 
-      "end_date": {$exists: true},
+      "active": "false",
       "pending": {$exists: false}
     }, 
     {"sort": "institute"}

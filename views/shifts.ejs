@@ -40,10 +40,11 @@
                                 <th id="table_head_this_year">
                                     <div class="dropdown">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            <span id="the_year">2020</span>
+                                            <span id="the_year">2021</span>
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" style="background-color:#fff;letter-spacing:normal;">
+                                            <li><a href="#">2021</a></li>
                                             <li><a href="#">2020</a></li>
                                             <li><a href="#">2019</a></li>
                                             <li><a href="#">2018</a></li>
@@ -273,7 +274,7 @@
                                 <strong>Shifter</strong>
                             </div>
                             <div class="col-6">
-                                <input id="id_shifter" type="text" name="shifter" readonly value="<%= user.daq_id %>">
+                                <input id="id_shifter" type="text" name="shifter" readonly value="<%= user.lngs_ldap_uid %>">
                             </div>
                         </div>
                         <div class="row" style="margin-top:12px">
@@ -374,7 +375,7 @@
                         </div>
                         <div class="row" style="margin-top:12px">
                             <div class="col-6">
-                                <strong>Shifter</strong>
+                                <strong>Shifter LNGS ID</strong>
                             </div>
                             <div class="col-6">
                                 <input id="assign_shifter" type="text" name="shifter">
@@ -479,14 +480,14 @@
 <script>
     $(document).ready(function() {
         // initialize the table at current year
-        FillAggregates("#aggregate_table_body", '2020', "<%= user.institute %>");
+        FillAggregates("#aggregate_table_body", '2021', "<%= user.institute %>");
         $('.dropdown-menu a').click(function(){
             $('#the_year').text($(this).text());
             FillAggregates("#aggregate_table_body", $(this).text(), "<%= user.institute %>");
         });
         // page is now ready, initialize the calendar...
-        FillCalculator("#calc_table_body", "<%= user.institute %>")
-        InitializeCalendar("<%= user.daq_id %>", "<%= user.position %>", "<%= user.groups %>", "<%= user.institute %>");
+        FillCalculator("#calc_table_body", '2020', "<%= user.institute %>", `<%- JSON.stringify(instInfo) %>`)
+        InitializeCalendar("<%= user.lngs_ldap_uid %>", "<%= user.position %>", "<%= user.groups %>", "<%= user.institute %>");
     });
 </script>
 </html>

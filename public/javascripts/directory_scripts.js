@@ -498,10 +498,10 @@ function openModal(userInfo, page) {
     modal
       .find('.modal-body input[name="StartDate"]')
       .val(new Date(userInfo.start_date).toISOString().slice(0,10));
-    if (userInfo.expected_end_date != "" && userInfo.expected_end_date != null) {
+    if (userInfo.end_date != null || userInfo.end_date != "") {
       modal
-        .find('.modal-body input[name="ExEndDate"]')
-        .val(new Date(userInfo.expected_end_date).toISOString().slice(0,10));
+        .find('.modal-body input[name="EndDate"]')
+        .val(new Date(userInfo.end_date).toISOString().slice(0,10));
     }
     
     // select only the checkboxes that correspond to the mailing lists for
@@ -565,10 +565,10 @@ function UpdateUserModal() {
       .find('.modal-body input[name="StartDate"]')
       .val(new Date(userInfo.start_date).toISOString().slice(0,10));
 
-    if (userInfo.expected_end_date != "" && userInfo.expected_end_date != null) {
+    if (userInfo.end_date != "" && userInfo.end_date != null) {
       modal
-        .find('.modal-body input[name="ExEndDate"]')
-        .val(new Date(userInfo.expected_end_date).toISOString().slice(0,10));
+        .find('.modal-body input[name="EndDate"]')
+        .val(new Date(userInfo.end_date).toISOString().slice(0,10));
     }
     
     // check only correct mailing list checkbox
@@ -633,12 +633,16 @@ function ValiDate(elem) {
   });
 }
 
+function isASCII(str) {
+  var txt = $(str).val()
+  return /^[\x00-\xFF]*$/.test(txt);
+}
+
 function ValidateForm(elem, list) {
   $(elem).on('submit', function(event) {
     var valid = true;
     for (let i = 0; i < list.length; i++) {
-      var hasClass = $(list[i]).hasClass('invalid');
-      console.log(hasClass);
+      // checks that the field is valid. If not, shows error message
       if ($(list[i]).hasClass('invalid')) {
         valid = false
         var hiddenClass = list[i] + '_hidden';
@@ -646,6 +650,51 @@ function ValidateForm(elem, list) {
         $(hiddenClass).show();
       }
     }
+    var start_date = new Date($('#sdate').val());
+    var end_date =  new Date($('#edate').val());
+    var oneyear = new Date();
+    var tenyears = new Date();
+    oneyear.setFullYear(oneyear.getFullYear() - 1);
+    tenyears.setFullYear(tenyears.getFullYear() + 10);
+    console.log(oneyear)
+    console.log(tenyears)
+    // check that the dates are reasonable
+    if (start_date < oneyear || start_date > tenyears) {
+      valid = false;
+      $('#valid_sdate_range').show();
+    } else {
+      $('#valid_sdate_range').hide();
+    }
+
+    if (end_date < oneyear || end_date > tenyears) {
+      valid = false;
+      $('#valid_edate_range').show();
+    } else {
+      $('#valid_edate_range').hide();
+    }
+    // check that the end date comes after start date
+    if (end_date < start_date) {
+      valid = false;
+      $('#valid_edate').show();
+    } else {
+      $('#valid_edate').hide();
+    }
+
+    // checks that first and last name fields only use extended ASCII
+    if (!isASCII('#fname')) {
+      valid = false;
+      $('#fname_hidden').show();
+    } else {
+      $('#fname_hidden').hide();
+    }
+    if (!isASCII('#lname')) {
+      valid = false;
+      $('#lname_hidden').show();
+    } else {
+      $('#lname_hidden').hide()
+    }
+
+    // If all fields are valid, submit form, otherwise don't
     console.log(valid)
     if (!valid) {
       event.preventDefault();
