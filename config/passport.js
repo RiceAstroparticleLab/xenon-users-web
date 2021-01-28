@@ -1,4 +1,9 @@
 var passport = require('passport');
+var fs = require('fs');
+
+// Vars for logging errors
+var now = new Date();
+const ERROR_FILE = process.env.ERROR_FILE;
 
 // GithubStrategy
 var GitHubStrategy = require('passport-github2').Strategy;
@@ -34,9 +39,19 @@ passport.deserializeUser(function(obj, done) {
     done(null, obj);
 });
 
+function logToFile(message) {
+    formattedMessage = `[${now.toISOString()}] ${message} \n`;
+    fs.writeFile(ERROR_FILE, formattedMessage, function (err, data) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log(message);
+    });
+}
+
 function isEmpty(obj) {
     for(var key in obj) {
-        if(obj.hasOwnProperty(key))
+        if (obj.hasOwnProperty(key)) 
             return false;
     }
     return true;
@@ -125,7 +140,6 @@ passport.use(new GitHubStrategy({
     scope: ["read:user", "read:orgs"]
   }, 
   function (accessToken, refreshToken, profile, done) {
-      // console.log(profile._json)
 
     // asynchronous verification 
     process.nextTick(() => {
@@ -138,11 +152,11 @@ passport.use(new GitHubStrategy({
                 console.log(response.status)
                 use_db.collection('users').find({"github": profile._json.login}).toArray((e, docs) => {
                     if(docs.length===0){
-                        console.log("Couldn't find user in run DB, un "+profile._json.login);
+                        logToFile(`${github_login} is a member of XENON1T but was not found in the DB.`);
                         return done(null, false, "Couldn't find user in DB");
                     } else {
                         var doc = docs[0]
-                        PopulateProfile(doc, profile, {}, function(ret_profile){
+                        PopulateProfile(doc, profile, {}, function(ret_profile) {
                             use_db.collection('users').findOneAndUpdate({"github": profile._json.login},
                                             {"$set": { "picture_url": profile._json.avatar_url,
                                                        "github_home": profile.html_url},
@@ -162,7 +176,7 @@ passport.use(new GitHubStrategy({
                 if (response.status == 204) {
                     use_db.collection('users').find({"github": profile._json.login}).toArray((e, docs) => {
                         if(docs.length===0){
-                            console.log("Couldn't find user in run DB, un "+profile._json.login);
+                            logToFile(`${github_login} is a member of XENONnT but was not found in the DB.`);
                             return done(null, false, "Couldn't find user in DB");
                         } else {
                             var doc = docs[0]
@@ -179,7 +193,7 @@ passport.use(new GitHubStrategy({
                     
                 }
             }).catch((e) => {
-                console.log(e)
+                logToFile(`${github_login} is not a member of XENON1T or XENONnT and was not found in the DB. Additional errors: ${e}`);
                 return done(null, false);
             }); 
         });     
@@ -199,42 +213,41 @@ var OPTS = {
     usernameField: 'user',
     passwordField: 'password'
 };
-passport.use(new LdapStrategy(OPTS,
-             function(user, done) {
 
-                 // Need to verify uid matches
-                 var collection = use_db.collection("users");
-                 collection.find({"lngs_ldap_uid": user.uid}).toArray(function(e, docs){
-                                     if(docs.length===0){
-					 console.log("No user " + user.uid + " in DB");
-					 return done(null, false, "Couldn't find user in DB");
-				     }
-				     var doc = docs[0];
-				     var ret_profile = PopulateProfile(doc, {}, user, function(ret_profile){
-					 // Save a couple things from the lngs profile 
-					 collection.update({"lngs_ldap_uid": user.uid},
-							   {"$set": { 
-							       "lngs_ldap_email": user.mail,
-							       "lngs_ldap_cn": user.cn
-							   }
-							   });
-					 return done(null, ret_profile);
-				     });
-                                 }); // end mongo query
-             }));
+passport.use(new LdapStrategy(OPTS,
+    function(user, done) {
+        // Need to verify uid matches
+        var collection = use_db.collection("users");
+        collection.find({"lngs_ldap_uid": user.uid}).toArray(function(e, docs){
+            if (docs.length === 0) {
+                logToFile(`The LNGS ID ${user.uid} was not found in the run DB`)
+                return done(null, false, "Couldn't find user in DB");
+            }
+            var doc = docs[0];
+            var ret_profile = PopulateProfile(doc, {}, user, function(ret_profile){
+                // Save a couple things from the lngs profile 
+                collection.update({"lngs_ldap_uid": user.uid},
+                    {"$set": { 
+                        "lngs_ldap_email": user.mail,
+                        "lngs_ldap_cn": user.cn
+                    }
+                    });
+                return done(null, ret_profile);
+            });
+        }); // end mongo query
+    }));
 
 // Login with Local username/pw
 passport.use(new LocalStrategy(
   function(username, password, done) {
-      console.log(`** USERNAME`)
         use_db.collection('users').find({"email": username}).toArray((e, docs) => {
             if (e) {return done(e)}
             if(docs.length===0) {
-                console.log(`Couldn't find user ${username} in DB`);
+                logToFile(`The email ${username} was not found in the DB.`);
                 return done(null, false, { message: "Couldn't find user in DB" });
             }
             if (`${password}` != GENERAL_LOGIN_PW) {
-                console.log(`${username} typed in the wrong password`)
+                logToFile(`${username} typed in the wrong password.`)
                 return done(null, false, { message: "Wrong password"});
             }
             console.log("Correct user and password")
