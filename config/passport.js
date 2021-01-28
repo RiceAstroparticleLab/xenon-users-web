@@ -41,7 +41,7 @@ passport.deserializeUser(function(obj, done) {
 
 function logToFile(message) {
     formattedMessage = `[${now.toISOString()}] ${message} \n`;
-    fs.writeFile(ERROR_FILE, formattedMessage, function (err, data) {
+    fs.appendFile(ERROR_FILE, formattedMessage, function (err, data) {
         if (err) {
             return console.log(err);
         }
