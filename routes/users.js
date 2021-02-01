@@ -18,7 +18,7 @@ function NewUserMail(req, mailing_lists, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.TEST_EMAIL,
+    to: process.env.CB_EMAIL,
     cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
     subject: 'New Member Confirmation: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
@@ -51,8 +51,8 @@ function PendingUserMail(req, mailing_lists, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.TEST_EMAIL,
-    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
+    to: process.env.CB_EMAIL,
+    cc: [process.env.ZE_EMAIL, process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
     subject: 'New Member Request: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
     html: '<p>Dear Collaboration Board,</p>' + 
@@ -88,8 +88,8 @@ function ApproveUserMail(req, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.TEST_EMAIL,
-    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
+    to: process.env.ADMIN_EMAIL,
+    cc: [process.env.CB_EMAIL, process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
     subject: 'Request Approved: ' + req.body.fName + ' ' + 
       req.body.lName,
     html:
@@ -144,7 +144,7 @@ function UpdateUserMail(req, changes, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.TEST_EMAIL,
+    to: process.env.CB_EMAIL,
     cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
     subject: 'User Information Updated: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
@@ -170,7 +170,7 @@ function LeaveCollaborationMail(req, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.TEST_EMAIL,
+    to: process.env.CB_EMAIL,
     cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
     subject: `${req.body.name} left the collaboration.`,
     html: '<p>Dear all,</p>' + 
@@ -567,10 +567,10 @@ router.post('/linkuser', function(req, res) {
           {$set: {lngs_ldap_uid: req.body.lngs_id}}
         );
         console.log(`success. Modified ${req.body.selectedUser}`);
-        res.redirect(base + '/login');
+        res.redirect(base + '/auth/login');
       } else {
         console.log("error. Could not send email.");
-        res.redirect(base + '/login');
+        res.redirect(base + '/auth/login');
       }
     });
   } catch (e) {
