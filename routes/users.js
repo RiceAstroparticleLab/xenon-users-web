@@ -525,5 +525,56 @@ router.post('/removeuser', function(req, res) {
   } catch (e) {
     console.log(e);
   }
+});
+
+function LinkLNGSMail(req, callback) {
+  var transporter = req.transporter;
+  var message = {
+    from: process.env.NOTIFS_ACCOUNT,
+    to: req.body.email,
+    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
+    subject: `You have successfully linked your LNGS account.`,
+    html:
+      `<p>Your LNGS account was succesfully linked on the Shift Management website. You ` +
+      `are now free to log in with your LNGS credentials to the Shift and DAQ websites.</p>` +
+      `<p>If you did not make this change please report it immediately.</p>` +
+      '<p>Regards,<br>XENON User Management System</p>'
+  };
+  
+  transporter.sendMail(message, function(error, info) {
+    if (error) {
+      console.log(error);
+      callback(false);
+    } else {
+      console.log('Message sent ' + info.message);
+      callback(true);
+    }
+  });
+}
+
+router.post('/linkuser', function(req, res) {
+  var db = req.xenonnt_db;
+  var collection = db.collection('users');
+  var user_id = new ObjectId(req.body.selectedUser);
+
+  try {
+    // make sure email alerting of new member can be sent before actually
+    // adding the new member to the database
+    LinkLNGSMail(req, function(success){
+      if (success) {
+        collection.findOneAndUpdate(
+          {"_id": user_id}, 
+          {$set: {lngs_ldap_uid: req.body.lngs_id}}
+        );
+        console.log(`success. Modified ${req.body.selectedUser}`);
+        res.redirect(base + '/login');
+      } else {
+        console.log("error. Could not send email.");
+        res.redirect(base + '/login');
+      }
+    });
+  } catch (e) {
+    console.log(e);
+  }
 })
 module.exports = router;

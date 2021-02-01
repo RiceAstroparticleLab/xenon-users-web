@@ -51,6 +51,8 @@ router.get('/login_attempt_3poiux93jxm023', function(req, res) {
 
 // fail LNGS login -- suggest linking accounts
 router.get('/login_attempt_4sowc37fbw0fjy3f', function (req, res) {
+  var db = req.xenonnt_db;
+  var collection = db.collection('users');
   var url = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
   var lngs_id = url.searchParams.get('id');
   console.log(lngs_id);

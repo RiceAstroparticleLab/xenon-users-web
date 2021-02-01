@@ -14,10 +14,12 @@
       <h5>It seems your LNGS login was correct but you are not in our system. Please select your 
           email from the dropdown list to link the accounts. A confirmation email will be sent
           from noreply@lngs.infn.it concerning this change. Thanks.</h5>
+      <h5 style="color:darkred">If your email does not appear in the list, please post to Slack tech-support as it 
+          may be an issue with your information within XENON</h5>
       <br>
-      <form id="formLinkLngs" name="removeuser" method="post" action="/shifts/users/removeuser">
+      <form id="formLinkLngs" name="removeuser" method="post" action="/shifts/users/linkuser">
         <div class="row" style="margin-top:12px">
-          <label for="fname" style="padding-left:30px">Name</label><br>
+          <label for="fname" style="padding-left:30px">Email</label><br>
           <div style="padding-left:30px">
               <select id="selectedUser" name="selectedUser" required>
                 <option value="" selected disabled hidden>Please select</option>
@@ -27,12 +29,14 @@
               </select>
           </div>
         </div>
-        <div class="row" style="margin-top:12px">
-            <h5>The LNGS id that will be associated with this account is <%= lngs %>. Please 
-            confirm that the email you selected is correct before submitting.</h5>
+        <div class="row" style="margin-top:12px;">
+            <p style="padding-left:30px;">The LNGS id that will be associated with this account is <b><%= lngs %></b>. Please 
+            confirm that the email you selected is correct before submitting.</p>
         </div>
 
         <input id="name" type="text" name="name" hidden/>
+        <input id="email" type="text" name="email" hidden/>
+        <input id="lngs_id" type="text" name="lngs_id" value="<%= lngs %>" hidden/>
 
         <br>
         <div style="text-align:center;">
@@ -50,8 +54,10 @@
       var optionId = $(this).children(":selected").attr("id");
       var data = JSON.parse(`<%- JSON.stringify(data) %>`);
       var name = `${data[optionId].first_name} ${data[optionId].last_name}`;
+      var email =  data[optionId].email;
       // hidden fields for req.body and email
       $('#name').val(name);
+      $('#email').val(email);
     });
   });
 </script>
