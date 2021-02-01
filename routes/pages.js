@@ -16,7 +16,7 @@ router.get('/', ensureAuthenticated, function(req, res) {
   var collection = db.collection('users');
 
   collection.aggregate([
-    {$match: {$and: [{start_date: {$exists: true, $ne: null}}, {institute: {$ne: "Other"}}]}},
+    {$match: {$and: [{start_date: {$exists: true, $ne: null}}, {institute: {$ne: "Other"}}, {position: {$nin: ['Engineer', 'Technician']}}]}},
     {$project: {
       "_id": 0, 
       "institute": 1,
@@ -35,7 +35,7 @@ router.get('/', ensureAuthenticated, function(req, res) {
       "first_name": 1,
       "position":
       {
-        $cond: {if: {$in: ["$position", ["PI", "Non-permanent Scientist", "Permanent Scientist", "PhD Student"]]}, then: 1, else: 0}
+        $cond: {if: {$in: ["$position", ["PI", "Non-permanent Sci.", "Permanent Scientist", "PhD Student", "Thesis"]]}, then: 1, else: 0}
       },
       "years": {$range: ["$start", "$end"]}
     }},
@@ -46,8 +46,8 @@ router.get('/', ensureAuthenticated, function(req, res) {
       "cfcount": {"$sum": "$position"}
     }},
     {$group: {
-      "_id": "$_id.institute", "total": {"$sum": "$count"}, "totalphd": {"$sum": "$phdcount"},
-      "years": {$push: {"year": "$_id.yr", "count": "$count", "phdcount": "$phdcount"}}
+      "_id": "$_id.institute", "total": {"$sum": "$count"}, "totalphd": {"$sum": "$cfcount"},
+      "years": {$push: {"year": "$_id.yr", "count": "$count", "phdcount": "$cfcount"}}
     }}
   ]).toArray(function(e, data) {
     res.render('shifts', 

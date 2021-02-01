@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <% include components/head %>
+  <script src="/shifts/javascripts/directory_scripts.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="/shifts/stylesheets/bootstrap-social.css">
+</head>
+<body style="background-color: #30415d;">
+  <div class="row" style="height: 50px;"></div>
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6 bg-3" style="padding: 40px 50px 40px 50px;  border-radius: 3px;">
+      <h3>Link your account</h3>
+      <h5>It seems your LNGS login was correct but you are not in our system. Please select your 
+          email from the dropdown list to link the accounts. A confirmation email will be sent
+          from noreply@lngs.infn.it concerning this change. Thanks.</h5>
+      <br>
+      <form id="formLinkLngs" name="removeuser" method="post" action="/shifts/users/removeuser">
+        <div class="row" style="margin-top:12px">
+          <label for="fname" style="padding-left:30px">Name</label><br>
+          <div style="padding-left:30px">
+              <select id="selectedUser" name="selectedUser" required>
+                <option value="" selected disabled hidden>Please select</option>
+                <% for (i = 0; i < data.length; i++) {%>
+                  <option id="<%= i %>" value="<%= data[i]._id %>"><%= data[i].email %></option>
+                <%}%>
+              </select>
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px">
+            <h5>The LNGS id that will be associated with this account is <%= lngs %>. Please 
+            confirm that the email you selected is correct before submitting.</h5>
+        </div>
+
+        <input id="name" type="text" name="name" hidden/>
+
+        <br>
+        <div style="text-align:center;">
+          <input type="submit" value="Link This Account">
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-3"></div>
+  </div>
+</body>
+<script>
+  // autofill disabled fields when user is selected
+  $(document).ready(function() {
+    $("#selectedUser").change(function() {
+      var optionId = $(this).children(":selected").attr("id");
+      var data = JSON.parse(`<%- JSON.stringify(data) %>`);
+      var name = `${data[optionId].first_name} ${data[optionId].last_name}`;
+      // hidden fields for req.body and email
+      $('#name').val(name);
+    });
+  });
+</script>
+</html>

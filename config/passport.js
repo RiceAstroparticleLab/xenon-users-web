@@ -221,7 +221,7 @@ passport.use(new LdapStrategy(OPTS,
         collection.find({"lngs_ldap_uid": user.uid}).toArray(function(e, docs){
             if (docs.length === 0) {
                 logToFile(`The LNGS ID ${user.uid} was not found in the run DB`)
-                return done(null, false, "Couldn't find user in DB");
+                return done(null, false, { message: user.uid });
             }
             var doc = docs[0];
             var ret_profile = PopulateProfile(doc, {}, user, function(ret_profile){

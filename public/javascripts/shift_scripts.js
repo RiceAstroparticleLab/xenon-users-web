@@ -163,9 +163,9 @@ function FillCalculator(tablediv, inputYear, myinstitute, peopleArr) {
           let instituteYear = instituteYears[j];
           if (instituteYear['year'] === thisYear) {
             console.log(totalShifts)
-            console.log(instituteYear["phdcount"])
+            console.log(instituteYear["count"])
 
-            estShifts = totalShifts/(instituteYear["phdcount"]*instituteYear["count"]);
+            estShifts = totalShifts/(instituteYear["count"]*instituteYear["count"]);
           }
           // if (thisYear === 0) {
           //   estShifts += totalShifts/(instituteYear["phd"]*["all"]);

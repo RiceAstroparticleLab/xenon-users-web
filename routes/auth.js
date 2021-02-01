@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var passport = require("passport");
+const URL = require('url').URL;
 var base = '/shifts';
 
 // auth login page
@@ -30,8 +31,8 @@ router.get('/login_attempt_2cn9rbu94gi4n', function(req, res) {
       menuId: 'home',
       user: req.user,
       message: 'Error: You do not appear to be in our database. Please ' +
-        'link your account on the',
-      link: 'https://xenon1t-daq.lngs.infn.it/login' 
+       'see Slack tech-support as it may be an issue with your information within XENON.',
+      link: null
     }
   );
 });
@@ -42,11 +43,32 @@ router.get('/login_attempt_3poiux93jxm023', function(req, res) {
     { page: 'Login', 
       menuId: 'home', 
       user: req.user, 
-      message: 'Error: Please make sure that your username/password is ' + 
-        'correct and that you have linked your account on the',
-      link: 'https://xenon1t-daq.lngs.infn.it/login'
+      message: 'Error: Invalid username/password',
+      link: null
     }
   );
+});
+
+// fail LNGS login -- suggest linking accounts
+router.get('/login_attempt_4sowc37fbw0fjy3f', function (req, res) {
+  var url = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
+  var lngs_id = url.searchParams.get('id');
+  console.log(lngs_id);
+  collection.find(
+    { active: "true",
+      pending: {$exists: false},
+      lngs_ldap_uid: {$exists: false}
+    }
+  ).toArray(function(e, docs) {
+    res.render('link_account',
+      { page: 'Failed Login',
+        menuId: 'home',
+        user: req.user,
+        data: docs,
+        lngs: lngs_id
+      }
+    )
+  });
 });
 
 // login using github
@@ -59,14 +81,32 @@ router.get('/github',
 );
 
 // LNGS login
-router.post('/ldap',
-	passport.authenticate('ldapauth', {
-    failureRedirect: base + '/auth/login_attempt_3poiux93jxm023'
-  }), 
-	function(req, res){
-    res.redirect(base + req.session.returnTo || base + '/profile');
-  }
-);
+router.post('/ldap', function(req, res, next) {
+  passport.authenticate('ldapauth', function(err, user, info) {
+    console.log(err);
+    console.log(user);
+    if (user) { // success
+      req.logIn(user, function(e) {
+        res.redirect(base + req.session.returnTo || base + '/profile');
+      });
+    } else {
+      console.log(`Info arg is ${info}`)
+      if (!info) { // failure
+        res.redirect(base + '/auth/login_attempt_3poiux93jxm023');
+      } else { 
+        console.log(info.message);
+        if (info.message === 'Invalid username/password') {
+          res.redirect(base + '/auth/login_attempt_3poiux93jxm023');
+        } else { // successful login but not in db
+          var u = new URL('https://xenon1t-daq.lngs.infn.it/shifts/auth/login_attempt_4sowc37fbw0fjy3f');
+          u.search = `id=${info.message}`;
+          console.log(u);
+          res.redirect(u);
+        }
+      }
+    }
+  })(req, res, next);
+});
 
 // local authentication
 router.post('/password', 
