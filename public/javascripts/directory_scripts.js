@@ -498,10 +498,11 @@ function openModal(userInfo, page) {
     modal
       .find('.modal-body input[name="StartDate"]')
       .val(new Date(userInfo.start_date).toISOString().slice(0,10));
-    if (userInfo.end_date != null || userInfo.end_date != "") {
+    if (userInfo.end_date && userInfo.end_date != null && userInfo.end_date != "") {
       modal
         .find('.modal-body input[name="EndDate"]')
-        .val(new Date(userInfo.end_date).toISOString().slice(0,10));
+        .val(new Date(userInfo.end_date)
+    .toISOString().slice(0,10));
     }
     
     // select only the checkboxes that correspond to the mailing lists for

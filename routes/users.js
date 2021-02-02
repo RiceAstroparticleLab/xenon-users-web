@@ -118,8 +118,8 @@ function DenyUserMail(req, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
-    to: process.env.TEST_EMAIL,
-    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
+    to: process.env.CB_EMAIL,
+    cc: [process.env.ADMIN_EMAIL, process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
     subject: 'Request Denied: ' + req.body.fName + ' ' + 
       req.body.lName,
     html:
@@ -252,8 +252,7 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
   collection.find({"_id": user_id}).toArray(function(e, data) {
     console.log(data)
     previous_doc = data[0];
-
-    var mailing_lists = '';
+    
     if (req.body.mlist != null && Array.isArray(req.body.mlist)) {
       var lists = req.body.mlist;
     } else {
@@ -265,7 +264,6 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
     }
     console.log(lists);
     lists.push('xe-all');
-    mailing_lists += lists.join(", ")
 
     idoc['first_name'] = req.body.FirstName;
     if (idoc['first_name'] != previous_doc['first_name']) {
@@ -276,13 +274,7 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
       changes += 'Last Name: ' + req.body.LastName + '<br>';
     }
     idoc['email'] = req.body.Email;
-    if (idoc['email'] != previous_doc['email']) {
-      changes += 'Email: ' + req.body.Email + '<br>';
-    }
     idoc['mailing_lists'] = lists;
-    if (idoc['mailing_lists'] != previous_doc['mailing_lists']) {
-      changes += 'Mailing Lists: ' + lists + '<br>';
-    }
 
     if (req.body.institute != null) {
       idoc['institute'] = req.body.institute;
@@ -294,9 +286,6 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
       } else {
         if (req.body.prevTime != null && req.body.prevTime != "") {
           idoc['previous_time'] = req.body.prevTime;
-          if (idoc['previous_time'] != previous_doc['previous_time']) {
-            changes += 'Previous Time: ' + req.body.prevTime + '<br>';
-          }
         }
       }
     }
@@ -308,9 +297,6 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
     }
     if (req.body.lngs_id != null && req.body.lngs_id != "") {
       idoc['lngs_ldap_uid'] = req.body.lngs_id;
-      if (idoc['lngs_ldap_uid'] != previous_doc['lngs_ldap_uid']) {
-        changes += 'LNGS ID: ' + req.body.lngs_id + '<br>';
-      }
     }
     if (req.body.Time != "" && req.body.Time != null) {
       idoc['percent_xenon'] = Number(req.body.Time);
@@ -321,24 +307,16 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
 
     if (req.body.addInst != null && req.body.addInst != "") {
       idoc['additional_institutes'] = req.body.addInst;
-      if (idoc['additional_institutes'] != previous_doc['additional_institutes']) {
-        changes += 'Additional Institutes: ' + req.body.addInst + '<br>';
-      }
     }
     if (req.body.StartDate != "" && req.body.StartDate != null) {
       idoc['start_date'] = new Date(`${req.body.StartDate}`);
-      if (idoc['start_date'] != previous_doc['start_date']) {
-        changes += 'Start Date: ' + req.body.StartDate + '<br>';
-      }
     }
     if (req.body.EndDate != "" && req.body.EndDate != null) {
       idoc['end_date'] = new Date(req.body.EndDate);
-      idoc['active'] = "false";
-      if (idoc['end_date'] != previous_doc['end_date']) {
-        changes += 'End Date: ' + req.body.EndDate + '<br>';
-      }
     }
+    idoc['last_modified'] = new Date();
 
+    // fixes redirect in case forms are on different pages
     if (page.toString().includes('Institute')) {
       var split = page.toString().split('_')[1];
       page = 'institutes/' + split;
@@ -513,7 +491,7 @@ router.post('/removeuser', function(req, res) {
       if (success) {
         collection.findOneAndUpdate(
           {"_id": user_id}, 
-          {$set: {email: req.body.email, active: "false", end_date: new Date(req.body.edate)}}
+          {$set: {email: req.body.email, active: "false", end_date: new Date(req.body.edate), last_modified: new Date()}}
         );
         console.log(`success. Modified ${req.body.selectedUser}`);
         res.redirect(base + '/remove_member');
