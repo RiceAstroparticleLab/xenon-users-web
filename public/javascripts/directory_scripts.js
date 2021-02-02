@@ -92,7 +92,7 @@ function InitializeTable(tablediv) {
     e.preventDefault();
     var data = table.row($(this).parents('tr')).data();
     var user = data.current_user;
-    if(user.groups.includes("directory")) {
+    if(user.groups.includes("directory") || (user.position === "PI" && data.institute === user.institute)) {
       openModal(data, 'fulldirectory');
     } else {
       alert("Sorry, you don't have the correct permissions.");
@@ -178,7 +178,7 @@ function InitializePrevTable(tablediv) {
     e.preventDefault();
     var data = table.row($(this).parents('tr')).data();
     var user = data.current_user;
-    if (user.groups.includes("directory")) {
+    if(user.groups.includes("directory") || (user.position === "PI" && data.institute === user.institute)) {
       openModal(data, 'fulldirectory');
     } else {
       alert("Sorry, you don't have the correct permissions.");
@@ -268,7 +268,7 @@ function TechTable(tablediv) {
     e.preventDefault();
     var data = table.row($(this).parents('tr')).data();
     var user = data.current_user;
-    if(user.groups.includes("directory")) {
+    if(user.groups.includes("directory") || (user.position === "PI" && data.institute === user.institute)) {
       openModal(data, 'fulldirectory');
     } else {
       alert("Sorry, you don't have the correct permissions.");
@@ -337,7 +337,7 @@ function PrevTechTable(tablediv) {
     e.preventDefault();
     var data = table.row($(this).parents('tr')).data();
     var user = data.current_user;
-    if(user.groups.includes("directory")) {
+    if(user.groups.includes("directory") || (user.position === "PI" && data.institute === user.institute)) {
       openModal(data, 'fulldirectory');
     } else {
       alert("Sorry, you don't have the correct permissions.");
