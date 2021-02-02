@@ -140,7 +140,7 @@ function DenyUserMail(req, callback) {
   });
 }
 
-function UpdateUserMail(req, changes, callback) {
+function UpdateUserMail(req, changes, previously, callback) {
   var transporter = req.transporter;
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
@@ -152,6 +152,7 @@ function UpdateUserMail(req, changes, callback) {
       "<p>" + req.body.FirstName + ' ' + req.body.LastName +"'s information has been updated by " + req.user.first_name + ' ' +
         req.user.last_name + ' at ' + req.body.institute + '. Please review the following changes:</p>' +
       '<p>' + changes + '</p>' +
+      `<p>Previously, the information was as follows: </p><p>${previously}</p>` +
       '<p>Regards,<br>XENON User Management System</p>'
   };
   
@@ -244,10 +245,11 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
   var db = req.xenonnt_db;
   var collection = db.collection('users');
   var user_id = new ObjectId(req.params.userid);
-  var page = req.params.page;
-  var idoc = {};
-  var previous_doc;
-  var changes = "";
+  var page = req.params.page; 
+  var idoc = {}; // changes made to mongo
+  var previous_doc; // previous member info
+  var changes = ""; // html for changes made to the member for email
+  var previously = ""; // html to keep track of previous member info in email
 
   collection.find({"_id": user_id}).toArray(function(e, data) {
     console.log(data)
@@ -267,10 +269,12 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
 
     idoc['first_name'] = req.body.FirstName;
     if (idoc['first_name'] != previous_doc['first_name']) {
+      previously += 'First Name: ' + previous_doc['first_name'] + '<br>';
       changes += 'First Name: ' + req.body.FirstName + '<br>';
     }
     idoc['last_name'] = req.body.LastName;
     if (idoc['last_name'] != previous_doc['last_name']) {
+      previously += 'Last Name: ' + previous_doc['last_name'] + '<br>';
       changes += 'Last Name: ' + req.body.LastName + '<br>';
     }
     idoc['email'] = req.body.Email;
@@ -282,6 +286,7 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
         changes += 'Institute: ' + req.body.institute + '<br>';
         prevtimestr = req.body.prevTime + "Was at " + previous_doc['institute'] + " until " + moment().format("MMM YYYY") + ". ";
         idoc['previous_time'] = prevtimestr;
+        previously += 'Previous Time: ' + previous_doc['institute'] + '<br>';
         changes += 'Previous Time: ' + prevtimestr + '<br>';
       } else {
         if (req.body.prevTime != null && req.body.prevTime != "") {
@@ -292,6 +297,7 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
     if (req.body.position != null) {
       idoc['position'] = req.body.position;
       if (idoc['position'] != previous_doc['position']) {
+        previously += 'Position: ' + previous_doc['position'] + '<br>';
         changes += 'Position: ' + req.body.position + '<br>';
       }
     }
@@ -301,6 +307,7 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
     if (req.body.Time != "" && req.body.Time != null) {
       idoc['percent_xenon'] = Number(req.body.Time);
       if (idoc['percent_xenon'] != previous_doc['percent_xenon']) {
+        previously += 'Percent XENON: ' + previous_doc['percent_xenon'] + '<br>';
         changes += 'Percent XENON: ' + Number(req.body.Time) + '<br>';
       }
     }
@@ -325,7 +332,7 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
     try {
       // make sure email alerting of new member can be sent before actually
       // adding the new member to the database
-      UpdateUserMail(req, changes, function(success){
+      UpdateUserMail(req, changes, previously, function(success){
         if (success) {
           collection.findOneAndUpdate({"_id": user_id}, {$set: idoc});
           console.log(`success. Modified ${req.body.FirstName} ${req.body.LastName}`);
