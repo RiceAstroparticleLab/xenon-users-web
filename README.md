@@ -1,7 +1,7 @@
 # XENON User Management
 
 The XENON User Management website automates administrative processes for XENON, such as account creation, shift creation and maintenance, and notification systems. The User Management website is built using Node.js, Express and MongoDB and many of the interactive elements (such as calendars, graphs, and tables) are built using Javascript plug-ins (FullCalendar, HighCharts, and DataTables). Access to the website is limited to those that are in the XENON dark matter collaboration.
-* [User Management Website](https://xenon1t-daq.lngs.infn.it/shifts/)
+* [User Management Website](https://xenonnt.lngs.infn.it/shifts/)
 
 ## Status
 

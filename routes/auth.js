@@ -100,7 +100,7 @@ router.post('/ldap', function(req, res, next) {
         if (info.message === 'Invalid username/password') {
           res.redirect(base + '/auth/login_attempt_3poiux93jxm023');
         } else { // successful login but not in db
-          var u = new URL('https://xenon1t-daq.lngs.infn.it/shifts/auth/login_attempt_4sowc37fbw0fjy3f');
+          var u = new URL('https://xenonnt.lngs.infn.it/shifts/auth/login_attempt_4sowc37fbw0fjy3f');
           u.search = `id=${info.message}`;
           console.log(u);
           res.redirect(u);

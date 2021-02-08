@@ -60,7 +60,7 @@
             <!-- make this button available only if authorized as admin/PI-->
             <!-- Button triggers newUserModal -->
             <% if ((user.position == "PI" && user.institute == page) || (user.groups !== undefined)) {%>
-              <a href="https://xenon1t-daq.lngs.infn.it/shifts/request_new_member" target="_blank"><button type="button" class="btn btn-secondary btn-sm" style="color:#333;float:right;margin-top:20px">Request New Member</button></a>
+              <a href="https://xenonnt.lngs.infn.it/shifts/request_new_member" target="_blank"><button type="button" class="btn btn-secondary btn-sm" style="color:#333;float:right;margin-top:20px">Request New Member</button></a>
             <%}%>  
           <% include components/directory %>
         </div>
