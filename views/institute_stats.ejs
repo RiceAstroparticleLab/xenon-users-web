@@ -74,10 +74,10 @@
   <script>
     $(document).ready(function () {
       UpdateUserModal();
-      Autocomplete("#update_institute");
-      $( "#sdate" ).datepicker({dateFormat: "yy-mm-dd"});
-      $( "#edate" ).datepicker({dateFormat: "yy-mm-dd"});
-      $( "#exEndDate" ).datepicker({dateFormat: "yy-mm-dd"});
+      suggestRemoveForm("#edate");
+      ValiDate("#sdate");
+      ValiDate("#edate");
+      ValidateForm('#formUpdateUser', ['#edate', '#sdate']);
       Chart('stats', '<%-JSON.stringify(dict)%>', '<%-JSON.stringify(PI)%>')
     })
   </script>
