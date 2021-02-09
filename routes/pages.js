@@ -54,7 +54,7 @@ router.get('/', ensureAuthenticated, function(req, res) {
       { page: 'Shift Management', 
         menuId: 'home', 
         user: req.user, 
-        institutes: array_of_institutes,
+        institutes: req.array_of_institutes,
         instInfo: data
       }
     );
@@ -122,7 +122,7 @@ router.get('/fulldirectory', ensureAuthenticated, function(req, res) {
     { page: 'Full Directory', 
       menuId: 'home',
       positions: positionsArr,
-      "institutes": array_of_institutes,
+      "institutes": req.array_of_institutes,
       user: req.user
     }
   );

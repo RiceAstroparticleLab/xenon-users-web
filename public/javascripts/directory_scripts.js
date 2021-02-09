@@ -627,6 +627,7 @@ function ValiDate(elem) {
     var re = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/;
     if (re.test($(this).val())) {
       $(this).removeClass("invalid");
+      // if bool is true, form will suggest 
     }
     else{
       $(this).addClass("invalid");
@@ -634,6 +635,21 @@ function ValiDate(elem) {
   });
 }
 
+// shows message suggesting the user go to the remove a user form
+function suggestRemoveForm(elem) {
+  $(elem).on('input', function() {
+    // regex for YYYY-MM-DD
+    var re = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/;
+    if (re.test($(this).val())) {
+      var d = new Date($(this).val());
+      if (d < new Date()) {
+        $('#suggest_form').show();
+      }
+    }
+  });
+}
+
+// checks if text is made of extended ASCII characters
 function isASCII(str) {
   var txt = $(str).val()
   return /^[\x00-\xFF]*$/.test(txt);

@@ -13,7 +13,7 @@ router.get('/', ensureAuthenticated, function(req, res) {
   res.render('institutes', 
     { page: 'Institutes', 
       menuId: 'home', 
-      institutes: array_of_institutes, 
+      institutes: req.array_of_institutes, 
       user: req.user
     }
   );
@@ -25,6 +25,7 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
   var collection = db.collection('users');
   var givenInstitute = req.params.institute;
   var findInstitute;
+  var array_of_institutes = req.array_of_institutes;
 
   // Hard-code institutes that are under different names in the database 
   // such as Muenster/Munster, UCSD/UC San Diego, Uchicago/Chicago, and 
@@ -96,7 +97,7 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
         dict: dict,
         curr: current, 
         prev: prev,
-        institutes: array_of_institutes,
+        institutes: req.array_of_institutes,
         user: req.user
       }
     );

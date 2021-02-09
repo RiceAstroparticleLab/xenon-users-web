@@ -36,16 +36,41 @@
             </div>
 
             <div class="row" style="margin-top:12px">
-              <label for="position" style="padding-left:30px">Position</label><br>
-              <div style="text-align:center;">
-                <input type="text" name="position" id="position">
+              <label for="position" style="padding-left:30px">Position</label>
+              <button type="button" class="btn btn-sm" data-html="true" data-toggle="tooltip" data-placement="right" id="right" title="" 
+              data-original-title="<b>Permanent scientists:</b>  Contributes common fund and shifts.<br><br>
+              <b>Non-permanent scientists:</b> Primarily postdocs and soft-money researchers.  Contribute to common fund and shifts.<br><br>
+              <b>PhD students:</b> Students whose terminal degree is a PhD (incl. American combined MS/PhD programs).  Count for shifts but not common fund<br><br>
+              <b>Thesis students:</b> Students working for ca. 1 year 100% on XENON and write a research thesis. The time as thesis student counts towards waiting time if a student continues as a PhD student. Counts for shifts and not for common funds).<br><br>
+              <b>XENON students:</b> Exceptional cases where people work with a PI who controls information usage." style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
+              <br>
+              <div style="padding-left:30px">
+                <select name="position" id="position" required> 
+                  <option value="" selected disabled hidden>Please select</option>
+                  <optgroup label="Member Positions">
+                    <option value="Non-permanent Scientist">Non-permanent Scientist</option>
+                    <option value="Permanent Scientist">Permanent Scientist</option>
+                    <option value="PhD Student">PhD Student</option>
+                    <option value="Thesis Student">Thesis Student</option>
+                    <option value="XENON Student">XENON Student</option>
+                  </optgroup>
+                  <optgroup label="Eng & Tech Positions">
+                    <option value="Engineer">Engineer</option>
+                    <option value="Technician">Technician</option>
+                  </optgroup>
+                </select>
               </div>
             </div>
 
             <div class="row" style="margin-top:12px">
               <label for="institute" style="padding-left:30px">Institute</label><br>
-              <div style="text-align:center;">
-                <input type="text" name="institute" id="update_institute">
+              <div style="padding-left:30px">
+                <select id="institute" name="institute" required>
+                  <option value="" selected disabled hidden>Please select</option>
+                  <% for (i = 0; i < institutes.length; i++) {%>
+                    <option value="<%= institutes[i] %>"><%= institutes[i] %></option>
+                  <%}%>
+                </select>
               </div>
             </div>
 
@@ -106,6 +131,7 @@
               <label for="edate" style="padding-left:30px">End Date</label><br>
               <div style="text-align:center;">
                 <input id="edate" type="date" name="EndDate" placeholder="YYYY-MM-DD">
+                <span id="suggest_form" style="color:red;display:none;">You have typed in a day before today. Did you mean to <b><a href="https://xenonnt.lngs.infn.it/shifts/remove_member">remove a member</a</b>?</span>
               </div>
             </div>
             <br>

@@ -178,19 +178,17 @@
   </body>
   <script>
     $(document).ready(function() {
-      InitializeTable("#currentMembersTable")
-      InitializePrevTable("#previousMembersTable")
-      TechTable("#engineeringTechTable")
-      PrevTechTable("#previousTechTable")
-      Autocomplete("#update_institute")
-      Autocomplete("#new_institute")
-      Autocomplete(document.getElementById("position"), "<%= positions %>")
-      Autocomplete("#new_position", "<%= positions %>")
-      Autocomplete("#institute");
+      InitializeTable("#currentMembersTable");
+      InitializePrevTable("#previousMembersTable");
+      TechTable("#engineeringTechTable");
+      PrevTechTable("#previousTechTable");
+      suggestRemoveForm("#edate");
+      ValiDate("#sdate");
+      ValiDate("#edate");
+      ValidateForm('#formUpdateUser', ['#edate', '#sdate']);
+      ValidateForm('#formAddUser', ['#edate', '#sdate']);
       $('#right').tooltip();
       $('#task_ttip').tooltip();
-      $( "#sdate" ).datepicker({dateFormat: "yy-mm-dd"});
-      $( "#edate" ).datepicker({dateFormat: "yy-mm-dd"});
     })
   </script>
 </html>

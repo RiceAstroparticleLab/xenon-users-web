@@ -19,25 +19,16 @@ MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
   err => {console.log(err);}
 });
 
-/* GLOBAL VARIABLES */
-// notes:
-// Bern/Freiburg -> Freiburg
-// Chicago -> UChicago
-// INFN Naples -> Naples
-// LNGS -> LNGS-GSSI
-// MPIK Heidelberg -> MPI Heidelberg
-// Muenster -> Munster
-// UC San Diego -> UCSD
-// Weizmann -> WIS
-global.array_of_institutes = [
-  ['Bologna'], ['Coimbra'], ['Columbia'], ['Freiburg', 'Bern/Freiburg'], 
-  ['KIT'], ['Kobe'], ["L'Aquila"], ['LAL'], ['LNGS-GSSI', 'LNGS'], ['LPNHE'],
-  ['Mainz'], ['MPIK Heidelberg', 'MPI Heidelberg'], ['Muenster', 'Munster'],
-  ['Nagoya'], ['Naples', 'INFN Naples'], ['Nikhef'], ['NYUAD'], ['Purdue'],
-  ['Rensselear'], ['Rice'], ['Stockholm'], ['Subatech'], ['Tokyo'], ['Torino'],
-  ['UChicago', 'Chicago'], ['UCSD', 'UC San Diego'], ['WIS', 'Weizmann'],
-  ['Zurich']
-];
+var institutes;
+xenonnt_db.collection('users').distinct(
+  "institute", 
+  { active: "true",
+    pending: {$exists: false},
+    institute: {$ne: "Common Fund"}
+  }
+).then(function(docs) {
+  institutes = docs;
+});
 
 // For email confirmations
 var nodemailer = require("nodemailer");
@@ -119,6 +110,7 @@ app.use((req,res,next) => {
   req.recode_db = recode_db;
   req.xenonnt_db = xenonnt_db;
   req.transporter = transporter;
+  req.array_of_institutes = institutes;
   next();
 });
 
