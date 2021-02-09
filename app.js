@@ -12,22 +12,22 @@ const MongoClient = require('mongodb').MongoClient;
 const mongoURI = process.env.DAQ_MONGO_URI;
 var recode_db;
 var xenonnt_db;
+var institutes;
 MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
   recode_db = db.db('recode');
   xenonnt_db = db.db("xenonnt");
+  // get list of distinct institutes
+  xenonnt_db.collection('users').distinct(
+    "institute", 
+    { active: "true",
+      pending: {$exists: false},
+      institute: {$ne: "Common Fund"}
+    }
+  ).then(function(docs) {
+    institutes = docs;
+  });
   console.log(`mongoDB is connected to remote mongo`),
   err => {console.log(err);}
-});
-
-var institutes;
-xenonnt_db.collection('users').distinct(
-  "institute", 
-  { active: "true",
-    pending: {$exists: false},
-    institute: {$ne: "Common Fund"}
-  }
-).then(function(docs) {
-  institutes = docs;
 });
 
 // For email confirmations
