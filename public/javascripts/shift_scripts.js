@@ -98,99 +98,92 @@ done in the selected year. The second column is the number of shifts that an ins
 is expected to complete for that selected year. 
 
 The number of shifts used are calculated using the following equation:
- (total # shifts) / (num phd or higher) * (num people at institute) 
+ (total # shifts) / (num phd or higher at institute) * (num phd+ people across all institutes) 
 */
 function FillCalculator(tablediv, inputYear, myinstitute, peopleArr) {
-  $.getJSON('shifts/total_shift_aggregates', function(data) {
-    var html = '';
+  $.getJSON('shifts/total_shift_aggregates', function(shifts) {
+    var users = JSON.parse(peopleArr);
     var thisYear = parseInt(inputYear);
-    var totalThisYear = 0;
-    var totalMissing = 0;
+    // stats object has the following structure:
+    // {instituteName: [numShiftsForYr, numPhdOrHigherForYr]}
+    var stats = {};
+    var totalPhd = 0;
     var totalShifts = 0;
-    var notCompletedThisYear = 0;
-    var numPeople = JSON.parse(peopleArr);
-    var names = []
-    var counts = []
-
-    for (let i = 0; i < data.length; i ++) {
-      let institute = data[i];
-      if (institute['_id'] !== "none") {
-        let countThisYear = 0;
-        let instituteYears = institute["years"];
-
-        // insert names into array to use later
-        names.push(institute['_id'])
-
-        // set current year column
-        if (thisYear === 0) {
-          countThisYear = institute['total'];
-        } else {
+    var totalThisYear = 0;
+    
+    // iterate through the shift data first
+    for (let i = 0; i < shifts.length; i++) {
+      let institute = shifts[i];
+      let id = institute['_id']
+      let instituteYears = institute["years"];
+      if (id !== "none") {
+        let numShifts;
+        if (thisYear === 0) { // this is the case where we want to see all time
+          numShifts = institute['total'];
+        } else { // otherwise iterate through array to find year
           for (let j = 0; j < instituteYears.length; j++) {
-            let instituteYear = instituteYears[j];
-            if (instituteYear['year'] === thisYear) {
-              countThisYear = instituteYear["count"];
+            if (instituteYears[j]['year'] === thisYear) {
+              numShifts = instituteYears[j]['count'];
             }
           }
         }
-        totalThisYear += countThisYear;
-
-        // insert count into array to use later
-        counts.push(countThisYear.toString())
+        totalThisYear += numShifts;
+        stats[id] = [numShifts]
       } else {
+        // add empty shifts from this year to totalShifts
         if (thisYear === 0) {
-          notCompletedThisYear = institute['total']
+          totalShifts += institute['total']
         } else {
           for (let j = 0; j < instituteYears.length; j++) {
-            let instituteYear = instituteYears[j];
-            if (instituteYear['year'] === thisYear) {
-              notCompletedThisYear = instituteYear["count"];
+            if (instituteYears[j]['year'] === thisYear) {
+              totalShifts += instituteYears[j]["count"];
             }
           }
         }
       }
     }
 
-    // these are the total shifts for the selected year
-    totalShifts = totalThisYear + notCompletedThisYear;
-    console.log(numPeople)
+    // add this years shifts to total
+    totalShifts += totalThisYear;
 
-    for (let i = 0; i < numPeople.length; i++) {
-      let institute = numPeople[i];
-      if (institute['_id'] !== null && institute['_id'] !== "") {
+    // iterate through the users array
+    for (let i = 0; i < users.length; i++) {
+      let institute  = users[i];
+      let id = institute['_id'];
+      if (stats.hasOwnProperty(id)) { // make sure the institute actually has shifts
         let instituteYears = institute["years"];
-        let estShifts = 0;
         for (let j = 0; j < instituteYears.length; j++) {
-          let instituteYear = instituteYears[j];
-          if (instituteYear['year'] === thisYear) {
-            console.log(totalShifts)
-            console.log(instituteYear["count"])
-
-            estShifts = totalShifts/(instituteYear["count"]*instituteYear["count"]);
+          if (instituteYears[j]['year'] === thisYear) {
+            var phdcount = institute[j]['phdcount'];
+            totalPhd += phdcount;
+            stats[id].push(phdcount);
           }
-          // if (thisYear === 0) {
-          //   estShifts += totalShifts/(instituteYear["phd"]*["all"]);
-          // }
         }
-        
-        html += '<tr';
-        // highlight user's institute
-        if (institute['_id'].includes(myinstitute)) {
-          html += ' style="background-color:#cf6766;color:white"';
-        }
-        // set column name
-        html += '><td>' + names[i] + '</td>'; 
-        // set first column
-        html += '<td>' + counts[i] + '</td>';
-        // set second column
-        html += '<td>' + estShifts.toString() + '</td></tr>';
       }
+    }
+
+    var html = '';
+    // iterate through the stats object
+    const keys = Object.keys(stats);
+    for (const institute of keys) {
+      let estimateShifts = totalShifts/(totalPhd * stats[institute][1]);
+      html += '<tr';
+      if (institute.includes(myinstitute)) {
+        html += ' style="background-color:#cf6766;color:white"';
+      }
+      // set column to institute name
+      html +=  `><td>${institute}</td>`; 
+      // set first column
+      html += `<td>${stats[institute][0]}</td>`;
+      // set second column
+      html += `<td>${estimateShifts}</td></tr>`;
     }
 
     // column with total counts
     html += "<tr style='border-bottom:1px solid black'><td colspan='100%'>" + 
             "</td></tr>";
-    html += "<tr><td></td><td><strong>" + totalThisYear.toString() + "</strong></td>" +
-            "<td><strong>" + totalMissing.toString() + "</strong></td></tr>";
+    html += `<tr><td></td><td><strong>${totalThisYear}</strong></td>` +
+            `<td><strong>${totalShifts}</strong></td></tr>`;
     $(tablediv).html(html);
   });
 }
