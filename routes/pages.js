@@ -93,12 +93,16 @@ router.get('/remove_member', ensureAuthenticated, function(req, res) {
   var db = req.xenonnt_db;
   var collection = db.collection('users');
 
-  collection.find(
-    { active: "true",
-      position: {$ne: "PI"}, 
-      pending: {$exists: false},
-      institute: req.user.institute}
-  ).toArray(function(e, docs) {
+  var query = {};
+
+  query["active"] = "true";
+  query["position"] = {$ne: "PI"};
+  query["pending"] = {$exists: false};
+  if (!req.user.groups.includes("admin")) {
+    query["institute"] = req.user.institute;
+  }
+
+  collection.find(query).toArray(function(e, docs) {
     res.render('removeUser', 
       { page: 'Remove a User', 
         menuId: 'home', 

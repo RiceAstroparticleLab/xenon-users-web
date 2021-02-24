@@ -104,7 +104,6 @@ router.get("/total_shift_aggregates", ensureAuthenticated, function(req, res) {
   var collection = db.collection('shifts');
 
   collection.aggregate([
-    {"$match": {"institute": {"$ne": "none"}}},
     {$group: {
       "_id": { "institute": "$institute", "yr": {"$year": "$start"}}, 
       "count": {"$sum": 1}
