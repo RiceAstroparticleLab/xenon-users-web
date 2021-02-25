@@ -251,6 +251,7 @@ passport.use(new LocalStrategy(
                 return done(null, false, { message: "Wrong password"});
             }
             console.log("Correct user and password")
+            logToFile(`The email ${username} was used to log in using the local strategy`);
             var doc = docs[0];
             var ret_profile = PopulateProfile(doc, {}, {}, function(ret_profile){
                 return done(null, ret_profile);
