@@ -62,7 +62,7 @@ router.get('/', ensureAuthenticated, function(req, res) {
 });
 
 // external form.
-router.get('/request_new_member', function(req, res) {
+router.get('/request_new_member', ensureAuthenticated, function(req, res) {
   var db = req.xenonnt_db;
   var collection = db.collection('users');
 
@@ -77,7 +77,8 @@ router.get('/request_new_member', function(req, res) {
       { page: 'Request New Member', 
         menuId: 'home', 
         title: 'Request New Member',
-        institutes: docs
+        institutes: docs,
+        user: req.user
       }
     );
   });

@@ -11,149 +11,153 @@
     <div class="col-sm-3"></div>
     <div class="col-sm-6 bg-3" style="padding: 40px 50px 40px 50px;  border-radius: 3px;">
       <h3>Request a New Member</h3>
-      <h5>Please fill out the following form to request a new member for your institute. 
-        The request should be approved soon by an admin.<br> Please note that this form should only be used by PIs.</h5>
-      <br>
-      <form id="formPendingUser" name="pendinguser" method="post" action="/shifts/users/pendinguser">
-        <div class="row" style="margin-top:12px">
-          <label for="fname" style="padding-left:30px">First Name</label><br>
-          <div style="text-align:center;">
-            <input id="fname" type="text" name="FirstName" required>
-            <span id="fname_hidden" style="color:red;display:none;">Please only use extended ASCII characters</span>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <label for="lname" style="padding-left:30px">Last Name</label><br>
-          <div style="text-align:center;">
-            <input id="lname" type="text" name="LastName" required>
-            <span id="lname_hidden" style="color:red;display:none;">Please only use extended ASCII characters</span>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <label for="email" style="padding-left:30px">Work Email</label><br>
-          <div style="text-align:center;">
-            <input id="email" type="email" name="Email" required>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <label for="position" style="padding-left:30px">Position</label>
-          <button type="button" class="btn btn-sm" data-html="true" data-toggle="tooltip" data-placement="right" id="right" title="" 
-          data-original-title="<b>Permanent scientists:</b>  Contributes common fund and shifts.<br><br>
-          <b>Non-permanent scientists:</b> Primarily postdocs and soft-money researchers.  Contribute to common fund and shifts.<br><br>
-          <b>PhD students:</b> Students whose terminal degree is a PhD (incl. American combined MS/PhD programs).  Count for shifts but not common fund<br><br>
-          <b>Thesis students:</b> Students working for ca. 1 year 100% on XENON and write a research thesis. The time as thesis student counts towards waiting time if a student continues as a PhD student. Counts for shifts and not for common funds).<br><br>
-          <b>XENON students:</b> Exceptional cases where people work with a PI who controls information usage." style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
-          <br>
-          <div style="padding-left:30px">
-            <select name="position" id="position" required> 
-              <option value="" selected disabled hidden>Please select</option>
-              <optgroup label="Member Positions">
-                <option value="Non-permanent Scientist">Non-permanent Scientist</option>
-                <option value="Permanent Scientist">Permanent Scientist</option>
-                <option value="PhD Student">PhD Student</option>
-                <option value="Thesis Student">Thesis Student</option>
-                <option value="XENON Student">XENON Student</option>
-              </optgroup>
-              <optgroup label="Eng & Tech Positions">
-                <option value="Engineer">Engineer</option>
-                <option value="Technician">Technician</option>
-              </optgroup>
-            </select>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <label for="institute" style="padding-left:30px">Institute</label><br>
-          <div style="padding-left:30px">
-            <select id="institute" name="institute" required>
-              <option value="" selected disabled hidden>Please select</option>
-              <% for (i = 0; i < institutes.length; i++) {%>
-                <option value="<%= institutes[i] %>"><%= institutes[i] %></option>
-              <%}%>
-            </select>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <label for="time" style="padding-left:30px">Percentage FTE on XENON</label><br>
-          <div style="text-align:center;">
-            <input id="time" type="number" name="Time" min="10" max="100" value="100" required>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <label for="tasks" style="padding-left:30px">Tasks</label>
-          <button type="button" class="btn btn-sm" data-html="true" data-toggle="tooltip" data-placement="right" id="task_ttip" title="" 
-          data-original-title="Description of what this person will be doing such that others on the collaboration board understand how they contribute to the experiment." 
-          style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
-          <br>
-          <div style="text-align:center;">
-            <input id="tasks" type="text" name="Tasks" required>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:12px;padding-left:30px">
-          <label for="mlists">Mailing Lists</label><br>
-          <div class="col-sm-6">
-            <input type="checkbox" id="mlist1" checked disabled>&nbsp;&nbsp;&nbsp;xe-all<br>
-            <input type="hidden" name="mlist1" value="xe-all">
-            <input type="checkbox" id="mlist2" name="mlist" value="xe-analysis">&nbsp;&nbsp;&nbsp;xe-analysis<br>
-            <input type="checkbox" id="mlist3" name="mlist" value="xe-calibration">&nbsp;&nbsp;&nbsp;xe-calibration<br>
-            <input type="checkbox" id="mlist4" name="mlist" value="xe-clean">&nbsp;&nbsp;&nbsp;xe-clean<br>
-            <input type="checkbox" id="mlist5" name="mlist" value="xe-commissioning">&nbsp;&nbsp;&nbsp;xe-commissioning<br>
-            <input type="checkbox" id="mlist6" name="mlist" value="xe-computing">&nbsp;&nbsp;&nbsp;xe-computing<br>
-            <input type="checkbox" id="mlist7" name="mlist" value="xe-cryogenics">&nbsp;&nbsp;&nbsp;xe-cryogenics<br>
-            <input type="checkbox" id="mlist8" name="mlist" value="xe-cryostat">&nbsp;&nbsp;&nbsp;xe-cryostat<br>
-            <input type="checkbox" id="mlist9" name="mlist" value="xe-daq">&nbsp;&nbsp;&nbsp;xe-daq<br>
-            <input type="checkbox" id="mlist10" name="mlist" value="xe-detector">&nbsp;&nbsp;&nbsp;xe-detector<br>
-            <input type="checkbox" id="mlist11" name="mlist" value="xe-infrastructure">&nbsp;&nbsp;&nbsp;xe-infrastructure<br>
-            <input type="checkbox" id="mlist12" name="mlist" value="xe-montecarlo">&nbsp;&nbsp;&nbsp;xe-montecarlo<br>
-          </div>
-          <div class="col-sm-6">
-            <input type="checkbox" id="mlist13" name="mlist" value="xe-muonveto">&nbsp;&nbsp;&nbsp;xe-muonveto<br>
-            <input type="checkbox" id="mlist14" name="mlist" value="xe-nveto">&nbsp;&nbsp;&nbsp;xe-nveto<br>
-            <input type="checkbox" id="mlist15" name="mlist" value="xe-operations">&nbsp;&nbsp;&nbsp;xe-operations<br>
-            <input type="checkbox" id="mlist16" name="mlist" value="xe-pmts">&nbsp;&nbsp;&nbsp;xe-pmts<br>
-            <input type="checkbox" id="mlist17" name="mlist" value="xe-purity">&nbsp;&nbsp;&nbsp;xe-purity<br>
-            <input type="checkbox" id="mlist18" name="mlist" value="xe-purification">&nbsp;&nbsp;&nbsp;xe-purification<br>
-            <input type="checkbox" id="mlist19" name="mlist" value="xe-restox">&nbsp;&nbsp;&nbsp;xe-restox<br>
-            <input type="checkbox" id="mlist20" name="mlist" value="xe-screening">&nbsp;&nbsp;&nbsp;xe-screening<br>
-            <input type="checkbox" id="mlist21" name="mlist" value="xe-slowcontrol">&nbsp;&nbsp;&nbsp;xe-slowcontrol<br>
-            <input type="checkbox" id="mlist22" name="mlist" value="xe-tpc">&nbsp;&nbsp;&nbsp;xe-tpc<br>
-            <input type="checkbox" id="mlist23" name="mlist" value="xe-watertank">&nbsp;&nbsp;&nbsp;xe-watertank<br>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <label for="sdate" style="padding-left:30px">Start Date</label><br>
-          <div style="text-align:center;">
-            <input id="sdate" type="date" name="StartDate" placeholder="YYYY-MM-DD" required>
-            <span id="sdate_hidden" style="color:red;display:none;">Please use the format YYYY-MM-DD</span>
-            <span id="valid_sdate_range" style="color:red;display:none;">Please select a date within the past year or less than ten years from today</span>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <label for="edate" style="padding-left:30px">End Date</label>
-          <button type="button" class="btn btn-sm" data-html="true" data-toggle="tooltip" data-placement="right" id="edate_ttip" title="" 
-          data-original-title="If you are unsure of the end date, estimate to the best of your ability. This can be changed later." 
-          style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
-          <br>
-          <div style="text-align:center;">
-            <input id="edate" type="date" name="expectedEnd" placeholder="YYYY-MM-DD" required>
-            <span id="edate_hidden" style="color:red;display:none;">Please use the format YYYY-MM-DD</span>
-            <span id="valid_edate_range" style="color:red;display:none;">Please select a date within the past year or less than ten years from today.</span>
-            <span id="valid_edate" style="color:red;display:none;">Please choose a date that comes after the start date</span>
-          </div>
-        </div>
+      <% if (user.position == "PI" || user.groups.includes("admin")) {%>
+        <h5>Please fill out the following form to request a new member for your institute. 
+          The request should be approved soon by an admin.</h5>
         <br>
-        <div style="text-align:center;">
-          <input type="submit" name="submitButton" value="Submit">
-        </div>
-      </form>
+        <form id="formPendingUser" name="pendinguser" method="post" action="/shifts/users/pendinguser">
+          <div class="row" style="margin-top:12px">
+            <label for="fname" style="padding-left:30px">First Name</label><br>
+            <div style="text-align:center;">
+              <input id="fname" type="text" name="FirstName" required>
+              <span id="fname_hidden" style="color:red;display:none;">Please only use extended ASCII characters</span>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="lname" style="padding-left:30px">Last Name</label><br>
+            <div style="text-align:center;">
+              <input id="lname" type="text" name="LastName" required>
+              <span id="lname_hidden" style="color:red;display:none;">Please only use extended ASCII characters</span>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="email" style="padding-left:30px">Work Email</label><br>
+            <div style="text-align:center;">
+              <input id="email" type="email" name="Email" required>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="position" style="padding-left:30px">Position</label>
+            <button type="button" class="btn btn-sm" data-html="true" data-toggle="tooltip" data-placement="right" id="right" title="" 
+            data-original-title="<b>Permanent scientists:</b>  Contributes common fund and shifts.<br><br>
+            <b>Non-permanent scientists:</b> Primarily postdocs and soft-money researchers.  Contribute to common fund and shifts.<br><br>
+            <b>PhD students:</b> Students whose terminal degree is a PhD (incl. American combined MS/PhD programs).  Count for shifts but not common fund<br><br>
+            <b>Thesis students:</b> Students working for ca. 1 year 100% on XENON and write a research thesis. The time as thesis student counts towards waiting time if a student continues as a PhD student. Counts for shifts and not for common funds).<br><br>
+            <b>XENON students:</b> Exceptional cases where people work with a PI who controls information usage." style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
+            <br>
+            <div style="padding-left:30px">
+              <select name="position" id="position" required> 
+                <option value="" selected disabled hidden>Please select</option>
+                <optgroup label="Member Positions">
+                  <option value="Non-permanent Scientist">Non-permanent Scientist</option>
+                  <option value="Permanent Scientist">Permanent Scientist</option>
+                  <option value="PhD Student">PhD Student</option>
+                  <option value="Thesis Student">Thesis Student</option>
+                  <option value="XENON Student">XENON Student</option>
+                </optgroup>
+                <optgroup label="Eng & Tech Positions">
+                  <option value="Engineer">Engineer</option>
+                  <option value="Technician">Technician</option>
+                </optgroup>
+              </select>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="institute" style="padding-left:30px">Institute</label><br>
+            <div style="padding-left:30px">
+              <select id="institute" name="institute" required>
+                <option value="" selected disabled hidden>Please select</option>
+                <% for (i = 0; i < institutes.length; i++) {%>
+                  <option value="<%= institutes[i] %>"><%= institutes[i] %></option>
+                <%}%>
+              </select>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="time" style="padding-left:30px">Percentage FTE on XENON</label><br>
+            <div style="text-align:center;">
+              <input id="time" type="number" name="Time" min="10" max="100" value="100" required>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="tasks" style="padding-left:30px">Tasks</label>
+            <button type="button" class="btn btn-sm" data-html="true" data-toggle="tooltip" data-placement="right" id="task_ttip" title="" 
+            data-original-title="Description of what this person will be doing such that others on the collaboration board understand how they contribute to the experiment." 
+            style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
+            <br>
+            <div style="text-align:center;">
+              <input id="tasks" type="text" name="Tasks" required>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px;padding-left:30px">
+            <label for="mlists">Mailing Lists</label><br>
+            <div class="col-sm-6">
+              <input type="checkbox" id="mlist1" checked disabled>&nbsp;&nbsp;&nbsp;xe-all<br>
+              <input type="hidden" name="mlist1" value="xe-all">
+              <input type="checkbox" id="mlist2" name="mlist" value="xe-analysis">&nbsp;&nbsp;&nbsp;xe-analysis<br>
+              <input type="checkbox" id="mlist3" name="mlist" value="xe-calibration">&nbsp;&nbsp;&nbsp;xe-calibration<br>
+              <input type="checkbox" id="mlist4" name="mlist" value="xe-clean">&nbsp;&nbsp;&nbsp;xe-clean<br>
+              <input type="checkbox" id="mlist5" name="mlist" value="xe-commissioning">&nbsp;&nbsp;&nbsp;xe-commissioning<br>
+              <input type="checkbox" id="mlist6" name="mlist" value="xe-computing">&nbsp;&nbsp;&nbsp;xe-computing<br>
+              <input type="checkbox" id="mlist7" name="mlist" value="xe-cryogenics">&nbsp;&nbsp;&nbsp;xe-cryogenics<br>
+              <input type="checkbox" id="mlist8" name="mlist" value="xe-cryostat">&nbsp;&nbsp;&nbsp;xe-cryostat<br>
+              <input type="checkbox" id="mlist9" name="mlist" value="xe-daq">&nbsp;&nbsp;&nbsp;xe-daq<br>
+              <input type="checkbox" id="mlist10" name="mlist" value="xe-detector">&nbsp;&nbsp;&nbsp;xe-detector<br>
+              <input type="checkbox" id="mlist11" name="mlist" value="xe-infrastructure">&nbsp;&nbsp;&nbsp;xe-infrastructure<br>
+              <input type="checkbox" id="mlist12" name="mlist" value="xe-montecarlo">&nbsp;&nbsp;&nbsp;xe-montecarlo<br>
+            </div>
+            <div class="col-sm-6">
+              <input type="checkbox" id="mlist13" name="mlist" value="xe-muonveto">&nbsp;&nbsp;&nbsp;xe-muonveto<br>
+              <input type="checkbox" id="mlist14" name="mlist" value="xe-nveto">&nbsp;&nbsp;&nbsp;xe-nveto<br>
+              <input type="checkbox" id="mlist15" name="mlist" value="xe-operations">&nbsp;&nbsp;&nbsp;xe-operations<br>
+              <input type="checkbox" id="mlist16" name="mlist" value="xe-pmts">&nbsp;&nbsp;&nbsp;xe-pmts<br>
+              <input type="checkbox" id="mlist17" name="mlist" value="xe-purity">&nbsp;&nbsp;&nbsp;xe-purity<br>
+              <input type="checkbox" id="mlist18" name="mlist" value="xe-purification">&nbsp;&nbsp;&nbsp;xe-purification<br>
+              <input type="checkbox" id="mlist19" name="mlist" value="xe-restox">&nbsp;&nbsp;&nbsp;xe-restox<br>
+              <input type="checkbox" id="mlist20" name="mlist" value="xe-screening">&nbsp;&nbsp;&nbsp;xe-screening<br>
+              <input type="checkbox" id="mlist21" name="mlist" value="xe-slowcontrol">&nbsp;&nbsp;&nbsp;xe-slowcontrol<br>
+              <input type="checkbox" id="mlist22" name="mlist" value="xe-tpc">&nbsp;&nbsp;&nbsp;xe-tpc<br>
+              <input type="checkbox" id="mlist23" name="mlist" value="xe-watertank">&nbsp;&nbsp;&nbsp;xe-watertank<br>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="sdate" style="padding-left:30px">Start Date</label><br>
+            <div style="text-align:center;">
+              <input id="sdate" type="date" name="StartDate" placeholder="YYYY-MM-DD" required>
+              <span id="sdate_hidden" style="color:red;display:none;">Please use the format YYYY-MM-DD</span>
+              <span id="valid_sdate_range" style="color:red;display:none;">Please select a date within the past year or less than ten years from today</span>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <label for="edate" style="padding-left:30px">End Date</label>
+            <button type="button" class="btn btn-sm" data-html="true" data-toggle="tooltip" data-placement="right" id="edate_ttip" title="" 
+            data-original-title="If you are unsure of the end date, estimate to the best of your ability. This can be changed later." 
+            style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
+            <br>
+            <div style="text-align:center;">
+              <input id="edate" type="date" name="expectedEnd" placeholder="YYYY-MM-DD" required>
+              <span id="edate_hidden" style="color:red;display:none;">Please use the format YYYY-MM-DD</span>
+              <span id="valid_edate_range" style="color:red;display:none;">Please select a date within the past year or less than ten years from today.</span>
+              <span id="valid_edate" style="color:red;display:none;">Please choose a date that comes after the start date</span>
+            </div>
+          </div>
+          <br>
+          <div style="text-align:center;">
+            <input type="submit" name="submitButton" value="Submit">
+          </div>
+        </form>
+      <%} else {%>
+        <h5>Sorry! You don't have the correct permissions to access this form!</h5>
+      <%}%>
     </div>
     <div class="col-sm-3"></div>
   </div>
