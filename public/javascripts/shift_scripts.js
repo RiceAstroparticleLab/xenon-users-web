@@ -158,11 +158,16 @@ function FillCalculator(tablediv, inputYear, myinstitute, peopleArr) {
       if (stats.hasOwnProperty(id)) { // make sure the institute actually has shifts
         let instituteYears = institute["years"];
         for (let j = 0; j < instituteYears.length; j++) {
-          if (instituteYears[j]['year'] === thisYear) {
-            var phdcount = instituteYears[j]['phdcount'];
-            totalPhd += phdcount;
-            stats[id].push(phdcount);
+          var phdcount = 0;
+          if (thisYear === 0) {
+            phdcount += instituteYears[j]['phdcount'];
+          } else {
+            if (instituteYears[j]['year'] === thisYear) {
+              phdcount = instituteYears[j]['phdcount'];
+            }
           }
+          totalPhd += phdcount;
+          stats[id].push(phdcount);
         }
       }
     }
