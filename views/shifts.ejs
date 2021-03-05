@@ -81,6 +81,7 @@
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu" style="background-color:#fff;letter-spacing:normal;">
+                                    <li><a href="#">Shifts All Time</a></li>
                                     <li><a href="#">2021</a></li>
                                     <li><a href="#">2020</a></li>
                                     <li><a href="#">2019</a></li>
@@ -508,12 +509,13 @@
             FillAggregates("#aggregate_table_body", $(this).text(), "<%= user.institute %>");
         });
         // page is now ready, initialize the calendar...
-        FillCalculator("#calc_table_body", '2021', "<%= user.institute %>", `<%- JSON.stringify(instInfo) %>`);
+        FillCalculator("#calc_table_body", '0', "<%= user.institute %>", `<%- JSON.stringify(instInfo) %>`);
         $('.dropdown-menu a').click(function(){
             $('#calc_the_year').text($(this).text());
             FillCalculator("#calc_table_body", $(this).text(), "<%= user.institute %>", `<%- JSON.stringify(instInfo) %>`);
         });
         InitializeCalendar("<%= user.lngs_ldap_uid %>", "<%= user.position %>", "<%= user.groups %>", "<%= user.institute %>");
+        $('#right').tooltip();
     });
 </script>
 </html>
