@@ -56,7 +56,7 @@ function PendingUserMail(req, mailing_lists, callback) {
     subject: 'New Member Request: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
     html: '<p>Dear Collaboration Board,</p>' + 
-      '<p>Please review the new membership request for ' + req.body.institute + ' that was made. The information is as follows: </p>' +
+      `<p>Please review the new membership request that was made by ${req.user.first_name} ${req.user.last_name}. The information is as follows: </p>` +
       '<p>a) Name: ' + req.body.FirstName + ' ' + req.body.LastName + '<br>' +
       'b) Email: ' + req.body.Email + '<br>' +
       'c) Position: ' + req.body.position + '<br>' +
@@ -68,7 +68,8 @@ function PendingUserMail(req, mailing_lists, callback) {
       '<p>Collaboration board: Please reply to all in this email thread if you would ' +
         'like a discussion in CB or more information on this member proposal. If you agree with the new member, do nothing. ' +
         'For instructions on how to use this system to submit your own members or other user management' +
-        ' tasks, please see https://xe1t-wiki.lngs.infn.it/doku.php?id=xenon:xenonnt:userlist_management.<br><br>' +
+        ' tasks, please see https://xe1t-wiki.lngs.infn.it/doku.php?id=xenon:xenonnt:userlist_management.' +
+        'To submit your own request, please visit https://xenonnt.lngs.infn.it/shifts/request_new_member.<br><br>' +
       'Our members admin (Ze) will approve or reject the new member after discussion or no request for information.</p>' + 
       '<p>Regards,<br>XENON User Management System</p>'
   };
@@ -329,21 +330,27 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
       page = 'institutes/' + split;
     }
 
-    try {
-      // make sure email alerting of new member can be sent before actually
-      // adding the new member to the database
-      UpdateUserMail(req, changes, previously, function(success){
-        if (success) {
-          collection.findOneAndUpdate({"_id": user_id}, {$set: idoc});
-          console.log(`success. Modified ${req.body.FirstName} ${req.body.LastName}`);
-          res.redirect(base + '/' + page);
-        } else {
-          console.log("error. Could not send email.");
-          res.redirect(base + '/' + page);
-        }
-      });
-    } catch (e) {
-      console.log(e);
+    if (changes !== "") {
+      try {
+        // make sure email alerting of new member can be sent before actually
+        // adding the new member to the database
+        UpdateUserMail(req, changes, previously, function(success){
+          if (success) {
+            collection.findOneAndUpdate({"_id": user_id}, {$set: idoc});
+            console.log(`success. Modified ${req.body.FirstName} ${req.body.LastName}`);
+            res.redirect(base + '/' + page);
+          } else {
+            console.log("error. Could not send email.");
+            res.redirect(base + '/' + page);
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      collection.findOneAndUpdate({"_id": user_id}, {$set: idoc});
+      console.log(`success. Modified ${req.body.FirstName} ${req.body.LastName}`);
+      res.redirect(base + '/' + page);
     }
   });
 });
