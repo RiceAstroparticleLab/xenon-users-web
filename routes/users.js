@@ -101,6 +101,7 @@ function ApproveUserMail(req, callback) {
       'd) Time: ' + req.body.time + '%<br>' +
       'e) Tasks: ' + req.body.tasks + '<br>' +
       'f) Start date: ' + req.body.start + '<br></p>' +
+      'f) End date: ' + req.body.end + '<br></p>' +
       '<p>XENON User Management</p>'
   };
   
@@ -419,6 +420,7 @@ router.post('/pendinguser', function(req, res) {
   console.log(lists);
   lists.push('xe-all');
   idoc['pending'] = true;
+  idoc['req_date'] = new Date();
   idoc['first_name'] = req.body.FirstName;
   idoc['last_name'] = req.body.LastName;
   idoc['email'] = req.body.Email;
@@ -436,6 +438,7 @@ router.post('/pendinguser', function(req, res) {
     lists.push('xe-junior');
   }
   idoc['mailing_lists'] = lists;
+  idoc['tasks'] = req.body.Tasks;
 
   mailing_lists += lists.join(", ")
 
@@ -461,7 +464,7 @@ router.post('/approve_req', function(req, res) {
   var collection = db.collection('users');
   var id = new ObjectId(req.body.objectId);
   collection
-  .findOneAndUpdate({'_id': id}, {$set: {"active": "true"}, $unset: {'pending': ""}})
+  .findOneAndUpdate({'_id': id}, {$set: {"active": "true"}, $unset: {'pending': "", 'req_date': ""}})
   .then(() => {
     ApproveUserMail(req, function(success) {
       if(success) {

@@ -87,6 +87,10 @@
                                         <div class="panel-body">
                                             <table>
                                                 <tr>
+                                                    <td style="width:150px"><strong>Date Request Was Made:</strong></td>
+                                                    <td><%=pending[i].req_date%></td>
+                                                </tr>
+                                                <tr>
                                                     <td style="width:150px"><strong>Institute:</strong></td>
                                                     <td><%=pending[i].institute%></td>
                                                 </tr>
@@ -110,6 +114,10 @@
                                                     <td><strong>Start Date:</strong></td>
                                                     <td><%= pending[i].start_date.toString().substring(4,15) %> </td>
                                                 </tr>
+                                                <tr>
+                                                    <td><strong>End Date:</strong></td>
+                                                    <td><%= pending[i].end_date.toString().substring(4,15) %> </td>
+                                                </tr>
                                             </table>
                                             <br>
                                             <form action="users/deny_req" method="post" style="display:inline-block">
@@ -128,6 +136,7 @@
                                                 <input id="time<%=i%>" name="time" type="hidden" value="<%= pending[i].percent_xenon %>">
                                                 <input id="tasks<%=i%>" name="tasks" type="hidden" value="<%= pending[i].tasks %>">
                                                 <input id="start<%=i%>" name="start" type="hidden" value="<%= pending[i].start_date %>">
+                                                <input id="end<%=i%>" name="end" type="hidden" value="<%= pending[i].end_date %>">
                                                 <a><button type="submit" class="btn btn-primary">Approve Request</button></a>
                                             </form>
                                         </div>
