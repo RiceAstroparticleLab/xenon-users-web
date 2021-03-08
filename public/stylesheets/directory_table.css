@@ -3,6 +3,10 @@
     border-width: 5px;
 }
 
+.modified td {
+    background-color:yellow;
+    border-width: 5px;
+}
 .even {
    background-color: #f5f5f5 !important;
 }

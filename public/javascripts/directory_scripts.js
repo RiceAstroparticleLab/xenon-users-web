@@ -41,6 +41,7 @@ function InitializeTable(tablediv) {
       { data: "percent_xenon", orderable: false },
       { data: "start_date", type: 'datetime', orderable: false }, 
       { data: "previous_time", defaultContent: '', orderable: false },
+      { data: "last_modified", defaultContent: ''},
       { title: '', orderable: false }
     ],
     columnDefs: [
@@ -53,6 +54,7 @@ function InitializeTable(tablediv) {
       { title: 'Time', targets: 6 },
       { title: 'Start Date', targets: 7 },
       { title: 'Previous Time Info', targets: 8 },
+      { visible: false, targets: 9 },
       { targets: -1,
         data: null,
         defaultContent: "<button type='button' class='btn-circle'>" + 
@@ -68,6 +70,13 @@ function InitializeTable(tablediv) {
         }
       }
     ],
+    createdRow: function(row, data, index) {
+      var d = new Date();
+      var oneMonthAgo = d.setMonth(d.getMonth() - 1);
+      if (new Date(data[9]) > oneMonthAgo) {
+        $(row).addClass('modified');
+      }
+    },
     // groups rows so that each group of members has a header row that has the 
     // name of the institute (like Ze's list)
     drawCallback: function(settings) {
