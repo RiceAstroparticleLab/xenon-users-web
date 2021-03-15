@@ -169,11 +169,11 @@ function CalcEstShifts(peopleArr) {
       console.log(stats);
     }
     var total = {}
-    const years = Object.keys(shifts);
+    const years = Object.keys(shiftStats);
     for (const year of years) {
-      const keys = Object.keys(shifts[year]);
+      const keys = Object.keys(shiftStats[year]);
       for (const institute of keys) {
-        var vals = shifts[year][institute];
+        var vals = shiftStats[year][institute];
         if (institute in total) {
           total[institute][0] += vals[0];
           total[institute][1] += vals[1];
