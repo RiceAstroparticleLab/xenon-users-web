@@ -74,7 +74,6 @@ function InitializeTable(tablediv) {
       var d = new Date();
       var oneMonthAgo = d.setMonth(d.getMonth() - 1);
       if (new Date(data['last_modified']) > oneMonthAgo) {
-        console.log(`In if.`)
         $(row).addClass('modified');
       }
     },

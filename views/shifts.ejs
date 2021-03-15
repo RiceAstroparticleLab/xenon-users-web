@@ -502,6 +502,7 @@
 </body>
 <script>
     $(document).ready(function() {
+        var stats = CalcEstShifts(`<%- JSON.stringify(instInfo) %>`);
         // initialize the table at current year
         FillAggregates("#aggregate_table_body", '2021', "<%= user.institute %>");
         $('.dropdown-menu a').click(function(){
@@ -514,13 +515,7 @@
             $('#calc_the_year').text($(this).text());
             FillCalculator("#calc_table_body", $(this).text(), "<%= user.institute %>", `<%- JSON.stringify(instInfo) %>`);
         });
-        var stats = FillCalculator();
-        {
-            2016: {
-                    institute: [shiftsComp, shiftsEst]
-                }
-        }
-        
+
         InitializeCalendar("<%= user.lngs_ldap_uid %>", "<%= user.position %>", "<%= user.groups %>", "<%= user.institute %>");
         $('#right').tooltip();
     });
