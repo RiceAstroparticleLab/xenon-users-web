@@ -98,11 +98,10 @@ function FillTable(tablediv, myinstitute) {
 // Calculates a stats object for filling the shift estimation
 function CalcEstShifts(peopleArr) {
   $.getJSON('shifts/total_shift_aggregates', function(shifts) {
-    var curYear = new Date().getFullYear();
     //  { 2016: { institute: [shiftsComp, shiftsEst] }  }
-    var shifts = {};
+    var shiftStats = {};
     var users = JSON.parse(peopleArr);
-    for (let yr = curYear; yr = 2016; yr--) {
+    for (let yr = new Date().getFullYear(); yr >= 2016; yr--) {
       // inner object has the following structure:
       // {instituteName: [shiftsCompleted, estimatedShifts]}
       var inner = {};
@@ -165,7 +164,9 @@ function CalcEstShifts(peopleArr) {
         let shiftsDone = stats[institute][0];
         inner[institute] = [shiftsDone, estimateShifts];
       }
-      shifts[yr] = inner;
+      shiftStats[yr] = inner;
+      console.log(inner);
+      console.log(stats);
     }
     var total = {}
     const years = Object.keys(shifts);
@@ -181,9 +182,9 @@ function CalcEstShifts(peopleArr) {
         }
       }
     }
-    shifts[0] = total;
-    console.log(shifts);
-    return shifts;
+    shiftStats[0] = total;
+    console.log(shiftStats);
+    return shiftStats;
   });
 }
 
