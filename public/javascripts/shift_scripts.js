@@ -160,7 +160,7 @@ function CalcEstShifts(peopleArr) {
       const keys = Object.keys(stats);
       for (const institute of keys) {
         let estimateShifts = totalShifts/totalPhd * stats[institute][1];
-        estimateShifts = estimateShifts.toFixed(2);
+        estimateShifts = parseInt(estimateShifts.toFixed(2));
         let shiftsDone = stats[institute][0];
         inner[institute] = [shiftsDone, estimateShifts];
       }
