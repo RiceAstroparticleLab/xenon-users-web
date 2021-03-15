@@ -97,95 +97,98 @@ function FillTable(tablediv, myinstitute) {
 
 // Calculates a stats object for filling the shift estimation
 function CalcEstShifts(peopleArr) {
-  $.getJSON('shifts/total_shift_aggregates', function(shifts) {
-    //  { 2016: { institute: [shiftsComp, shiftsEst] }  }
-    var shiftStats = {};
-    var users = JSON.parse(peopleArr);
-    for (let yr = new Date().getFullYear(); yr >= 2016; yr--) {
-      // inner object has the following structure:
-      // {instituteName: [shiftsCompleted, estimatedShifts]}
-      var inner = {};
-      // temp object has the following structure:
-      // {instituteName: [numShiftsForYr, numPhdOrHigherForYr]}
-      var stats = {};
-      var thisYear = yr;
-      var totalPhd = 0;
-      var totalShifts = 0;
-      var totalThisYear = 0;
-
-      // iterate through the shift data first
-      for (let i = 0; i < shifts.length; i++) {
-        let institute = shifts[i];
-        let id = institute['_id']
-        let instituteYears = institute["years"];
-        if (id !== "none") {
-          let numShifts = 0;
-          for (let j = 0; j < instituteYears.length; j++) {
-            if (instituteYears[j]['year'] === thisYear) {
-              numShifts = instituteYears[j]["count"];
-            }
-          }
-          totalThisYear += numShifts;
-          stats[id] = [numShifts]
-        } else {
-          // add empty shifts from this year to totalShifts
-          for (let j = 0; j < instituteYears.length; j++) {
-            if (instituteYears[j]['year'] === thisYear) {
-              totalShifts += instituteYears[j]["count"];
-            }
-          }
-        }
-      }
-
-      // add this years shifts to total
-      totalShifts += totalThisYear;
-
-      // iterate through the users array
-      for (let i = 0; i < users.length; i++) {
-        let institute  = users[i];
-        let id = institute['_id'];
-        if (stats.hasOwnProperty(id)) { // make sure the institute actually has shifts
+  p = new Promise(function(resolve, reject) {
+    $.getJSON('shifts/total_shift_aggregates', function(shifts) {
+      //  { 2016: { institute: [shiftsComp, shiftsEst] }  }
+      var shiftStats = {};
+      var users = JSON.parse(peopleArr);
+      for (let yr = new Date().getFullYear(); yr >= 2016; yr--) {
+        // inner object has the following structure:
+        // {instituteName: [shiftsCompleted, estimatedShifts]}
+        var inner = {};
+        // temp object has the following structure:
+        // {instituteName: [numShiftsForYr, numPhdOrHigherForYr]}
+        var stats = {};
+        var thisYear = yr;
+        var totalPhd = 0;
+        var totalShifts = 0;
+        var totalThisYear = 0;
+  
+        // iterate through the shift data first
+        for (let i = 0; i < shifts.length; i++) {
+          let institute = shifts[i];
+          let id = institute['_id']
           let instituteYears = institute["years"];
-          for (let j = 0; j < instituteYears.length; j++) {
-            var phdcount = 0;
-            if (instituteYears[j]['year'] === thisYear) {
-              phdcount = instituteYears[j]['phdcount'];
+          if (id !== "none") {
+            let numShifts = 0;
+            for (let j = 0; j < instituteYears.length; j++) {
+              if (instituteYears[j]['year'] === thisYear) {
+                numShifts = instituteYears[j]["count"];
+              }
             }
-            totalPhd += phdcount;
-            stats[id].push(phdcount);
+            totalThisYear += numShifts;
+            stats[id] = [numShifts]
+          } else {
+            // add empty shifts from this year to totalShifts
+            for (let j = 0; j < instituteYears.length; j++) {
+              if (instituteYears[j]['year'] === thisYear) {
+                totalShifts += instituteYears[j]["count"];
+              }
+            }
+          }
+        }
+  
+        // add this years shifts to total
+        totalShifts += totalThisYear;
+  
+        // iterate through the users array
+        for (let i = 0; i < users.length; i++) {
+          let institute  = users[i];
+          let id = institute['_id'];
+          if (stats.hasOwnProperty(id)) { // make sure the institute actually has shifts
+            let instituteYears = institute["years"];
+            for (let j = 0; j < instituteYears.length; j++) {
+              var phdcount = 0;
+              if (instituteYears[j]['year'] === thisYear) {
+                phdcount = instituteYears[j]['phdcount'];
+              }
+              totalPhd += phdcount;
+              stats[id].push(phdcount);
+            }
+          }
+        }
+  
+        const keys = Object.keys(stats);
+        for (const institute of keys) {
+          let estimateShifts = totalShifts/totalPhd * stats[institute][1];
+          estimateShifts = parseInt(estimateShifts.toFixed(2));
+          let shiftsDone = stats[institute][0];
+          inner[institute] = [shiftsDone, estimateShifts];
+        }
+        shiftStats[yr] = inner;
+        console.log(inner);
+        console.log(stats);
+      }
+      var total = {}
+      const years = Object.keys(shiftStats);
+      for (const year of years) {
+        const keys = Object.keys(shiftStats[year]);
+        for (const institute of keys) {
+          var vals = shiftStats[year][institute];
+          if (institute in total) {
+            total[institute][0] += vals[0];
+            total[institute][1] += vals[1];
+          } else {
+            total[institute] = [vals[0], vals[1]];
           }
         }
       }
-
-      const keys = Object.keys(stats);
-      for (const institute of keys) {
-        let estimateShifts = totalShifts/totalPhd * stats[institute][1];
-        estimateShifts = parseInt(estimateShifts.toFixed(2));
-        let shiftsDone = stats[institute][0];
-        inner[institute] = [shiftsDone, estimateShifts];
-      }
-      shiftStats[yr] = inner;
-      console.log(inner);
-      console.log(stats);
-    }
-    var total = {}
-    const years = Object.keys(shiftStats);
-    for (const year of years) {
-      const keys = Object.keys(shiftStats[year]);
-      for (const institute of keys) {
-        var vals = shiftStats[year][institute];
-        if (institute in total) {
-          total[institute][0] += vals[0];
-          total[institute][1] += vals[1];
-        } else {
-          total[institute] = [vals[0], vals[1]];
-        }
-      }
-    }
-    shiftStats[0] = total;
-    console.log(shiftStats);
-    return shiftStats;
+      shiftStats[0] = total;
+      console.log(shiftStats);
+      resolve(shiftStats);
+    });
   });
+  return p;
 }
 
 /* 

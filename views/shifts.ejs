@@ -501,8 +501,9 @@
 
 </body>
 <script>
-    $(document).ready(function() {
-        var stats = CalcEstShifts(`<%- JSON.stringify(instInfo) %>`);
+    $(document).ready(async function() {
+        const stats = await CalcEstShifts(`<%- JSON.stringify(instInfo) %>`);
+        console.log(stats);
         // initialize the table at current year
         FillAggregates("#aggregate_table_body", '2021', "<%= user.institute %>");
         $('.dropdown-menu a').click(function(){
@@ -510,10 +511,10 @@
             FillAggregates("#aggregate_table_body", $(this).text(), "<%= user.institute %>");
         });
         // page is now ready, initialize the calendar...
-        FillCalculator("#calc_table_body", '0', "<%= user.institute %>", `<%- JSON.stringify(stats) %>`);
+        FillCalculator("#calc_table_body", '0', "<%= user.institute %>", JSON.stringify(stats));
         $('.dropdown-menu a').click(function(){
             $('#calc_the_year').text($(this).text());
-            FillCalculator("#calc_table_body", $(this).text(), "<%= user.institute %>", `<%- JSON.stringify(stats) %>`);
+            FillCalculator("#calc_table_body", $(this).text(), "<%= user.institute %>", JSON.stringify(stats));
         });
 
         InitializeCalendar("<%= user.lngs_ldap_uid %>", "<%= user.position %>", "<%= user.groups %>", "<%= user.institute %>");
