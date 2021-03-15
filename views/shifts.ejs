@@ -514,6 +514,13 @@
             $('#calc_the_year').text($(this).text());
             FillCalculator("#calc_table_body", $(this).text(), "<%= user.institute %>", `<%- JSON.stringify(instInfo) %>`);
         });
+        var stats = FillCalculator();
+        {
+            2016: {
+                    institute: [shiftsComp, shiftsEst]
+                }
+        }
+        
         InitializeCalendar("<%= user.lngs_ldap_uid %>", "<%= user.position %>", "<%= user.groups %>", "<%= user.institute %>");
         $('#right').tooltip();
     });

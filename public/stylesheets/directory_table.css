@@ -1,10 +1,10 @@
 .group td{
-    background-color: #cfe2f3;
+    background-color: #dbe5f1;
     border-width: 5px;
 }
 
 .modified td {
-    background-color:yellow;
+    background-color:rgb(255, 229, 124);
     border-width: 5px;
 }
 .even {
