@@ -198,6 +198,8 @@ The number of shifts used are calculated using the following equation:
 function FillCalculator(tablediv, inputYear, myinstitute, stats) {
   console.log(inputYear);
   var thisYear = parseInt(inputYear);
+  var totalThisYear = 0;
+  var totalShifts = 0;
 
   var html = '';
   // iterate through the stats object
@@ -205,6 +207,8 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
   for (const institute of keys) {
     let estimateShifts = stats[institute][1];
     let shiftsDone = stats[institute][0];
+    totalThisYear += shiftsDone;
+    totalShifts += estimateShifts;
     html += '<tr';
     if (institute.includes(myinstitute)) {
       html += ' style="background-color:#e5e5ea;"';
