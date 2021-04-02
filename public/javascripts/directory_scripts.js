@@ -685,21 +685,24 @@ function ValidateForm(elem, list) {
     console.log(oneyear)
     console.log(tenyears)
     // check that the dates are reasonable
-    if (start_date < oneyear || start_date > tenyears) {
-      valid = false;
-      $('#valid_sdate_range').show();
-    } else {
-      $('#valid_sdate_range').hide();
-    }
+    // if (start_date < oneyear || start_date > tenyears) {
+    //   console.log("Start date range invalid");
+    //   valid = false;
+    //   $('#valid_sdate_range').show();
+    // } else {
+    //   $('#valid_sdate_range').hide();
+    // }
 
-    if (end_date < oneyear || end_date > tenyears) {
-      valid = false;
-      $('#valid_edate_range').show();
-    } else {
-      $('#valid_edate_range').hide();
-    }
+    // if (end_date < oneyear || end_date > tenyears) {
+    //   console.log("End date range invalid");
+    //   valid = false;
+    //   $('#valid_edate_range').show();
+    // } else {
+    //   $('#valid_edate_range').hide();
+    // }
     // check that the end date comes after start date
     if (end_date < start_date) {
+      console.log("End date comes before start date");
       valid = false;
       $('#valid_edate').show();
     } else {
@@ -708,12 +711,14 @@ function ValidateForm(elem, list) {
 
     // checks that first and last name fields only use extended ASCII
     if (!isASCII('#fname')) {
+      console.log("First name not ascii");
       valid = false;
       $('#fname_hidden').show();
     } else {
       $('#fname_hidden').hide();
     }
     if (!isASCII('#lname')) {
+      console.log("Last name not ascii");
       valid = false;
       $('#lname_hidden').show();
     } else {

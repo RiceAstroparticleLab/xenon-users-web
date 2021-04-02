@@ -148,25 +148,24 @@ function CalcEstShifts(peopleArr) {
           if (stats.hasOwnProperty(id)) { // make sure the institute actually has shifts
             let instituteYears = institute["years"];
             for (let j = 0; j < instituteYears.length; j++) {
-              var phdcount = 0;
               if (instituteYears[j]['year'] === thisYear) {
-                phdcount = instituteYears[j]['phdcount'];
+                var phdcount = instituteYears[j]['phdcount'];
+                totalPhd += phdcount;
+                stats[id].push(phdcount);
               }
-              totalPhd += phdcount;
-              stats[id].push(phdcount);
             }
           }
         }
   
         const keys = Object.keys(stats);
+        console.log(`${yr} has ${totalShifts} total shifts, ${totalPhd} total Phd`);
         for (const institute of keys) {
-          let estimateShifts = totalShifts/totalPhd * stats[institute][1];
-          estimateShifts = parseInt(estimateShifts.toFixed(2));
+          let estimateShifts = (totalShifts/totalPhd * stats[institute][1]) || 0;
+          estimateShifts = parseFloat(estimateShifts.toFixed(2));
           let shiftsDone = stats[institute][0];
           inner[institute] = [shiftsDone, estimateShifts];
         }
         shiftStats[yr] = inner;
-        console.log(inner);
         console.log(stats);
       }
       var total = {}
@@ -200,8 +199,14 @@ The number of shifts used are calculated using the following equation:
  (total # shifts) / (num phd or higher at institute) * (num phd+ people across all institutes) 
 */
 function FillCalculator(tablediv, inputYear, myinstitute, stats) {
-  console.log(inputYear);
-  var thisYear = parseInt(inputYear);
+  var thisYear;
+  if (inputYear === "Shifts All Time") {
+    thisYear = 0;
+  } else {
+    thisYear = parseInt(inputYear);
+  }
+  stats = JSON.parse(stats);
+  console.log(stats);
   var totalThisYear = 0;
   var totalShifts = 0;
 
@@ -209,8 +214,8 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
   // iterate through the stats object
   const keys = Object.keys(stats[thisYear]);
   for (const institute of keys) {
-    let estimateShifts = stats[institute][1];
-    let shiftsDone = stats[institute][0];
+    let estimateShifts = stats[thisYear][institute][1];
+    let shiftsDone = stats[thisYear][institute][0];
     totalThisYear += shiftsDone;
     totalShifts += estimateShifts;
     html += '<tr';
@@ -222,7 +227,7 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
     // set first column
     html += `<td>${shiftsDone}</td>`;
     // set second column
-    html += `<td>${estimateShifts}</td>`;
+    html += `<td>${estimateShifts.toFixed(2)}</td>`;
     // set third column
     let color = "";
     let diff = estimateShifts - shiftsDone;
@@ -238,7 +243,7 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
   html += "<tr style='border-bottom:1px solid black'><td colspan='100%'>" + 
           "</td></tr>";
   html += `<tr><td></td><td><strong>${totalThisYear}</strong></td>` +
-          `<td><strong>${totalShifts}</strong></td></tr>`;
+          `<td><strong>${totalShifts.toFixed(2)}</strong></td></tr>`;
   $(tablediv).html(html);
 }
 

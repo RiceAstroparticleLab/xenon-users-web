@@ -104,6 +104,7 @@ router.get("/total_shift_aggregates", ensureAuthenticated, function(req, res) {
   var collection = db.collection('shifts');
 
   collection.aggregate([
+    {"$match": {"institute": {"$ne": "none"}}},
     {$group: {
       "_id": { "institute": "$institute", "yr": {"$year": "$start"}}, 
       "count": {"$sum": 1}
@@ -126,6 +127,7 @@ router.get("/get_lngsids", ensureAuthenticated, function(req, res) {
     });
 });
 
+c
 // not currently in use
 router.get("/get_rules", ensureAuthenticated, function(req,res) {
   var db = req.xenonnt_db;

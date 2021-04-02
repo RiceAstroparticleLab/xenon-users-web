@@ -52,6 +52,7 @@ function PendingUserMail(req, mailing_lists, callback) {
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
     to: process.env.CB_EMAIL,
+    replyTo: req.user.email,
     cc: [process.env.ZE_EMAIL, process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
     subject: 'New Member Request: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
@@ -60,15 +61,16 @@ function PendingUserMail(req, mailing_lists, callback) {
       '<p>a) Name: ' + req.body.FirstName + ' ' + req.body.LastName + '<br>' +
       'b) Email: ' + req.body.Email + '<br>' +
       'c) Position: ' + req.body.position + '<br>' +
-      'd) Time: ' + req.body.Time + '%<br>' +
-      'e) Tasks: ' + req.body.Tasks + '<br>' +
-      'f) Mailing lists: ' + mailing_lists + '<br>' +
-      'g) Start date: ' + req.body.StartDate + '<br>' +
-      'h) End date: ' + req.body.expectedEnd + '</p>' +
+      'd) Institute: ' + req.body.institute + '<br>' +
+      'e) Time: ' + req.body.Time + '%<br>' +
+      'f) Tasks: ' + req.body.Tasks + '<br>' +
+      'g) Mailing lists: ' + mailing_lists + '<br>' +
+      'h) Start date: ' + req.body.StartDate + '<br>' +
+      'i) End date: ' + req.body.expectedEnd + '</p>' +
       '<p>Collaboration board: Please reply to all in this email thread if you would ' +
         'like a discussion in CB or more information on this member proposal. If you agree with the new member, do nothing. ' +
         'For instructions on how to use this system to submit your own members or other user management' +
-        ' tasks, please see https://xe1t-wiki.lngs.infn.it/doku.php?id=xenon:xenonnt:userlist_management.' +
+        ' tasks, please see https://xe1t-wiki.lngs.infn.it/doku.php?id=xenon:xenonnt:userlist_management. ' +
         'To submit your own request, please visit https://xenonnt.lngs.infn.it/shifts/request_new_member.<br><br>' +
       'Our members admin (Ze) will approve or reject the new member after discussion or no request for information.</p>' + 
       '<p>Regards,<br>XENON User Management System</p>'
@@ -183,9 +185,9 @@ function LeaveCollaborationMail(req, callback) {
       `b) Email: ${req.body.email}<br>` +
       `c) Position: ${req.body.position}<br>` +
       `d) Institute: ${req.body.institute}<br>` +
-      `d) Time: ${req.body.time}%<br>` +
-      `g) Start date: ${req.body.sdate}<br>` +
-      `h) End date: ${req.body.edate}</p>` +
+      `e) Time: ${req.body.time}%<br>` +
+      `f) Start date: ${req.body.sdate}<br>` +
+      `g) End date: ${req.body.edate}</p>` +
       '<p>Regards,<br>XENON User Management System</p>'
   };
   
