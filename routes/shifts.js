@@ -127,7 +127,6 @@ router.get("/get_lngsids", ensureAuthenticated, function(req, res) {
     });
 });
 
-c
 // not currently in use
 router.get("/get_rules", ensureAuthenticated, function(req,res) {
   var db = req.xenonnt_db;
