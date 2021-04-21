@@ -163,7 +163,7 @@ function CalcEstShifts(peopleArr) {
           let estimateShifts = (totalShifts/totalPhd * stats[institute][1]) || 0;
           estimateShifts = parseFloat(estimateShifts.toFixed(2));
           let shiftsDone = stats[institute][0];
-          inner[institute] = [shiftsDone, estimateShifts];
+          inner[institute] = [shiftsDone, estimateShifts, totalPhd];
         }
         shiftStats[yr] = inner;
         console.log(stats);
@@ -177,8 +177,9 @@ function CalcEstShifts(peopleArr) {
           if (institute in total) {
             total[institute][0] += vals[0];
             total[institute][1] += vals[1];
+            total[institute][2] += vals[2];
           } else {
-            total[institute] = [vals[0], vals[1]];
+            total[institute] = [vals[0], vals[1], vals[2]];
           }
         }
       }
@@ -216,6 +217,7 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
   for (const institute of keys) {
     let estimateShifts = stats[thisYear][institute][1];
     let shiftsDone = stats[thisYear][institute][0];
+    let phdHeadCount = stats[thisYear][institute][2];
     totalThisYear += shiftsDone;
     totalShifts += estimateShifts;
     html += '<tr';
@@ -227,8 +229,10 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
     // set first column
     html += `<td>${shiftsDone}</td>`;
     // set second column
-    html += `<td>${estimateShifts.toFixed(2)}</td>`;
+    html += `<td>${phdHeadCount}</td>`;
     // set third column
+    html += `<td>${estimateShifts.toFixed(2)}</td>`;
+    // set fourth column
     let color = "";
     let diff = estimateShifts - shiftsDone;
     if (diff > 0) {

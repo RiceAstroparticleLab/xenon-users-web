@@ -13,43 +13,9 @@ function ensureAuthenticated(req, res, next) {
 // GET home page.
 router.get('/', ensureAuthenticated, function(req, res) {
   var db = req.xenonnt_db;
-  var collection = db.collection('users');
+  var collection = db.collection('shift_calcs');
 
-  collection.aggregate([
-    {$match: {$and: [{start_date: {$exists: true, $ne: null}}, {institute: {$ne: "Other"}}, {position: {$nin: ['Engineer', 'Technician']}}]}},
-    {$project: {
-      "_id": 0, 
-      "institute": 1,
-      "first_name": 1,
-      "position": 1,
-      "start_date": 1,
-      "start": 
-      {
-        $cond: { if: { $and: [{$eq: [{$month: "$start_date"}, 1]}, {$eq: [{$dayOfMonth: "$start_date"}, 1]}] }, then: {$year: "$start_date"}, else: {$sum: [{$year: "$start_date"}, 1]} }
-      },
-      "end": {$sum: [{$year: { $ifNull: [ "$end_date", new Date() ] }}, 1]},
-    }},
-    {$project: {
-      "_id": 0, 
-      "institute": 1,
-      "first_name": 1,
-      "position":
-      {
-        $cond: {if: {$in: ["$position", ["PI", "Non-permanent Sci.", "Permanent Scientist", "PhD Student", "Thesis"]]}, then: 1, else: 0}
-      },
-      "years": {$range: ["$start", "$end"]}
-    }},
-    { $unwind : { path: "$years", preserveNullAndEmptyArrays: true }},
-    {$group: {
-      "_id": { "institute": "$institute", "yr": "$years"},
-      "count": {"$sum": 1},
-      "cfcount": {"$sum": "$position"}
-    }},
-    {$group: {
-      "_id": "$_id.institute", "total": {"$sum": "$count"}, "totalphd": {"$sum": "$cfcount"},
-      "years": {$push: {"year": "$_id.yr", "count": "$count", "phdcount": "$cfcount"}}
-    }}
-  ]).toArray(function(e, data) {
+  collection.find().toArray(function(e, data) {
     res.render('shifts', 
       { page: 'Shift Management', 
         menuId: 'home', 
