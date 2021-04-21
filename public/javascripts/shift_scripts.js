@@ -163,7 +163,7 @@ function CalcEstShifts(peopleArr) {
           let estimateShifts = (totalShifts/totalPhd * stats[institute][1]) || 0;
           estimateShifts = parseFloat(estimateShifts.toFixed(2));
           let shiftsDone = stats[institute][0];
-          inner[institute] = [shiftsDone, estimateShifts, stats[institute][1]];
+          inner[institute] = [shiftsDone, estimateShifts, (stats[institute][1] || 0)];
         }
         shiftStats[yr] = inner;
         console.log(stats);
@@ -247,7 +247,7 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
   html += "<tr style='border-bottom:1px solid black'><td colspan='100%'>" + 
           "</td></tr>";
   html += `<tr><td></td><td><strong>${totalThisYear}</strong></td>` +
-          `<td><strong>${totalShifts.toFixed(2)}</strong></td></tr>`;
+          `<td></td><td><strong>${totalShifts.toFixed(2)}</strong></td></tr>`;
   $(tablediv).html(html);
 }
 
