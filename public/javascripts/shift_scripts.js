@@ -163,7 +163,7 @@ function CalcEstShifts(peopleArr) {
           let estimateShifts = (totalShifts/totalPhd * stats[institute][1]) || 0;
           estimateShifts = parseFloat(estimateShifts.toFixed(2));
           let shiftsDone = stats[institute][0];
-          inner[institute] = [shiftsDone, estimateShifts, totalPhd];
+          inner[institute] = [shiftsDone, estimateShifts, stats[institute][1]];
         }
         shiftStats[yr] = inner;
         console.log(stats);
