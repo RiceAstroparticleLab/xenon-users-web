@@ -322,6 +322,10 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
     }
     if (req.body.StartDate != "" && req.body.StartDate != null) {
       idoc['start_date'] = new Date(`${req.body.StartDate}`);
+      if (new Date(`${req.body.StartDate}`) != new Date(previous_doc['start_date'])) {
+        previously += 'Start Date: ' + previous_doc['start_date'] + '<br>';
+        changes += 'Start Date: ' + idoc['start_date'] + '<br>';
+      }
     }
     if (req.body.EndDate != "" && req.body.EndDate != null) {
       idoc['end_date'] = new Date(req.body.EndDate);
