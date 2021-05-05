@@ -66,7 +66,8 @@ function PendingUserMail(req, mailing_lists, callback) {
       'f) Tasks: ' + req.body.Tasks + '<br>' +
       'g) Mailing lists: ' + mailing_lists + '<br>' +
       'h) Start date: ' + req.body.StartDate + '<br>' +
-      'i) End date: ' + req.body.expectedEnd + '</p>' +
+      'i) End date: ' + req.body.expectedEnd + '<br>' +
+      'j) Comments: ' + req.body.comments + '</p>' +
       '<p>Collaboration board: Please reply to all in this email thread if you would ' +
         'like a discussion in CB or more information on this member proposal. If you agree with the new member, do nothing. ' +
         'For instructions on how to use this system to submit your own members or other user management' +
