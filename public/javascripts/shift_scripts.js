@@ -234,7 +234,7 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
     // set third column
     html += `<td>${estimateShifts.toFixed(2)}</td>`;
     // set fourth column
-    html += `<td>${percentageDone.toFixed(2) * 100}%</td>`;
+    html += `<td>${Math.round(percentageDone * 100)}%</td>`;
     // set fifth column
     let color = "";
     let diff = estimateShifts - shiftsDone;

@@ -142,6 +142,36 @@ router.get("/get_rules", ensureAuthenticated, function(req,res) {
   });
 });
 
+// generates data as of Nov 1 of the current year and adds it to 
+// the mongodb collection shift_calcs
+router.post('/add_to_shift_calcs', ensureAuthenticated, function(req, res) {
+  var db = req.xenonnt_db;
+  var collection = db.collection('shift_calcs');
+  var d = new Date();
+  var year = d.getFullYear();
+  collection.aggregate([
+    {"$match": {
+      "position":  {$in: ["PI", "Non-permanent Sci.", "Permanent Scientist", "PhD Student", "Thesis Student"]},
+      "start_date": {$lte: new Date(`${year}-11-01`)},
+      $or: [{"end_date": {$exists: false}}, {"end_date": {$gt: new Date(`${year}-11-01`)}}]
+    }},
+    {"$group": {
+      "_id": "$institute",
+      "count": {"$sum": 1}
+    }}
+  ]).toArray(function(err, data) {
+    // iterate through array and add that new information to the shift_calcs collection
+    for (let i = 0; i < data.length; i++) {
+      inst = data[i];
+      collection.findOneAndUpdate(
+        {"_id": inst['_id']}, 
+        {"$push": {"years": {"year": year, "phdcount": inst['count']}}}
+      )
+    }
+    return res.sendStatus(200); 
+  });
+});
+
 router.post('/add_shifts', ensureAuthenticated, function(req, res){
   var idoc;
   var db = req.xenonnt_db;
