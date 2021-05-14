@@ -23,7 +23,7 @@ router.post("/marc_temp_table", ensureAuthenticated, function(req, res){
   collection.find(
     {"position": {$in: ["PI", "Non-permanent Sci.", "Permanent Scientist", "PhD Student", "Staff", "Postdoc", "Master student", "PhD student", "Thesis Student", "Phd student", "Phd Student", "Thesis student"]}},
     {"start_date": {$lte: new Date("2020-11-01")}},
-    {"end_date": {$or: [{$exists: false},{$gt: new Date("2016-11-01")}]}},
+    {"end_date": {$or: [{$exists: false},{$gt: new Date("2015-11-01")}]}},
     {"sort": "institute"}
   ).toArray(function(err, result) {
     res.send(JSON.stringify({"data": result}));
