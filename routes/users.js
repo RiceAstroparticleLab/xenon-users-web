@@ -19,7 +19,7 @@ function NewUserMail(req, mailing_lists, callback) {
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
     to: process.env.CB_EMAIL,
-    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
+    cc: [process.env.CHRIS_EMAIL],
     subject: 'New Member Confirmation: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
     html: '<p>Dear Collaboration Board,</p>' + 
@@ -53,7 +53,7 @@ function PendingUserMail(req, mailing_lists, callback) {
     from: process.env.NOTIFS_ACCOUNT,
     to: process.env.CB_EMAIL,
     replyTo: req.user.email,
-    cc: [process.env.ZE_EMAIL, process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
+    cc: [process.env.ZE_EMAIL, process.env.CHRIS_EMAIL],
     subject: 'New Member Request: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
     html: '<p>Dear Collaboration Board,</p>' + 
@@ -93,7 +93,7 @@ function ApproveUserMail(req, callback) {
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
     to: process.env.ADMIN_EMAIL,
-    cc: [process.env.CB_EMAIL, process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
+    cc: [process.env.CB_EMAIL, process.env.CHRIS_EMAIL],
     subject: 'Request Approved: ' + req.body.fName + ' ' + 
       req.body.lName,
     html:
@@ -124,7 +124,7 @@ function DenyUserMail(req, callback) {
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
     to: process.env.CB_EMAIL,
-    cc: [process.env.ADMIN_EMAIL, process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
+    cc: [process.env.ADMIN_EMAIL, process.env.CHRIS_EMAIL],
     subject: 'Request Denied: ' + req.body.fName + ' ' + 
       req.body.lName,
     html:
@@ -150,7 +150,7 @@ function UpdateUserMail(req, changes, previously, callback) {
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
     to: process.env.CB_EMAIL,
-    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
+    cc: [process.env.CHRIS_EMAIL],
     subject: 'User Information Updated: ' + req.body.FirstName + ' ' + 
       req.body.LastName,
     html: '<p>Dear all,</p>' + 
@@ -177,8 +177,8 @@ function LeaveCollaborationMail(req, callback) {
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
     to: process.env.CB_EMAIL,
-    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
-    subject: `${req.body.name} left the collaboration.`,
+    cc: [process.env.CHRIS_EMAIL],
+    subject: `${req.body.name} is leaving the collaboration.`,
     html: '<p>Dear all,</p>' + 
       `<p>${req.user.first_name} ${req.user.last_name} is removing ${req.body.name}. ` + 
       'Please review the following information:</p>' +
@@ -534,7 +534,7 @@ function LinkLNGSMail(req, callback) {
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
     to: req.body.email,
-    cc: [process.env.CHRIS_EMAIL, process.env.YVETTE_EMAIL],
+    cc: [process.env.CHRIS_EMAIL],
     subject: `You have successfully linked your LNGS account.`,
     html:
       `<p>Your LNGS account was succesfully linked on the Shift Management website. You ` +
