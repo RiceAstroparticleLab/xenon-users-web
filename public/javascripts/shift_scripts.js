@@ -102,7 +102,7 @@ function CalcEstShifts(peopleArr) {
       //  { 2016: { institute: [shiftsComp, shiftsEst] }  }
       var shiftStats = {};
       var users = JSON.parse(peopleArr);
-      for (let yr = new Date().getFullYear() - 1; yr >= 2016; yr--) {
+      for (let yr = new Date().getFullYear() - 1; yr >= 2015; yr--) {
         // inner object has the following structure:
         // {instituteName: [shiftsCompleted, estimatedShifts]}
         var inner = {};

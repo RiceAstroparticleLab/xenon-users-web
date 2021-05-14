@@ -82,7 +82,7 @@
                                 </button>
                                 <ul class="dropdown-menu" style="background-color:#fff;letter-spacing:normal;">
                                     <li><a href="#">Shifts All Time</a></li>
-                                    <% for (let yr = new Date().getFullYear(); yr >= 2017; yr--) {%>
+                                    <% for (let yr = new Date().getFullYear(); yr >= 2016; yr--) {%>
                                         <li><a href="#"><%= yr %></a></li>
                                     <%}%>
                                 </ul>
@@ -97,7 +97,7 @@
                             completed shifts stored in the data base for the selected year." 
                             style="border-radius:25px;border:transparent;padding:0px 5px;"><i class="fas fa-question"></i></button>
                         </th>
-                        <th>Shift Deficit Percentage</th>
+                        <th>Shifts Completed</th>
                         <th>Shift Deficit</th>
                     </thead>
                     <tbody id="calc_table_body"></tbody>
