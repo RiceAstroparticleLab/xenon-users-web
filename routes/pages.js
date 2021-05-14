@@ -10,6 +10,28 @@ function ensureAuthenticated(req, res, next) {
   return res.redirect(base + '/auth/login');
 }
 
+/************************* THIS IS NOT PERMANENT ****************************/
+
+ // marc temp table stuff
+ router.get('/temp_table', ensureAuthenticated, function(req, res) {
+  res.render('temptable', {page: 'Calc Data Tables', title: 'Calc Data Tables', menuId: 'home', user: req.user});
+});
+
+router.post("/marc_temp_table", ensureAuthenticated, function(req, res){
+  var db = req.xenonnt_db;
+  var collection = db.collection('users');
+  collection.find(
+    {"position": {$in: ["PI", "Non-permanent Sci.", "Permanent Scientist", "PhD Student", "Staff", "Postdoc", "Master student", "PhD student", "Thesis Student", "Phd student", "Phd Student", "Thesis student"]}},
+    {"start_date": {$lte: new Date("2020-11-01")}},
+    {"end_date": {$or: [{$exists: false},{$gt: new Date("2016-11-01")}]}},
+    {"sort": "institute"}
+  ).toArray(function(err, result) {
+    res.send(JSON.stringify({"data": result}));
+  });
+});
+
+/*****************************************************************************/
+
 // GET home page.
 router.get('/', ensureAuthenticated, function(req, res) {
   var db = req.xenonnt_db;
