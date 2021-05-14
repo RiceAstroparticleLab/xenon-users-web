@@ -122,7 +122,7 @@ function CalcEstShifts(peopleArr) {
           if (id !== "none") {
             let numShifts = 0;
             for (let j = 0; j < instituteYears.length; j++) {
-              if (instituteYears[j]['year'] === thisYear) {
+              if (instituteYears[j]['year'] === thisYear + 1) {
                 numShifts = instituteYears[j]["count"];
               }
             }
@@ -131,7 +131,7 @@ function CalcEstShifts(peopleArr) {
           } else {
             // add empty shifts from this year to totalShifts
             for (let j = 0; j < instituteYears.length; j++) {
-              if (instituteYears[j]['year'] === thisYear) {
+              if (instituteYears[j]['year'] === thisYear + 1) {
                 totalShifts += instituteYears[j]["count"];
               }
             }
@@ -158,14 +158,14 @@ function CalcEstShifts(peopleArr) {
         }
   
         const keys = Object.keys(stats);
-        console.log(`${yr} has ${totalShifts} total shifts, ${totalPhd} total Phd`);
+        console.log(`${yr + 1} has ${totalShifts} total shifts, ${totalPhd} total Phd`);
         for (const institute of keys) {
           let estimateShifts = (totalShifts/totalPhd * stats[institute][1]) || 0;
           estimateShifts = parseFloat(estimateShifts.toFixed(2));
           let shiftsDone = stats[institute][0];
           inner[institute] = [shiftsDone, estimateShifts, (stats[institute][1] || 0)];
         }
-        shiftStats[yr] = inner;
+        shiftStats[yr + 1] = inner;
         console.log(stats);
       }
       var total = {}
@@ -217,6 +217,7 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
   for (const institute of keys) {
     let estimateShifts = stats[thisYear][institute][1];
     let shiftsDone = stats[thisYear][institute][0];
+    let percentageDone = shiftsDone/estimateShifts;
     let phdHeadCount = stats[thisYear][institute][2];
     totalThisYear += shiftsDone;
     totalShifts += estimateShifts;
@@ -233,6 +234,8 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
     // set third column
     html += `<td>${estimateShifts.toFixed(2)}</td>`;
     // set fourth column
+    html += `<td>${percentageDone.toFixed(2) * 100}%</td>`;
+    // set fifth column
     let color = "";
     let diff = estimateShifts - shiftsDone;
     if (diff > 0) {
