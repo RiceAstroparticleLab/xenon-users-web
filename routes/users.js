@@ -155,7 +155,7 @@ function UpdateUserMail(req, changes, previously, callback) {
       req.body.LastName,
     html: '<p>Dear all,</p>' + 
       "<p>" + req.body.FirstName + ' ' + req.body.LastName +"'s information has been updated by " + req.user.first_name + ' ' +
-        req.user.last_name + ' at ' + req.body.institute + '. Please review the following changes:</p>' +
+        req.user.last_name + '. Please review the following changes:</p>' +
       '<p>' + changes + '</p>' +
       `<p>Previously, the information was as follows: </p><p>${previously}</p>` +
       '<p>Regards,<br>XENON User Management System</p>'
