@@ -24,7 +24,7 @@ function NewUserMail(req, mailing_lists, callback) {
       req.body.LastName,
     html: '<p>Dear Collaboration Board,</p>' + 
       '<p>A new member has been added by ' + req.user.first_name + ' ' +
-        req.user.last_name + ' at ' + req.body.institute + '</p>' +
+        req.user.last_name + '</p>' +
       '<p>a) Name: ' + req.body.FirstName + ' ' + req.body.LastName + '<br>' +
       'b) email: ' + req.body.Email + '<br>' +
       'c) Position: ' + req.body.position + '<br>' +
@@ -103,8 +103,8 @@ function ApproveUserMail(req, callback) {
       'c) Position: ' + req.body.position + '<br>' +
       'd) Time: ' + req.body.time + '%<br>' +
       'e) Tasks: ' + req.body.tasks + '<br>' +
-      'f) Start date: ' + req.body.start + '<br></p>' +
-      'f) End date: ' + req.body.end + '<br></p>' +
+      'f) Start date: ' + req.body.start + '<br>' +
+      'g) End date: ' + req.body.end + '<br></p>' +
       '<p>XENON User Management</p>'
   };
   
