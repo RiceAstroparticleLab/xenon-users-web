@@ -21,7 +21,7 @@ Currently there are three ways to login: LNGS credentials, GitHub and local (ema
 
 ##### The following pages are available in the codebase but still under development:
 - Full Directory
-  - Tavke that displays list of all current and previous members of the collaboration
+  - Table that displays list of all current and previous members of the collaboration
   - Automates account creation
   - Only select group of people will have permission to edit every member on the list.
 - Individual Institutes 
