@@ -1,0 +1,19 @@
+.input-shift-modal {
+  padding: 20px 35px 20px 35px;
+  background-color: #fdfdfd;
+}
+
+.input-shift-modal__flex-row {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.input-shift-modal__input {
+  width: 60%;
+}
+
+.input-shift-modal__buttons {
+  display: flex;
+  justify-content: space-between;
+}
