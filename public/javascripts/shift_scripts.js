@@ -200,6 +200,9 @@ The number of shifts used are calculated using the following equation:
  (total # shifts) / (num phd or higher at institute) * (num phd+ people across all institutes) 
 */
 function FillCalculator(tablediv, inputYear, myinstitute, stats) {
+  var db = req.xenonnt_db;
+  var collection = db.collection('shift_calcs');
+
   var thisYear;
   if (inputYear === "Shifts All Time") {
     thisYear = 0;
@@ -225,6 +228,27 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
     if (institute.includes(myinstitute)) {
       html += ' style="background-color:#e5e5ea;"';
     }
+
+    let db_est_shifts
+    if (inputYear === "Shifts All Time") {
+      thisYear = 0;
+      let query = collection.aggregate([
+        {$match: {_id: institute}},
+        {$unwind: "$years"},
+        {$group: {_id: "$_id", expected_alltime: {$sum: "$years.expected"}}}
+      ])
+      if (query["expected_alltime"] != 0) {
+        db_est_shifts = query["expected_alltime"]
+      }
+    } else {
+      let query = collection.aggregate([
+        {$match: {_id: institute}},
+        {$unwind: "$years"},
+        {$match: {"years.year": thisYear}}
+      ])
+      db_est_shifts = query[years][expected]
+    }
+
     // set column to institute name
     html += `><td>${institute}</td>`; 
     // set first column
@@ -232,7 +256,7 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
     // set second column
     html += `<td>${phdHeadCount}</td>`;
     // set third column
-    html += `<td>${estimateShifts.toFixed(2)}</td>`;
+    html += `<td><input type="text" placeholder=${estimateShifts.toFixed(2)} value="${db_est_shifts}"></td>`;
     // set fourth column
     html += `<td>${Math.round(percentageDone * 100)}%</td>`;
     // set fifth column
@@ -250,7 +274,7 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
   html += "<tr style='border-bottom:1px solid black'><td colspan='100%'>" + 
           "</td></tr>";
   html += `<tr><td></td><td><strong>${totalThisYear}</strong></td>` +
-          `<td></td><td><strong>${totalShifts.toFixed(2)}</strong></td></tr>`;
+          `<td></td><td><input type="submit" value="Save"></td></tr>`;
   $(tablediv).html(html);
 }
 
