@@ -2,7 +2,17 @@
  * Scripts for the shift calendar page.
  */
 
-// const { color } = require("highcharts");
+// connect to the mongo server
+const MongoClient = require('mongodb').MongoClient
+const mongoURI = process.env.DAQ_MONGO_URI
+// const mongoURI = process.env.MONGO_LOCAL_URI
+var use_db
+MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
+    // use_db = db.db('xenon')
+    use_db = db.db("xenonnt")
+    console.log(`Connected in shift scripts`),
+    err => {console.log(err)}
+})
 
 // Fills in table in (tablediv) which displays the stats for number of shifts
 // done by each institute while highlighting the institute of the user who is 
@@ -200,7 +210,7 @@ The number of shifts used are calculated using the following equation:
  (total # shifts) / (num phd or higher at institute) * (num phd+ people across all institutes) 
 */
 function FillCalculator(tablediv, inputYear, myinstitute, stats) {
-  var db = req.xenonnt_db;
+  var db = use_db;
   var collection = db.collection('shift_calcs');
 
   var thisYear;
