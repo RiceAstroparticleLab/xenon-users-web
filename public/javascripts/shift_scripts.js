@@ -2,18 +2,6 @@
  * Scripts for the shift calendar page.
  */
 
-// connect to the mongo server
-const MongoClient = require('mongodb').MongoClient
-const mongoURI = process.env.DAQ_MONGO_URI
-// const mongoURI = process.env.MONGO_LOCAL_URI
-var use_db
-MongoClient.connect(mongoURI, {useUnifiedTopology: true}, (err, db) => {
-    // use_db = db.db('xenon')
-    use_db = db.db("xenonnt")
-    console.log(`Connected in shift scripts`),
-    err => {console.log(err)}
-})
-
 // Fills in table in (tablediv) which displays the stats for number of shifts
 // done by each institute while highlighting the institute of the user who is 
 // logged in (myinstitute) and sets the header in the (headerdiv)
@@ -210,8 +198,8 @@ The number of shifts used are calculated using the following equation:
  (total # shifts) / (num phd or higher at institute) * (num phd+ people across all institutes) 
 */
 function FillCalculator(tablediv, inputYear, myinstitute, stats) {
-  var db = use_db;
-  var collection = db.collection('shift_calcs');
+  // var db = use_db;
+  // var collection = db.collection('shift_calcs');
 
   var thisYear;
   if (inputYear === "Shifts All Time") {
@@ -239,25 +227,25 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
       html += ' style="background-color:#e5e5ea;"';
     }
 
-    let db_est_shifts
-    if (inputYear === "Shifts All Time") {
-      thisYear = 0;
-      let query = collection.aggregate([
-        {$match: {_id: institute}},
-        {$unwind: "$years"},
-        {$group: {_id: "$_id", expected_alltime: {$sum: "$years.expected"}}}
-      ])
-      if (query["expected_alltime"] != 0) {
-        db_est_shifts = query["expected_alltime"]
-      }
-    } else {
-      let query = collection.aggregate([
-        {$match: {_id: institute}},
-        {$unwind: "$years"},
-        {$match: {"years.year": thisYear}}
-      ])
-      db_est_shifts = query[years][expected]
-    }
+    // let db_est_shifts
+    // if (inputYear === "Shifts All Time") {
+    //   thisYear = 0;
+    //   let query = collection.aggregate([
+    //     {$match: {_id: institute}},
+    //     {$unwind: "$years"},
+    //     {$group: {_id: "$_id", expected_alltime: {$sum: "$years.expected"}}}
+    //   ])
+    //   if (query["expected_alltime"] != 0) {
+    //     db_est_shifts = query["expected_alltime"]
+    //   }
+    // } else {
+    //   let query = collection.aggregate([
+    //     {$match: {_id: institute}},
+    //     {$unwind: "$years"},
+    //     {$match: {"years.year": thisYear}}
+    //   ])
+    //   db_est_shifts = query[years][expected]
+    // }
 
     // set column to institute name
     html += `><td>${institute}</td>`; 
