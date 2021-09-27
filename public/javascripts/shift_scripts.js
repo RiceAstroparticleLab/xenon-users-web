@@ -148,8 +148,10 @@ function CalcEstShifts(peopleArr) {
             for (let j = 0; j < instituteYears.length; j++) {
               if (instituteYears[j]['year'] === thisYear) {
                 var phdcount = instituteYears[j]['phdcount'];
+                var realShifts = instituteYears[j]['expected_shifts'];
                 totalPhd += phdcount;
                 stats[id].push(phdcount);
+                stats[id].push(realShifts || 0)
               }
             }
           }
@@ -158,10 +160,12 @@ function CalcEstShifts(peopleArr) {
         const keys = Object.keys(stats);
         console.log(`${yr + 1} has ${totalShifts} total shifts, ${totalPhd} total Phd`);
         for (const institute of keys) {
-          let estimateShifts = (totalShifts/totalPhd * stats[institute][1]) || 0;
+          let institutePhd = stats[institute][1];
+          let estimateShifts = (totalShifts/totalPhd * institutePhd) || 0;
           estimateShifts = parseFloat(estimateShifts.toFixed(2));
           let shiftsDone = stats[institute][0];
-          inner[institute] = [shiftsDone, estimateShifts, (stats[institute][1] || 0)];
+          let realShiftsDue = stats[institute][2];
+          inner[institute] = [shiftsDone, estimateShifts, (institutePhd || 0), (realShiftsDue || 0)];
         }
         shiftStats[yr + 1] = inner;
         console.log(stats);
@@ -173,11 +177,12 @@ function CalcEstShifts(peopleArr) {
         for (const institute of keys) {
           var vals = shiftStats[year][institute];
           if (institute in total) {
-            total[institute][0] += vals[0];
-            total[institute][1] += vals[1];
-            total[institute][2] += vals[2];
+            total[institute][0] += vals[0]; // shifts done
+            total[institute][1] += vals[1]; // est shifts
+            total[institute][2] += vals[2]; // phd headcount
+            total[institute][3] += vals[3]; // required shifts (manually inputted)
           } else {
-            total[institute] = [vals[0], vals[1], vals[2]];
+            total[institute] = [vals[0], vals[1], vals[2], vals[3]];
           }
         }
       }
@@ -198,9 +203,6 @@ The number of shifts used are calculated using the following equation:
  (total # shifts) / (num phd or higher at institute) * (num phd+ people across all institutes) 
 */
 function FillCalculator(tablediv, inputYear, myinstitute, stats) {
-  // var db = use_db;
-  // var collection = db.collection('shift_calcs');
-
   var thisYear;
   if (inputYear === "Shifts All Time") {
     thisYear = 0;
@@ -220,32 +222,13 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
     let shiftsDone = stats[thisYear][institute][0];
     let percentageDone = shiftsDone/estimateShifts;
     let phdHeadCount = stats[thisYear][institute][2];
+    let realShiftsDue = stats[thisYear][institute][3];
     totalThisYear += shiftsDone;
     totalShifts += estimateShifts;
     html += '<tr';
     if (institute.includes(myinstitute)) {
       html += ' style="background-color:#e5e5ea;"';
     }
-
-    // let db_est_shifts
-    // if (inputYear === "Shifts All Time") {
-    //   thisYear = 0;
-    //   let query = collection.aggregate([
-    //     {$match: {_id: institute}},
-    //     {$unwind: "$years"},
-    //     {$group: {_id: "$_id", expected_alltime: {$sum: "$years.expected"}}}
-    //   ])
-    //   if (query["expected_alltime"] != 0) {
-    //     db_est_shifts = query["expected_alltime"]
-    //   }
-    // } else {
-    //   let query = collection.aggregate([
-    //     {$match: {_id: institute}},
-    //     {$unwind: "$years"},
-    //     {$match: {"years.year": thisYear}}
-    //   ])
-    //   db_est_shifts = query[years][expected]
-    // }
 
     // set column to institute name
     html += `><td>${institute}</td>`; 
@@ -254,7 +237,11 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
     // set second column
     html += `<td>${phdHeadCount}</td>`;
     // set third column
-    html += `<td><input type="text" placeholder=${estimateShifts.toFixed(2)} value="${db_est_shifts}"></td>`;
+    if (realShiftsDue === 0) {
+      html += `<td><input type="text" placeholder=${estimateShifts.toFixed(2)}></td>`;
+    } else {
+      html += `<td><input type="text" placeholder=${estimateShifts.toFixed(2)} value="${realShiftsDue}"></td>`;
+    }
     // set fourth column
     html += `<td>${Math.round(percentageDone * 100)}%</td>`;
     // set fifth column
