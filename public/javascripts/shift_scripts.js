@@ -235,7 +235,7 @@ function FillCalculator(tablediv, inputYear, myinstitute, stats) {
     // set first column
     html += `<td>${shiftsDone}</td>`;
     // set second column
-    html += `<td>${phdHeadCount}</td>`;
+    html += `<td><input type="text" placeholder="${phdHeadCount}" value="${phdHeadCount}"></td>`;
     // set third column
     if (realShiftsDue === 0) {
       html += `<td><input type="text" placeholder=${estimateShifts.toFixed(2)}></td>`;
