@@ -32,7 +32,7 @@ function InitializeTable(tablediv) {
       type: 'POST',
     },
     columns: [	    
-      { data: "institute", defaultContent, '', searchable: true },
+      { data: "institute", defaultContent: '', searchable: true },
       { data: "institute", searchable: true },
       { data: "last_name", searchable: true },
       { data: "first_name", searchable: true },
