@@ -32,7 +32,7 @@ function InitializeTable(tablediv) {
       type: 'POST',
     },
     columns: [	    
-      { data: null, defaultContent: '', orderable: false },
+      { data: "institute", searchable: true },
       { data: "institute", searchable: true },
       { data: "last_name", searchable: true },
       { data: "first_name", searchable: true },
@@ -213,7 +213,7 @@ function TechTable(tablediv) {
       type: 'POST',
     },
     columns: [
-      { data: null, defaultContent: '', orderable: false },
+      { data: "institute", searchable: true },
       { data: "institute", searchable: true },
       { data: "last_name", searchable: true },
       { data: "first_name", searchable: true },
@@ -302,7 +302,7 @@ function PrevTechTable(tablediv) {
       type: 'POST',
     },
     columns: [
-      { data: null, defaultContent: '', orderable: false },
+      { data: "institute", searchable: true},
       { data: "last_name", searchable: true },
       { data: "first_name", searchable: true },
       { data: "email", orderable: false, searchable: true },
