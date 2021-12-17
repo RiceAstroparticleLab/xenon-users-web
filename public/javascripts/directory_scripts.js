@@ -28,7 +28,7 @@ function InitializeTable(tablediv) {
       searchPlaceholder: 'Search...',
     },
     ajax: {
-      url: 'curr_table_info',
+      url: '/shifts/curr_table_info',
       type: 'POST',
     },
     columns: [	    
@@ -123,7 +123,7 @@ function InitializePrevTable(tablediv) {
       searchPlaceholder: 'Search...',
     },
     ajax: {
-      url: 'prev_table_info',
+      url: '/shifts/prev_table_info',
       type: 'POST',
     },
     columns: [	    
@@ -209,7 +209,7 @@ function TechTable(tablediv) {
       searchPlaceholder: 'Search...',
     },
     ajax: {
-      url: 'tech_table',
+      url: '/shifts/tech_table',
       type: 'POST',
     },
     columns: [
@@ -298,7 +298,7 @@ function PrevTechTable(tablediv) {
       searchPlaceholder: 'Search...',
     },
     ajax: {
-      url: 'prev_tech_table',
+      url: '/shifts/prev_tech_table',
       type: 'POST',
     },
     columns: [
@@ -360,7 +360,7 @@ function PrevAuthorsTable(tablediv) {
   var table = $(tablediv).DataTable({
     lengthMenu: [[10, 50, 100, -1], [10, 50, 100, 'All']],
     ajax: {
-      url: 'prev_author_table',
+      url: '/shifts/prev_author_table',
       type: 'POST',
     },
     columns: [	    
@@ -420,7 +420,7 @@ function CurrAuthorsTable(tablediv) {
   var table = $(tablediv).DataTable({
     lengthMenu: [[10, 50, 100, -1], [10, 50, 100, 'All']],
     ajax: {
-      url: 'curr_author_table',
+      url: '/shifts/curr_author_table',
       type: 'POST',
     },
     columns: [	    
