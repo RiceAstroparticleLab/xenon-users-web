@@ -39,7 +39,7 @@ function InitializeTable(tablediv) {
       { data: "email", orderable: false, searchable: true },
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
-      { data: "start_date", type: 'datetime', orderable: false }, 
+      { data: "start_date", type: 'datetime' }, 
       { data: "previous_time", defaultContent: '', orderable: false },
       { data: "last_modified", defaultContent: ''},
       { title: '', orderable: false }
@@ -133,7 +133,7 @@ function InitializePrevTable(tablediv) {
       { data: "email", orderable: false, searchable: true },
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
-      { data: "start_date", type: 'datetime', orderable: false }, 
+      { data: "start_date", type: 'datetime' }, 
       { data: "end_date", type: 'datetime' },
       { data: "end_date", format: 'YYYY', type: 'datetime', orderable: false },
       { title: '', orderable: false }
@@ -220,7 +220,7 @@ function TechTable(tablediv) {
       { data: "email", orderable: false, searchable: true },
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
-      { data: "start_date", type: 'datetime', orderable: false },
+      { data: "start_date", type: 'datetime' },
       { data: "previous_time", defaultContent: '', orderable: false },
       { data: "username", defaultContent: '', orderable: false },
       { title: '', orderable: false }
@@ -308,7 +308,7 @@ function PrevTechTable(tablediv) {
       { data: "email", orderable: false, searchable: true },
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
-      { data: "start_date", type: 'datetime', orderable: false },
+      { data: "start_date", type: 'datetime' },
       { data: "end_date", type: 'datetime', orderable: false }, 
       { data: "username", defaultContent: '', orderable: false },
       { title: '', orderable: false }
