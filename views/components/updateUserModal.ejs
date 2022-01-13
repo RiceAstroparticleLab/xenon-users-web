@@ -46,7 +46,7 @@
               <br>
               <div style="padding-left:30px">
                 <select name="position" id="position" required> 
-                  <option value="" selected disabled hidden>Please select</option>
+                  <option value="default" disabled hidden>Please select</option>
                   <optgroup label="Member Positions">
                     <option value="Non-permanent Sci.">Non-permanent Sci.</option>
                     <option value="Permanent Scientist">Permanent Scientist</option>
@@ -66,7 +66,7 @@
               <label for="institute" style="padding-left:30px">Institute</label><br>
               <div style="padding-left:30px">
                 <select id="institute" name="institute" required>
-                  <option value="" selected disabled hidden>Please select</option>
+                  <option value="default" disabled hidden>Please select</option>
                   <% for (i = 0; i < institutes.length; i++) {%>
                     <option value="<%= institutes[i] %>"><%= institutes[i] %></option>
                   <%}%>

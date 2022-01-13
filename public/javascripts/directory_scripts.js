@@ -55,7 +55,7 @@ function InitializeTable(tablediv) {
       { title: 'Start Date', targets: 7 },
       { title: 'Explanations <button type="button" class="btn btn-sm"' +
         'data-html="true" data-toggle="tooltip" data-placement="right" id="explanations"' +
-        'data-original-title="Date of moving between institutes and comments on other' +
+        'data-original-title="Date of moving between institutes and comments on other ' +
         'status changes" style="border-radius:25px;border:transparent;padding:0px 5px;">' +
         '<i class="fas fa-question"></i></button>', targets: 8 },
       { visible: false, targets: 9 },
@@ -240,7 +240,7 @@ function TechTable(tablediv) {
       { title: 'Start Date', targets: 7 },
       { title: 'Explanations <button type="button" class="btn btn-sm"' +
         'data-html="true" data-toggle="tooltip" data-placement="right" id="explanationsTech"' +
-        'data-original-title="Date of moving between institutes and comments on other' +
+        'data-original-title="Date of moving between institutes and comments on other ' +
         'status changes" style="border-radius:25px;border:transparent;padding:0px 5px;">' +
         '<i class="fas fa-question"></i></button>', targets: 8 },
       { title: 'Username', targets: 9 },
@@ -506,8 +506,16 @@ function openModal(userInfo, page) {
     modal.find('.modal-body input[name="Email"]').val(userInfo.email);
     modal.find('.modal-body input[name="Time"]').val(userInfo.percent_xenon);
     modal.find('.modal-body input[name="Tasks"]').val(userInfo.tasks);
-    modal.find('.modal-body input[name="position"]').val(userInfo.position);
-    modal.find('.modal-body input[name="institute"]').val(userInfo.institute);
+    if (userInfo.position){
+      modal.find('.modal-body option[name="position"]').val(userInfo.position).prop('selected', true);
+    } else {
+      modal.find('.modal-body option[name="position"]').val('default').prop('selected', true);
+    }
+    if (userInfo.institute) {
+      modal.find('.modal-body option[name="institute"]').val(userInfo.institute).prop('selected', true);
+    } else {
+      modal.find('.modal-body option[name="institute"]').val('default').prop('selected', true);
+    }
     modal.find('.modal-body input[name="lngs_id"]').val(userInfo.lngs_ldap_uid);
     modal
       .find('.modal-body input[name="prevTime"]')
@@ -540,6 +548,9 @@ function openModal(userInfo, page) {
     $("#updateUserModal .modal-body")
       .find('input:checkbox')
       .prop('checked', false);
+    $("#updateUserModal .modal-body")
+      .find('option')
+      .prop('seleected', false);
   });
 
   $('#updateUserModal').modal('show');
