@@ -507,20 +507,20 @@ function openModal(userInfo, page) {
     modal.find('.modal-body input[name="Time"]').val(userInfo.percent_xenon);
     modal.find('.modal-body input[name="Tasks"]').val(userInfo.tasks);
     if (userInfo.position){
-      modal.find('.modal-body option[name="position"]').val(userInfo.position).prop('selected', true);
+      modal.find('.modal-body select[name="position"]').val(userInfo.position).prop('selected', true);
     } else {
-      modal.find('.modal-body option[name="position"]').val('default').prop('selected', true);
+      modal.find('.modal-body select[name="position"]').val('default').prop('selected', true);
     }
     if (userInfo.institute) {
-      modal.find('.modal-body option[name="institute"]').val(userInfo.institute).prop('selected', true);
+      modal.find('.modal-body select[name="institute"]').val(userInfo.institute).prop('selected', true);
     } else {
-      modal.find('.modal-body option[name="institute"]').val('default').prop('selected', true);
+      modal.find('.modal-body select[name="institute"]').val('default').prop('selected', true);
     }
     modal.find('.modal-body input[name="lngs_id"]').val(userInfo.lngs_ldap_uid);
     modal
       .find('.modal-body input[name="prevTime"]')
       .val(userInfo.previous_time);
-    modal
+    modalgot a
       .find('.modal-body input[name="StartDate"]')
       .val(new Date(userInfo.start_date).toISOString().slice(0,10));
     if (userInfo.end_date && userInfo.end_date != null && userInfo.end_date != "") {
@@ -549,8 +549,8 @@ function openModal(userInfo, page) {
       .find('input:checkbox')
       .prop('checked', false);
     $("#updateUserModal .modal-body")
-      .find('option')
-      .prop('seleected', false);
+      .find('select:option')
+      .prop('selected', false);
   });
 
   $('#updateUserModal').modal('show');
