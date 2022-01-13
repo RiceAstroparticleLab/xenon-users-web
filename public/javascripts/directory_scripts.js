@@ -520,7 +520,7 @@ function openModal(userInfo, page) {
     modal
       .find('.modal-body input[name="prevTime"]')
       .val(userInfo.previous_time);
-    modalgot a
+    modal
       .find('.modal-body input[name="StartDate"]')
       .val(new Date(userInfo.start_date).toISOString().slice(0,10));
     if (userInfo.end_date && userInfo.end_date != null && userInfo.end_date != "") {
