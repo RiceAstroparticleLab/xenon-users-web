@@ -53,11 +53,11 @@ function InitializeTable(tablediv) {
       { title: 'Position', targets: 5 },
       { title: 'Time', targets: 6 },
       { title: 'Start Date', targets: 7 },
-      { title: 'Explanations <button type="button" class="btn btn-sm"' + 
-       + 'data-html="true" data-toggle="tooltip" data-placement="right" id="explanations"'
-       + 'data-original-title="Date of moving between institutes and comments on other'
-       + 'status changes" style="border-radius:25px;border:transparent;padding:0px 5px;">'
-       + '<i class="fas fa-question"></i></button>', targets: 8 },
+      { title: 'Explanations <button type="button" class="btn btn-sm"' +
+        'data-html="true" data-toggle="tooltip" data-placement="right" id="explanations"' +
+        'data-original-title="Date of moving between institutes and comments on other' +
+        'status changes" style="border-radius:25px;border:transparent;padding:0px 5px;">' +
+        '<i class="fas fa-question"></i></button>', targets: 8 },
       { visible: false, targets: 9 },
       { targets: -1,
         data: null,
@@ -238,7 +238,11 @@ function TechTable(tablediv) {
       { title: 'Position', targets: 5 },
       { title: 'Time', targets: 6 },
       { title: 'Start Date', targets: 7 },
-      { title: 'Previous Time Info', targets: 8 },
+      { title: 'Explanations <button type="button" class="btn btn-sm"' +
+        'data-html="true" data-toggle="tooltip" data-placement="right" id="explanationsTech"' +
+        'data-original-title="Date of moving between institutes and comments on other' +
+        'status changes" style="border-radius:25px;border:transparent;padding:0px 5px;">' +
+        '<i class="fas fa-question"></i></button>', targets: 8 },
       { title: 'Username', targets: 9 },
       { targets: -1,
         data: null,
