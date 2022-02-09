@@ -648,21 +648,6 @@ function Autocomplete(id, arr) {
   });
 }
 
-// Checks that date is in YYYY-MM-DD format
-function ValiDate(elem) {
-  $(elem).on('input', function() {
-    // regex for YYYY-MM-DD
-    var re = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/;
-    if (re.test($(this).val())) {
-      $(this).removeClass("invalid");
-      // if bool is true, form will suggest 
-    }
-    else{
-      $(this).addClass("invalid");
-    }
-  });
-}
-
 // shows message suggesting the user go to the remove a user form
 function suggestRemoveForm(elem) {
   $(elem).on('input', function() {
@@ -673,81 +658,6 @@ function suggestRemoveForm(elem) {
       if (d < new Date()) {
         $('#suggest_form').show();
       }
-    }
-  });
-}
-
-// checks if text is made of extended ASCII characters
-function isASCII(str) {
-  var txt = $(str).val()
-  return /^[\x00-\xFF]*$/.test(txt);
-}
-
-function ValidateForm(elem, list) {
-  $(elem).on('submit', function(event) {
-    var valid = true;
-    for (let i = 0; i < list.length; i++) {
-      // checks that the field is valid. If not, shows error message
-      if ($(list[i]).hasClass('invalid')) {
-        valid = false
-        var hiddenClass = list[i] + '_hidden';
-        console.log(hiddenClass)
-        $(hiddenClass).show();
-      }
-    }
-    var start_date = new Date($('#sdate').val());
-    var end_date =  new Date($('#edate').val());
-    var oneyear = new Date();
-    var tenyears = new Date();
-    oneyear.setFullYear(oneyear.getFullYear() - 1);
-    tenyears.setFullYear(tenyears.getFullYear() + 10);
-    console.log(oneyear)
-    console.log(tenyears)
-    // check that the dates are reasonable
-    // if (start_date < oneyear || start_date > tenyears) {
-    //   console.log("Start date range invalid");
-    //   valid = false;
-    //   $('#valid_sdate_range').show();
-    // } else {
-    //   $('#valid_sdate_range').hide();
-    // }
-
-    // if (end_date < oneyear || end_date > tenyears) {
-    //   console.log("End date range invalid");
-    //   valid = false;
-    //   $('#valid_edate_range').show();
-    // } else {
-    //   $('#valid_edate_range').hide();
-    // }
-    // check that the end date comes after start date
-    if (end_date < start_date) {
-      console.log("End date comes before start date");
-      valid = false;
-      $('#valid_edate').show();
-    } else {
-      $('#valid_edate').hide();
-    }
-
-    // checks that first and last name fields only use extended ASCII
-    if (!isASCII('#fname')) {
-      console.log("First name not ascii");
-      valid = false;
-      $('#fname_hidden').show();
-    } else {
-      $('#fname_hidden').hide();
-    }
-    if (!isASCII('#lname')) {
-      console.log("Last name not ascii");
-      valid = false;
-      $('#lname_hidden').show();
-    } else {
-      $('#lname_hidden').hide()
-    }
-
-    // If all fields are valid, submit form, otherwise don't
-    console.log(valid)
-    if (!valid) {
-      event.preventDefault();
     }
   });
 }
