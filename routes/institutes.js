@@ -85,7 +85,8 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
     for (let i = 0; i < docs.length; i++) {
       if(docs[i].active === "true") {
         current.push(docs[i]);
-      } else {
+      }
+      if (docs[i].active === "false") {
         prev.push(docs[i]);
       }
     }
