@@ -17,7 +17,7 @@
         </p>
         <br>
         <!-- make this button available only if authorized as admin/PI-->
-        <% if ((user.position == "PI" && user.institute == page) || (user.groups != undefined)) {%>
+        <% if ((user.position == "PI" && user.institute == page)) {%>
           <button id="btn-ManageAcct" type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#updateUserModal" data-id="<%= JSON.stringify(curr[i]) %>" >Manage Account</button>
         <%}%>
       </details>
