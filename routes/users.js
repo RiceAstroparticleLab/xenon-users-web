@@ -206,7 +206,9 @@ function LeaveCollaborationMail(req, callback) {
 router.post('/updateContactInfo', ensureAuthenticated, function(req, res) {
   var db = req.xenonnt_db;
   var collection = db.collection('users');
+  var log = db.collection('shifts_changelog')
   var idoc = {};
+  var og = req.user
   if (req.body.email != "") {
     idoc['email'] = req.body.email;
     req.user.email = req.body.email;
@@ -231,6 +233,15 @@ router.post('/updateContactInfo', ensureAuthenticated, function(req, res) {
     idoc["favorite_color"] = req.body.favorite_color;
     req.user.favorite_color = req.body.favorite_color;
   }
+  editor = req.user.first_name + ' ' + req.user.last_name
+  log.insertOne(
+    {
+      "editor": editor,
+      "prev": og,
+      "changes": idoc,
+      "comment": "Edited using update contact info button on profile."
+    }
+  )
   collection.updateOne(
     { 
       "first_name": req.user.first_name,
