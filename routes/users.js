@@ -221,9 +221,9 @@ router.post('/updateContactInfo', ensureAuthenticated, function(req, res) {
     idoc['lngs_ldap_uid'] = req.body.lngs;
     req.user.lngs_ldap_uid = req.body.lngs;
   }
-  if (req.body.skype != "" && req.user.skype != req.user.skype) {
+  if (req.body.skype != "" && req.user.skype != req.body.skype) {
     idoc["skype"] = req.body.skype;
-    req.user.skype = req.user.skype;
+    req.user.skype = req.body.skype;
   }
   if (req.body.cell != "" && req.user.cell != req.body.cell) {	
     idoc["cell"] = req.body.cell;
