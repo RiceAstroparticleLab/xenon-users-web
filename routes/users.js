@@ -209,27 +209,27 @@ router.post('/updateContactInfo', ensureAuthenticated, function(req, res) {
   var log = db.collection('shifts_changelog')
   var idoc = {};
   var og = req.user
-  if (req.body.email != "") {
+  if (req.body.email != "" && req.user.email != req.body.email) {
     idoc['email'] = req.body.email;
     req.user.email = req.body.email;
   }
-  if (req.body.git != "") {
+  if (req.body.git != "" && req.user.github != req.body.git) {
     idoc['github'] = req.body.git;
     req.user.github = req.body.git;
   }
-  if (req.body.lngs != "") {
+  if (req.body.lngs != "" && req.user.lngs_ldap_uid != req.body.lngs) {
     idoc['lngs_ldap_uid'] = req.body.lngs;
     req.user.lngs_ldap_uid = req.body.lngs;
   }
-  if (req.body.skype != "") {
+  if (req.body.skype != "" && req.user.skype != req.user.skype) {
     idoc["skype"] = req.body.skype;
     req.user.skype = req.user.skype;
   }
-  if (req.body.cell != "") {	
+  if (req.body.cell != "" && req.user.cell != req.body.cell) {	
     idoc["cell"] = req.body.cell;
     req.user.cell = req.body.cell;
   }
-  if (req.body.favorite_color != "") {
+  if (req.body.favorite_color != "" && req.user.favorite_color != req.body.favorite_color) {
     idoc["favorite_color"] = req.body.favorite_color;
     req.user.favorite_color = req.body.favorite_color;
   }
@@ -237,6 +237,7 @@ router.post('/updateContactInfo', ensureAuthenticated, function(req, res) {
   log.insertOne(
     {
       "editor": editor,
+      "date": new Date(),
       "prev": og,
       "changes": idoc,
       "comment": "Edited using update contact info button on profile."
