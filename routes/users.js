@@ -242,14 +242,15 @@ router.post('/updateContactInfo', ensureAuthenticated, function(req, res) {
       "changes": idoc,
       "comment": "Edited using update contact info button on profile."
     }
-  )
-  collection.updateOne(
-    { 
-      "first_name": req.user.first_name,
-      "last_name": req.user.last_name
-    },
-    {"$set": idoc}
-  );   
+  ).then(() => {
+    collection.updateOne(
+      { 
+        "first_name": req.user.first_name,
+        "last_name": req.user.last_name
+      },
+      {"$set": idoc}
+    );   
+  });
   return(res.redirect(base + '/profile'));
 }); 
 
