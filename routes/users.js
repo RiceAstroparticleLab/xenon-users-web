@@ -208,7 +208,7 @@ router.post('/updateContactInfo', ensureAuthenticated, function(req, res) {
   var collection = db.collection('users');
   var log = db.collection('shifts_changelog')
   var idoc = {};
-  var og = req.user
+  var og = JSON.parse(JSON.stringify(req.user))
   if (req.body.email != "" && req.user.email != req.body.email) {
     idoc['email'] = req.body.email;
     req.user.email = req.body.email;
