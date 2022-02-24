@@ -262,6 +262,7 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
   // Get our form values. These rely on the "name" attributes
   var db = req.xenonnt_db;
   var collection = db.collection('users');
+  var log = db.collection('shifts_changelog')
   var user_id = new ObjectId(req.params.userid);
   var page = req.params.page; 
   var idoc = {}; // changes made to mongo
@@ -353,7 +354,18 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
         // adding the new member to the database
         UpdateUserMail(req, changes, previously, function(success){
           if (success) {
-            collection.findOneAndUpdate({"_id": user_id}, {$set: idoc});
+            collection.findOneAndUpdate({"_id": user_id}, {$set: idoc}).then(() => {
+              editor = req.user.first_name + ' ' + req.user.last_name
+              log.insertOne(
+                {
+                  "editor": editor,
+                  "date": new Date(),
+                  "prev": previously,
+                  "changes": changes,
+                  "comment": "Edited using Update User form."
+                }
+              )
+            });
             console.log(`success. Modified ${req.body.FirstName} ${req.body.LastName}`);
             res.redirect(base + '/' + page);
           } else {
@@ -406,7 +418,18 @@ router.post('/adduser', ensureAuthenticated, function(req, res) {
     // adding the new member to the database
     NewUserMail(req, mailing_lists, function(success){
       if (success) {
-        db.collection('users').insertOne(idoc);
+        db.collection('users').insertOne(idoc).then(() => {
+          editor = req.user.first_name + ' ' + req.user.last_name
+          db.collection('shifts_changelog').insertOne(
+            {
+              "editor": editor,
+              "date": new Date(),
+              "prev": {},
+              "changes": idoc,
+              "comment": "Edited using Add User form."
+            }
+          )
+        });
         console.log('success. Added' + req.body.FirstName + ' ' +
           req.body.LastName);
         res.redirect(base + '/fulldirectory');
@@ -463,7 +486,18 @@ router.post('/pendinguser', function(req, res) {
     // adding the new member to the database
     PendingUserMail(req, mailing_lists, function(success){
       if (success) {
-        db.collection('users').insertOne(idoc);
+        db.collection('users').insertOne(idoc).then(() => {
+          editor = req.user.first_name + ' ' + req.user.last_name
+          db.collection('shifts_changelog').insertOne(
+            {
+              "editor": editor,
+              "date": new Date(),
+              "prev": {},
+              "changes": idoc,
+              "comment": "Edited using Request New Member form."
+            }
+          )
+        });
         res.redirect(base + '/confirmation');
       } else {
         console.log("error. Could not send email.");
@@ -522,10 +556,29 @@ router.post('/removeuser', function(req, res) {
     // adding the new member to the database
     LeaveCollaborationMail(req, function(success){
       if (success) {
+        idoc = {
+          email: req.body.email, 
+          active: "false", 
+          end_date: new Date(req.body.edate), 
+          last_modified: new Date()
+        }
+        editor = req.user.first_name + ' ' + req.user.last_name
         collection.findOneAndUpdate(
           {"_id": user_id}, 
-          {$set: {email: req.body.email, active: "false", end_date: new Date(req.body.edate), last_modified: new Date()}}
-        );
+          {$set: idoc}
+        ).then(() => {
+          collection.find({"_id": user_id}).toArray((doc) => {
+            db.collection('shifts_changelog').insertOne(
+              {
+                "editor": editor,
+                "date": new Date(),
+                "prev": doc,
+                "changes": idoc,
+                "comment": "Edited using Remove User form."
+              }
+            )
+          });
+        });
         console.log(`success. Modified ${req.body.selectedUser}`);
         res.redirect(base + '/remove_member');
       } else {
@@ -569,14 +622,27 @@ router.post('/linkuser', function(req, res) {
   var user_id = new ObjectId(req.body.selectedUser);
 
   try {
-    // make sure email alerting of new member can be sent before actually
-    // adding the new member to the database
     LinkLNGSMail(req, function(success){
       if (success) {
+        idoc = {
+          lngs_ldap_uid: req.body.lngs_id
+        }
         collection.findOneAndUpdate(
           {"_id": user_id}, 
-          {$set: {lngs_ldap_uid: req.body.lngs_id}}
-        );
+          {$set: idoc}
+        ).then(() => {
+          collection.find({"_id": user_id}).toArray((doc) => {
+            db.collection('shifts_changelog').insertOne(
+              {
+                "editor": req.body.lngs_id,
+                "date": new Date(),
+                "prev": doc,
+                "changes": idoc,
+                "comment": "Edited using Link LNGS mail."
+              }
+            )
+          });
+        });
         console.log(`success. Modified ${req.body.selectedUser}`);
         res.redirect(base + '/auth/login');
       } else {
