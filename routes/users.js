@@ -563,21 +563,21 @@ router.post('/removeuser', function(req, res) {
           last_modified: new Date()
         }
         editor = req.user.first_name + ' ' + req.user.last_name
-        collection.findOneAndUpdate(
-          {"_id": user_id}, 
-          {$set: idoc}
-        ).then(() => {
-          collection.find({"_id": user_id}).toArray((e, doc) => {
-            db.collection('shifts_changelog').insertOne(
-              {
-                "editor": editor,
-                "date": new Date(),
-                "prev": doc,
-                "changes": idoc,
-                "comment": "Edited using Remove User form."
-              }
-            )
-          });
+        collection.find({"_id": user_id}).toArray((e, doc) => {
+          db.collection('shifts_changelog').insertOne(
+            {
+              "editor": editor,
+              "date": new Date(),
+              "prev": doc,
+              "changes": idoc,
+              "comment": "Edited using Remove User form."
+            }
+          )
+        }).then(() => {
+          collection.findOneAndUpdate(
+            {"_id": user_id}, 
+            {$set: idoc}
+          )
         });
         console.log(`success. Modified ${req.body.selectedUser}`);
         res.redirect(base + '/remove_member');
