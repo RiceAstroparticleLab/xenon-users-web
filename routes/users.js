@@ -360,8 +360,8 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
                 {
                   "editor": editor,
                   "date": new Date(),
-                  "prev": previously,
-                  "changes": changes,
+                  "prev": previous_doc,
+                  "changes": idoc,
                   "comment": "Edited using Update User form."
                 }
               )
