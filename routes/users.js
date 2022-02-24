@@ -572,13 +572,13 @@ router.post('/removeuser', function(req, res) {
               "changes": idoc,
               "comment": "Edited using Remove User form."
             }
-          )
-        }).then(() => {
-          collection.findOneAndUpdate(
-            {"_id": user_id}, 
-            {$set: idoc}
-          )
-        });
+          ).then(() => {
+            collection.findOneAndUpdate(
+              {"_id": user_id}, 
+              {$set: idoc}
+            )
+          });
+        })
         console.log(`success. Modified ${req.body.selectedUser}`);
         res.redirect(base + '/remove_member');
       } else {
