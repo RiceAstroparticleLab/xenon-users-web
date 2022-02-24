@@ -567,7 +567,7 @@ router.post('/removeuser', function(req, res) {
           {"_id": user_id}, 
           {$set: idoc}
         ).then(() => {
-          collection.find({"_id": user_id}).toArray((doc) => {
+          collection.find({"_id": user_id}).toArray((e, doc) => {
             db.collection('shifts_changelog').insertOne(
               {
                 "editor": editor,
