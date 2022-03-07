@@ -582,11 +582,19 @@ function UpdateUserModal() {
     modal.find('.modal-body input[name="FirstName"]').val(userInfo.first_name);
     modal.find('.modal-body input[name="LastName"]').val(userInfo.last_name);
     modal.find('.modal-body input[name="Email"]').val(userInfo.email);
-    modal.find('.modal-body input[name="institute"]').val(institute);
+    if (userInfo.position){
+      modal.find('.modal-body select[name="position"]').val(userInfo.position).prop('selected', true);
+    } else {
+      modal.find('.modal-body select[name="position"]').val('default').prop('selected', true);
+    }
+    if (userInfo.institute) {
+      modal.find('.modal-body select[name="institute"]').val(userInfo.institute).prop('selected', true);
+    } else {
+      modal.find('.modal-body select[name="institute"]').val('default').prop('selected', true);
+    }
     modal.find('.modal-body input[name="Time"]').val(userInfo.percent_xenon);
     modal.find('.modal-body input[name="Tasks"]').val(userInfo.tasks);
     modal.find('.modal-body input[name="lngs_id"]').val(userInfo.lngs_ldap_uid);
-    modal.find('.modal-body input[name="position"]').val(userInfo.position);
     modal
       .find('.modal-body input[name="prevTime"]')
       .val(userInfo.previous_time);
