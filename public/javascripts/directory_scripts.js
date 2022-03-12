@@ -18,7 +18,6 @@ const INSTITUTES_ARRAY = [['Bologna'], ['Coimbra'], ['Columbia'],
 // selected div (tablediv)
 function InitializeTable(tablediv) {
   var groupColumn = 1;
-  $.fn.dataTable.moment( 'MM YYYY' );
   var table = $(tablediv).DataTable({       
     dom: 'flrtip',                                  
     order: [[groupColumn, 'asc']],
@@ -66,14 +65,9 @@ function InitializeTable(tablediv) {
                         "<i class='fas fa-pen'></i></button>"
       },
       { visible: false, targets: groupColumn },
-      // { targets: [7],
-      //   render: function(data) {
-      //     if (typeof(data) === 'undefined') {
-      //       return '';
-      //     }
-      //     return moment(data).tz('Atlantic/St_Helena').format('MMM YYYY');
-      //   }
-      // }
+      { targets: [7],
+        render: $.fn.dataTable.moment( 'MM YYYY' )
+      }
     ],
     createdRow: function(row, data, index) {
       var d = new Date();
