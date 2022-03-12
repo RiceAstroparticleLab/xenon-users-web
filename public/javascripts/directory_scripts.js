@@ -18,6 +18,7 @@ const INSTITUTES_ARRAY = [['Bologna'], ['Coimbra'], ['Columbia'],
 // selected div (tablediv)
 function InitializeTable(tablediv) {
   var groupColumn = 1;
+  $.fn.dataTable.moment( 'MMM YYYY' )
   var table = $(tablediv).DataTable({       
     dom: 'flrtip',                                  
     order: [[groupColumn, 'asc']],
@@ -39,7 +40,7 @@ function InitializeTable(tablediv) {
       { data: "email", orderable: false, searchable: true },
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
-      { data: "start_date"}, // type: 'date' 
+      { data: "start_date"},
       { data: "previous_time", defaultContent: '', orderable: false },
       { data: "last_modified", defaultContent: ''},
       { title: '', orderable: false }
@@ -66,7 +67,12 @@ function InitializeTable(tablediv) {
       },
       { visible: false, targets: groupColumn },
       { targets: [7],
-        render: $.fn.dataTable.moment( 'MM YYYY' )
+        render: function(data) {
+          if (typeof(data) === 'undefined') {
+            return '';
+          }
+          return moment(data).tz('Atlantic/St_Helena').format('MMM YYYY');
+        }
       }
     ],
     createdRow: function(row, data, index) {
@@ -112,6 +118,7 @@ function InitializeTable(tablediv) {
 // selected div (tablediv)
 function InitializePrevTable(tablediv) {
   var groupColumn = 8;
+  $.fn.dataTable.moment( 'MMM YYYY' )
   var table = $(tablediv).DataTable({  
     dom: 'flrtip',                                  
     order: [[groupColumn, 'desc']],
@@ -132,8 +139,8 @@ function InitializePrevTable(tablediv) {
       { data: "email", orderable: false, searchable: true },
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
-      { data: "start_date", type: 'date' }, 
-      { data: "end_date", type: 'date' },
+      { data: "start_date"}, 
+      { data: "end_date"},
       { data: "end_date", format: 'YYYY', type: 'date', orderable: false },
       { title: '', orderable: false }
     ],
@@ -198,6 +205,7 @@ function InitializePrevTable(tablediv) {
 // selected div (tablediv)
 function TechTable(tablediv) {
   var groupColumn = 1;
+  $.fn.dataTable.moment( 'MMM YYYY' )
   var table = $(tablediv).DataTable({
     dom: 'flrtip',               
     order: [[groupColumn, 'asc']],
@@ -219,7 +227,7 @@ function TechTable(tablediv) {
       { data: "email", orderable: false, searchable: true },
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
-      { data: "start_date", type: 'date' },
+      { data: "start_date"},
       { data: "previous_time", defaultContent: '', orderable: false },
       { data: "username", defaultContent: '', orderable: false },
       { title: '', orderable: false }
@@ -291,6 +299,7 @@ function TechTable(tablediv) {
 // Makes DataTables table of previous technicians in the fulldirectory page in 
 // selected div (tablediv)
 function PrevTechTable(tablediv) {
+  $.fn.dataTable.moment( 'MMM YYYY' )
   var table = $(tablediv).DataTable({       
     dom: 'flrtip',                                  
     order: [[7, 'asc']],
@@ -311,8 +320,8 @@ function PrevTechTable(tablediv) {
       { data: "email", orderable: false, searchable: true },
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
-      { data: "start_date", type: 'date' },
-      { data: "end_date", type: 'date', orderable: false }, 
+      { data: "start_date"},
+      { data: "end_date", orderable: false }, 
       { data: "username", defaultContent: '', orderable: false },
       { title: '', orderable: false }
     ],
