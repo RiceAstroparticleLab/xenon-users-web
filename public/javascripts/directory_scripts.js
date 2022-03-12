@@ -39,7 +39,7 @@ function InitializeTable(tablediv) {
       { data: "email", orderable: false, searchable: true },
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
-      { data: "start_date", type: 'datetime' }, 
+      { data: "start_date", type: 'date' }, 
       { data: "previous_time", defaultContent: '', orderable: false },
       { data: "last_modified", defaultContent: ''},
       { title: '', orderable: false }
@@ -137,9 +137,9 @@ function InitializePrevTable(tablediv) {
       { data: "email", orderable: false, searchable: true },
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
-      { data: "start_date", type: 'datetime' }, 
-      { data: "end_date", type: 'datetime' },
-      { data: "end_date", format: 'YYYY', type: 'datetime', orderable: false },
+      { data: "start_date", type: 'date' }, 
+      { data: "end_date", type: 'date' },
+      { data: "end_date", format: 'YYYY', type: 'date', orderable: false },
       { title: '', orderable: false }
     ],
     columnDefs: [
@@ -224,7 +224,7 @@ function TechTable(tablediv) {
       { data: "email", orderable: false, searchable: true },
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
-      { data: "start_date", type: 'datetime' },
+      { data: "start_date", type: 'date' },
       { data: "previous_time", defaultContent: '', orderable: false },
       { data: "username", defaultContent: '', orderable: false },
       { title: '', orderable: false }
@@ -316,8 +316,8 @@ function PrevTechTable(tablediv) {
       { data: "email", orderable: false, searchable: true },
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
-      { data: "start_date", type: 'datetime' },
-      { data: "end_date", type: 'datetime', orderable: false }, 
+      { data: "start_date", type: 'date' },
+      { data: "end_date", type: 'date', orderable: false }, 
       { data: "username", defaultContent: '', orderable: false },
       { title: '', orderable: false }
     ],
@@ -378,8 +378,8 @@ function PrevAuthorsTable(tablediv) {
       { data: "email" },
       { data: "position", searchable: true },
       { data: "percent_xenon" },
-      { data: "start_date", format: 'MM.YYYY', type: 'datetime' },
-      { data: "end_date", format: 'MM.YYYY', type: 'datetime' },
+      { data: "start_date", format: 'MM.YYYY', type: 'date' },
+      { data: "end_date", format: 'MM.YYYY', type: 'date' },
       { data: "additional_institutes", defaultContent: '' },
       { title: '', orderable: false }
     ],
@@ -438,7 +438,7 @@ function CurrAuthorsTable(tablediv) {
         { data: "email" },
         { data: "position", searchable: true },
         { data: "percent_xenon" },
-        { data: "start_date", format: 'MM.YYYY', type: 'datetime' },
+        { data: "start_date", format: 'MM.YYYY', type: 'date' },
         { data: "additional_institutes", defaultContent: '' },
         { title: '', orderable: false }
     ],
