@@ -638,6 +638,8 @@ function UpdateUserModal() {
 // Allows the textbox with the id (id) to provide autocomplete suggestions 
 // based on an inputted array (arr). If no array is inputted, the function 
 // defaults to an array of institutes
+//
+// DEPRECATED IN FAVOR OF DROPDOWNS
 function Autocomplete(id, arr) {
   if (arr) {
     arr = arr.split(',');

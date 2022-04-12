@@ -4,7 +4,15 @@ var passport = require("passport");
 const URL = require('url').URL;
 var base = '/shifts';
 
-// auth login page
+/**
+ * Router that renders the initial login page using the login.ejs view 
+ * when a user visits the home page but is not authenticated.
+ * 
+ * Locals:
+ *  - page: Name of page
+ *  - menuId: [deprecated]
+ *  - user: object containing user information stored in req
+ */
 router.get('/login', function(req, res) {
   res.render('login', {page: 'Login', menuId: 'home', user: req.user});
 });

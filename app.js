@@ -37,13 +37,6 @@ var transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: process.env.SMTP_PORT,
   secure: false
-
-  /* Using google for mail */
-  // service: 'gmail',
-  // auth: {
-  //   user: process.env.NOTIFS_ACCOUNT,
-  //   pass: process.env.NOTIFS_PASSWORD
-  // }
 });
 
 // Routers for subsites
