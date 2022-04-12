@@ -69,6 +69,9 @@ function ValidateForm(elem, list) {
     console.log(valid)
     if (!valid) {
       event.preventDefault();
+    } else {
+      var submit_button = $(this).find(':submit');
+      submit_button.attr('disabled', true);
     }
   });
 }
