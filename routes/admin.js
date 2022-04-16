@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var base = '/shifts';
+var base = process.env.BASE_URL;
 
 /* Set up GitHub REST API client for Node.js */
 const { Octokit } = require("@octokit/rest");
@@ -48,7 +48,8 @@ router.get('/', ensureAuthenticated, function(req, res) {
                            'roles': roles,
                            'users': doc,
                            'last_synced': date,
-                           user: req.user});
+                           user: req.user,
+                           base_url: base});
     });
   });
 });

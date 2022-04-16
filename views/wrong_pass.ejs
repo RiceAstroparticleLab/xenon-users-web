@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <% include components/head %>
-  <link rel="stylesheet" href="/shifts/stylesheets/bootstrap-social.css">
+  <%- include('components/head', {base_url: base_url}); %>
+  <link rel="stylesheet" href="<%=base_url%>/stylesheets/bootstrap-social.css">
 </head>
 <body style="background-color: #30415d;">
     <div class="text-center">
@@ -23,7 +23,7 @@
           <!-- LNGS -->
           <button type="button" data-toggle="modal" data-target="#LNGSmodal" class="btn btn-linkedin" style="width:90%;padding:8px;margin-top:10px;font-size:medium;"><i class="fas fa-globe-americas" style="float:left;font-size:x-large;"></i> Login with LNGS</button>
           <!--Github-->
-          <a href="/shifts/auth/github"><button type="button" class="btn btn-github" style="width:90%;padding:10px;margin-top:10px;font-size:medium;"><i class="fab fa-github pr-1" style="float:left;font-size:x-large;"></i> Login with GitHub</button></a>
+          <a href="<%=base_url%>/auth/github"><button type="button" class="btn btn-github" style="width:90%;padding:10px;margin-top:10px;font-size:medium;"><i class="fab fa-github pr-1" style="float:left;font-size:x-large;"></i> Login with GitHub</button></a>
           <!-- Email/PW -->
           <button type="button" data-toggle="modal" data-target="#localModal" class="btn btn-vk" style="width:90%;padding:8px;margin-top:10px;font-size:medium;"><i class="fas fa-at" style="float:left;font-size:x-large;"></i> Login with Email</button>
           <p style="margin-top:20px">*If you are repeatedly having issues logging in with LNGS or GitHub please use the workaround as described in the <a href="https://xe1t-wiki.lngs.infn.it/doku.php?id=xenon:xenonnt:webapp#addressing_login_issues" class="alert-link">wiki page</a></p>
@@ -65,7 +65,7 @@
         </div>
         <div class="modal-body" style="padding:10px 0px 30px 40px">
           <br>
-          <form method='post' action='/shifts/auth/ldap'>
+          <form method='post' action='<%=base_url%>/auth/ldap'>
               <div class="form-group">
                 <input type='text' name='user' placeholder="LNGS ID" required>
               <div class="form-group">

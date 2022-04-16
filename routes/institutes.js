@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var base = '/shifts';
+var base = process.env.BASE_URL;
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
@@ -14,7 +14,8 @@ router.get('/', ensureAuthenticated, function(req, res) {
     { page: 'Institutes', 
       menuId: 'home', 
       institutes: req.array_of_institutes, 
-      user: req.user
+      user: req.user,
+      base_url: base
     }
   );
 });
@@ -99,7 +100,8 @@ router.get('/:institute', ensureAuthenticated, function(req, res) {
         curr: current, 
         prev: prev,
         institutes: req.array_of_institutes,
-        user: req.user
+        user: req.user,
+        base_url: base
       }
     );
   });

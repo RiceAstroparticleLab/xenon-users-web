@@ -33,14 +33,14 @@
 <html lang="en"></html>
 <html>
   <head>
-    <% include components/head %>
-    <script src="/shifts/javascripts/directory_scripts.js" type="text/javascript"></script>
-    <script src="/shifts/javascripts/text-validations.js" type="text/javascript"></script>
-    <script src="/shifts/javascripts/chart.js" type="text/javascript"></script>
+    <%- include('components/head', {base_url: base_url}); %>
+    <script src="<%= base_url %>/javascripts/directory_scripts.js" type="text/javascript"></script>
+    <script src="<%= base_url %>/javascripts/text-validations.js" type="text/javascript"></script>
+    <script src="<%= base_url %>/javascripts/chart.js" type="text/javascript"></script>
 
   </head>
   <body>
-    <% include components/menu %>
+    <%- include('components/menu', {base_url: base_url}); %> 
     <div class="container-fluid bg-3 text-left">  
       <div class ="row">
         <div class="col-sm-1"></div>
@@ -61,7 +61,7 @@
             <!-- make this button available only if authorized as admin/PI-->
             <!-- Button triggers newUserModal -->
             <% if ((user.position == "PI") || (user.groups !== undefined)) {%>
-              <a href="https://xenonnt.lngs.infn.it/shifts/request_new_member" target="_blank"><button type="button" class="btn btn-secondary btn-sm" style="color:#333;float:right;margin-top:20px">Request New Member</button></a>
+              <a href="https://xenonnt.lngs.infn.it/<%= base_url %>/request_new_member" target="_blank"><button type="button" class="btn btn-secondary btn-sm" style="color:#333;float:right;margin-top:20px">Request New Member</button></a>
             <%}%>  
           <% include components/directory %>
         </div>
@@ -70,7 +70,7 @@
     </div>
 
     <!-- Update User Modal -->
-    <% include components/updateUserModal %>
+    <%- include('components/updateUserModal', {base_url: base_url}); %> 
   </body>
   <script>
     $(document).ready(function () {

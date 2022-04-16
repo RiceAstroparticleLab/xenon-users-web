@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <% include components/head %>
-  <script src="/shifts/javascripts/directory_scripts.js" type="text/javascript"></script>
-  <script src="/shifts/javascripts/text-validations.js" type="text/javascript"></script>
-  <link rel="stylesheet" href="/shifts/stylesheets/bootstrap-social.css">
+  <%- include('components/head', {base_url: base_url}); %>
+  <script src="<%=base_url%>/javascripts/directory_scripts.js" type="text/javascript"></script>
+  <script src="<%=base_url%>/javascripts/text-validations.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="<%=base_url%>/stylesheets/bootstrap-social.css">
 </head>
 <body style="background-color: #30415d;">
   <div class="row" style="height: 50px;"></div>
@@ -16,7 +16,7 @@
         <h5>Please fill out the following form to request a new member for your institute. 
           The request should be approved soon by an admin.</h5>
         <br>
-        <form id="formPendingUser" name="pendinguser" method="post" action="/shifts/users/pendinguser">
+        <form id="formPendingUser" name="pendinguser" method="post" action="<%=base_url%>/users/pendinguser">
           <div class="row" style="margin-top:12px">
             <label for="fname" style="padding-left:30px">First Name</label><br>
             <div style="text-align:center;">

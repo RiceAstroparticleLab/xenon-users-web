@@ -10,31 +10,31 @@
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-          <!-- <li><a href="/shifts/authors">Author List</a></li> -->
+          <!-- <li><a href="<%=base_url%>/authors">Author List</a></li> -->
           <% if (user.position == "PI" || user.groups.includes("admin")) {%>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Forms<span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="/shifts/request_new_member">Request New Member</a></li>
-                <li><a href="/shifts/remove_member">Remove Member</a></li>
+                <li><a href="<%=base_url%>/request_new_member">Request New Member</a></li>
+                <li><a href="<%=base_url%>/remove_member">Remove Member</a></li>
               </ul>
             </li>
           <%}%>
-          <li id="institutes"><a href="/shifts/institutes">Institutes</a></li>
-          <li id="fulldirectory"><a href="/shifts/fulldirectory">Full Directory</a></li>  
-          <li id="shifts"><a href="/shifts/">Shifts</a></li>
+          <li id="institutes"><a href="<%=base_url%>/institutes">Institutes</a></li>
+          <li id="fulldirectory"><a href="<%=base_url%>/fulldirectory">Full Directory</a></li>  
+          <li id="shifts"><a href="<%=base_url%>/">Shifts</a></li>
           <% if (user) { %>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <!-- <% if (user.position == "PI" || user.groups != undefined) {%>
-                  <li id="dashboard"><a href="/shifts/admin">Admin Dashboard</a></li>
+                  <li id="dashboard"><a href="<%=base_url%>/admin">Admin Dashboard</a></li>
                 <%}%> -->
-                <li id="profile"><a href="/shifts/profile">Profile</a></li>
-                <li id="logout"><a href="/shifts/auth/logout">Logout</a></li>
+                <li id="profile"><a href="<%=base_url%>/profile">Profile</a></li>
+                <li id="logout"><a href="<%=base_url%>/auth/logout">Logout</a></li>
               </ul>
           <% } else { %>
-            <li id="login"><a href="/shifts/auth/login">Login</a></li>
+            <li id="login"><a href="<%=base_url%>/auth/login">Login</a></li>
           <%}%>
         </ul>
       </div>

@@ -13,6 +13,7 @@ const INSTITUTES_ARRAY = [['Bologna'], ['Coimbra'], ['Columbia'],
                           ['Subatech'], ['Tokyo'], ['Torino'], 
                           ['UChicago', 'Chicago'], ['UCSD', 'UC San Diego'], 
                           ['WIS', 'Weizmann'], ['Zurich']];
+const BASE_URL = '/shifts';
 
 // Makes DataTables table of current members in the fulldirectory page in 
 // selected div (tablediv)
@@ -29,7 +30,7 @@ function InitializeTable(tablediv) {
       searchPlaceholder: 'Search...',
     },
     ajax: {
-      url: '/shifts/curr_table_info',
+      url: `${BASE_URL}/curr_table_info`,
       type: 'POST',
     },
     columns: [	    
@@ -129,7 +130,7 @@ function InitializePrevTable(tablediv) {
       searchPlaceholder: 'Search...',
     },
     ajax: {
-      url: '/shifts/prev_table_info',
+      url: `${BASE_URL}/prev_table_info`,
       type: 'POST',
     },
     columns: [	    
@@ -216,7 +217,7 @@ function TechTable(tablediv) {
       searchPlaceholder: 'Search...',
     },
     ajax: {
-      url: '/shifts/tech_table',
+      url: `${BASE_URL}/tech_table`,
       type: 'POST',
     },
     columns: [
@@ -310,7 +311,7 @@ function PrevTechTable(tablediv) {
       searchPlaceholder: 'Search...',
     },
     ajax: {
-      url: '/shifts/prev_tech_table',
+      url: `${BASE_URL}/prev_tech_table`,
       type: 'POST',
     },
     columns: [
@@ -372,7 +373,7 @@ function PrevAuthorsTable(tablediv) {
   var table = $(tablediv).DataTable({
     lengthMenu: [[10, 50, 100, -1], [10, 50, 100, 'All']],
     ajax: {
-      url: '/shifts/prev_author_table',
+      url: `${BASE_URL}/prev_author_table`,
       type: 'POST',
     },
     columns: [	    
@@ -432,7 +433,7 @@ function CurrAuthorsTable(tablediv) {
   var table = $(tablediv).DataTable({
     lengthMenu: [[10, 50, 100, -1], [10, 50, 100, 'All']],
     ajax: {
-      url: '/shifts/curr_author_table',
+      url: `${BASE_URL}/curr_author_table`,
       type: 'POST',
     },
     columns: [	    
@@ -582,7 +583,7 @@ function UpdateUserModal() {
     var modal = $(this);
     // Update the modal's content to match the data for the user
     document.getElementById('formUpdateUser').action = 
-      '/shifts/users/Institute_'+institute+'/'+userInfo._id+'/updateContactInfoAdmin';
+      `${BASE_URL}/users/Institute_${institute}/${userInfo._id}/updateContactInfoAdmin`;
     modal.find('.modal-body input[name="FirstName"]').val(userInfo.first_name);
     modal.find('.modal-body input[name="LastName"]').val(userInfo.last_name);
     modal.find('.modal-body input[name="Email"]').val(userInfo.email);

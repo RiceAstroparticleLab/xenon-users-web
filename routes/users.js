@@ -4,7 +4,7 @@ var ObjectId = require('mongodb').ObjectId;
 var jsdom = require('jsdom');
 var moment = require('moment');
 $ = require('jquery')(new jsdom.JSDOM().window);
-var base = '/shifts';
+var base = process.env.BASE_URL;
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }

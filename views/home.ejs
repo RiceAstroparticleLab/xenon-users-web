@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <% include components/head %>
-    <link rel="stylesheet" href="/shifts/stylesheets/bootstrap-social.css">
+    <%- include('components/head', {base_url: base_url}); %>
+    <link rel="stylesheet" href="<%= base_url %>/stylesheets/bootstrap-social.css">
 </head>
 <body>
-    <% include components/menu %>
+    <%- include('components/menu', {base_url: base_url}); %> 
     <h1>Under Construction</h1>
 
 </body>

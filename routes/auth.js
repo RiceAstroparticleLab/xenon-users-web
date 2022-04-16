@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var passport = require("passport");
 const URL = require('url').URL;
-var base = '/shifts';
+var base = process.env.BASE_URL;
 
 /**
  * Router that renders the initial login page using the login.ejs view 
@@ -14,7 +14,7 @@ var base = '/shifts';
  *  - user: object containing user information stored in req
  */
 router.get('/login', function(req, res) {
-  res.render('login', {page: 'Login', menuId: 'home', user: req.user});
+  res.render('login', {page: 'Login', menuId: 'home', user: req.user, base_url: base});
 });
 
 // For the failed login attempts, the random numbers are there so people
@@ -27,7 +27,8 @@ router.get('/login_attempt_1vn9ub480ng49', function(req, res) {
       menuId: 'home', 
       user: req.user, 
       message: 'The email or password you entered is incorrect', 
-      link: null 
+      link: null,
+      base_url: base
     }
   );
 });
@@ -40,7 +41,8 @@ router.get('/login_attempt_2cn9rbu94gi4n', function(req, res) {
       user: req.user,
       message: 'Error: You do not appear to be in our database. Please ' +
        'see Slack tech-support as it may be an issue with your information within XENON.',
-      link: null
+      link: null,
+      base_url: base
     }
   );
 });
@@ -52,7 +54,8 @@ router.get('/login_attempt_3poiux93jxm023', function(req, res) {
       menuId: 'home', 
       user: req.user, 
       message: 'Error: Invalid username/password',
-      link: null
+      link: null,
+      base_url: base
     }
   );
 });
@@ -75,7 +78,8 @@ router.get('/login_attempt_4sowc37fbw0fjy3f', function (req, res) {
         menuId: 'home',
         user: req.user,
         data: docs,
-        lngs: lngs_id
+        lngs: lngs_id,
+        base_url: base
       }
     )
   });
@@ -108,7 +112,7 @@ router.post('/ldap', function(req, res, next) {
         if (info.message === 'Invalid username/password') {
           res.redirect(base + '/auth/login_attempt_3poiux93jxm023');
         } else { // successful login but not in db
-          var u = new URL('https://xenonnt.lngs.infn.it/shifts/auth/login_attempt_4sowc37fbw0fjy3f');
+          var u = new URL(`https://xenonnt.lngs.infn.it${base}/auth/login_attempt_4sowc37fbw0fjy3f`);
           u.search = `id=${info.message}`;
           console.log(u);
           res.redirect(u);

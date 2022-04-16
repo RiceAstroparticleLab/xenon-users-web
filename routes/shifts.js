@@ -1,7 +1,7 @@
 var express = require("express");
 var url = require("url");
 var router = express.Router();
-var base = '/shifts';
+var base = process.env.BASE_URL;
 
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { return next(); }

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <% include components/head %> 
+  <%- include('components/head', {base_url: base_url}); %>
 </head>
 <body>
-<% include components/menu %>
+  <%- include('components/menu', {base_url: base_url}); %> 
 <div class="container-fluid bg-3 text-center">  
   <div class="row">
     <div class="col-sm-6">
@@ -17,7 +17,7 @@
   <div class="row">
     <div class="col-sm-12">
       <% for (i = 0; i < institutes.length; i++) {%>
-          <a class="btn btn-institutes" href="/shifts/institutes/<%=institutes[i]%>"><%=institutes[i]%></a>
+          <a class="btn btn-institutes" href="<%=base_url%>/institutes/<%=institutes[i]%>"><%=institutes[i]%></a>
           &nbsp; &nbsp; &nbsp; &nbsp;
       <%}%>
     </div>

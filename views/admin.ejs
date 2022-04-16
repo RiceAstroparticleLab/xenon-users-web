@@ -46,11 +46,11 @@
   }
 </style>
 <head>
-  <% include components/head %> 
-  <script src="/shifts/javascripts/admin_scripts.js" type="text/javascript"></script>
+  <%- include('components/head', {base_url: base_url}); %> 
+  <script src="<%= base_url %>/javascripts/admin_scripts.js" type="text/javascript"></script>
 </head>
 <body style="background-color:#ECF0F6">
-  <% include components/menu %>
+  <%- include('components/menu', {base_url: base_url}); %> 
   <div class="row" style="height:100%;overflow:hidden;">
     <div class="col-sm-2 col-xs-3 sidebar">
       <div style="text-align:center;">

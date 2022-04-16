@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var base = '/shifts';
+var base = process.env.BASE_URL;
 var today = Date.now()
 var oneYearAgo = new Date(Number(today) - 31556952000);
 
@@ -21,7 +21,8 @@ router.get('/', ensureAuthenticated, function(req, res) {
         menuId: 'home', 
         user: req.user, 
         institutes: req.array_of_institutes,
-        instInfo: data
+        instInfo: data,
+        base_url: base
       }
     );
   })
@@ -44,7 +45,8 @@ router.get('/request_new_member', ensureAuthenticated, function(req, res) {
         menuId: 'home', 
         title: 'Request New Member',
         institutes: docs,
-        user: req.user
+        user: req.user,
+        base_url: base
       }
     );
   });
@@ -52,7 +54,7 @@ router.get('/request_new_member', ensureAuthenticated, function(req, res) {
 
 // confirmation of external form
 router.get('/confirmation', function(req, res) {
-  res.render('confirmation_lander', {page: 'Request Confirmed', menuId: 'home', title: 'Request Confirmed'})
+  res.render('confirmation_lander', {page: 'Request Confirmed', menuId: 'home', title: 'Request Confirmed', base_url: base})
 });
 
 // external form.
@@ -75,7 +77,8 @@ router.get('/remove_member', ensureAuthenticated, function(req, res) {
         menuId: 'home', 
         title: 'Remove a User',
         data: docs,
-        user: req.user
+        user: req.user,
+        base_url: base
       }
     );
   });
@@ -94,7 +97,8 @@ router.get('/fulldirectory', ensureAuthenticated, function(req, res) {
       menuId: 'home',
       positions: positionsArr,
       "institutes": req.array_of_institutes,
-      user: req.user
+      user: req.user,
+      base_url: base
     }
   );
 });
@@ -113,7 +117,8 @@ router.get('/authors', ensureAuthenticated, function(req, res) {
       { page: 'Author List',
         menuId: 'home', 
         data: docs, 
-        user: req.user
+        user: req.user,
+        base_url: base
       }
     );
   });
@@ -132,6 +137,7 @@ router.get('/profile', ensureAuthenticated, function(req, res){
       slackLink: process.env.SLACK_INVITE, 
       title: name, 
       user: req.user, 
+      base_url: base
     }
   );
   });

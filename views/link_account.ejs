@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <% include components/head %>
-  <script src="/shifts/javascripts/directory_scripts.js" type="text/javascript"></script>
-  <link rel="stylesheet" href="/shifts/stylesheets/bootstrap-social.css">
+  <%- include('components/head', {base_url: base_url}); %>
+  <script src="<%=base_url%>/javascripts/directory_scripts.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="<%=base_url%>/stylesheets/bootstrap-social.css">
 </head>
 <body style="background-color: #30415d;">
   <div class="row" style="height: 50px;"></div>
@@ -17,7 +17,7 @@
       <h5 style="color:darkred">If your email does not appear in the list, please post to Slack tech-support as it 
           may be an issue with your information within XENON</h5>
       <br>
-      <form id="formLinkLngs" name="removeuser" method="post" action="/shifts/users/linkuser">
+      <form id="formLinkLngs" name="removeuser" method="post" action="<%=base_url%>/users/linkuser">
         <div class="row" style="margin-top:12px">
           <label for="fname" style="padding-left:30px">Email</label><br>
           <div style="padding-left:30px">
