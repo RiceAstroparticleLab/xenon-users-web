@@ -1,0 +1,16 @@
+[Unit]
+Description=XENON User Management server
+Requires=After=network.target
+
+[Service]
+ExecStart=/usr/bin/npm start
+WorkingDirectory=/var/www/xenon-users-web
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifer=xenonUM
+Environment=/global/etc/env_vars
+
+[Install]
+WantedBy=multi-user.target
