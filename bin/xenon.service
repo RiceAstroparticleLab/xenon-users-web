@@ -9,8 +9,8 @@ Restart=always
 RestartSec=10
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifer=xenonUM
-Environment=/global/etc/env_vars
+SyslogIdentifier=xenonUM
+Environment=.env
 
 [Install]
 WantedBy=multi-user.target
