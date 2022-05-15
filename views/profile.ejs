@@ -33,7 +33,7 @@
                 <h5 style="color:#355C99"><%= user.position %> at <%= user.institute %></h5>
                 <br>
                 <ul class="nav nav-tabs">
-                    <li class="active views"><a data-toggle="tab" role="tab" href="#profiletab"><i class="fas fa-user"></i><strong>&nbsp;&nbsp;&nbsp;XENON Profile</strong></a></li>
+                    <li class="active views" style="border-bottom: 2px solid navy;"><a data-toggle="tab" role="tab" href="#profiletab"><i class="fas fa-user"></i><strong>&nbsp;&nbsp;&nbsp;XENON Profile</strong></a></li>
                     <% if (user.groups.includes("approval")) {%>
                         <li class="views"><a data-toggle="tab" role="tab" href="#requesttab"><i class="fas fa-hourglass-half"></i><strong>&nbsp;&nbsp;&nbsp;Pending Requests</strong></a></li>
                     <%}%>
