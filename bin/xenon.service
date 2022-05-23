@@ -1,6 +1,6 @@
 [Unit]
 Description=XENON User Management server
-Requires=network.target
+After=network.target
 
 [Service]
 ExecStart=/usr/bin/node /var/www/xenon-users-web/app.js
