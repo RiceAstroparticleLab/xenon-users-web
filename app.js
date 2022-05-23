@@ -3,9 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var dotenv = require('dotenv');
+// var dotenv = require('dotenv'); // LOCAL TESTING ONLY
 
-dotenv.config();
+// dotenv.config(); // LOCAL TESTING ONLY
 
 // connect to the mongo server
 const MongoClient = require('mongodb').MongoClient;
@@ -128,6 +128,8 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+
+  app.listen(process.env.PORT, () => {console.log(`Server running on :${process.env.PORT}`);});
 });
 
 module.exports = app
