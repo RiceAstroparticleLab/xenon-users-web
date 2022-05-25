@@ -40,10 +40,11 @@
                                 <th id="table_head_this_year">
                                     <div class="dropdown">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            <span id="the_year">2021</span>
+                                            <span id="the_year">2022</span>
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" style="background-color:#fff;letter-spacing:normal;">
+                                            <li><a href="#">2022</a></li>
                                             <li><a href="#">2021</a></li>
                                             <li><a href="#">2020</a></li>
                                             <li><a href="#">2019</a></li>
@@ -506,7 +507,7 @@
         const stats = await CalcEstShifts(`<%- JSON.stringify(instInfo) %>`);
         console.log(stats);
         // initialize the table at current year
-        FillAggregates("#aggregate_table_body", '2021', "<%= user.institute %>");
+        FillAggregates("#aggregate_table_body", '2022', "<%= user.institute %>");
         $('.dropdown-menu a').click(function(){
             $('#the_year').text($(this).text());
             FillAggregates("#aggregate_table_body", $(this).text(), "<%= user.institute %>");
