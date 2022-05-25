@@ -177,7 +177,7 @@ function LeaveCollaborationMail(req, callback) {
   var message = {
     from: process.env.NOTIFS_ACCOUNT,
     to: process.env.CB_EMAIL,
-    cc: [process.env.CHRIS_EMAIL],
+    cc: [process.env.CHRIS_EMAIL, process.env.WG_EMAIL],
     subject: `${req.body.name} is leaving the collaboration.`,
     html: '<p>Dear all,</p>' + 
       `<p>${req.user.first_name} ${req.user.last_name} is removing ${req.body.name}. ` + 
