@@ -52,22 +52,22 @@ const app = express();
 
 // Session caching
 var session = require('express-session');
-var MongoDBStore = require('connect-mongodb-session')(session);			
-var store = new MongoDBStore({
-  uri: process.env.MONGO_LOCAL_URI,
-  collection: 'mySessions'
-});
+// var MongoDBStore = require('connect-mongodb-session')(session);			
+// var store = new MongoDBStore({
+//   uri: process.env.MONGO_LOCAL_URI,
+//   collection: 'mySessions'
+// });
  
-store.on('connected', function() {
-  store.client; // The underlying MongoClient object from the MongoDB driver
-});
+// store.on('connected', function() {
+//   store.client; // The underlying MongoClient object from the MongoDB driver
+// });
 
-// Catch errors
-var assert = require("assert");
-store.on('error', function(error) {
-  assert.ifError(error);
-  assert.ok(false);
-});
+// // Catch errors
+// var assert = require("assert");
+// store.on('error', function(error) {
+//   assert.ifError(error);
+//   assert.ok(false);
+// });
  
 app.use(session({
   secret: process.env.EXPRESS_SESSION,
