@@ -41,7 +41,7 @@
                                     <div class="dropdown">
                                         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                             <!-- <span id="the_year">2022</span> -->
-                                            <span id="the_year"><%= new Date(2030, 1, 1).getFullYear()%></span>
+                                            <span id="the_year"><%= new Date().getFullYear()%></span>
                                             <span class="caret"></span>
                                         </button>
                                         <!-- <ul class="dropdown-menu" style="background-color:#fff;letter-spacing:normal;">
@@ -55,7 +55,7 @@
                                         </ul> -->
                                         
                                         <ul class="dropdown-menu" style="background-color:#fff;letter-spacing:normal;">
-                                            <% for(var yr = new Date(2030, 1, 1).getFullYear(); yr >= 2016; yr--) { %>
+                                            <% for(var yr = new Date().getFullYear(); yr >= 2016; yr--) { %>
                                                 <li><a href="#"><%= yr%></a></li>
                                             <% } %>
                                         </ul>
@@ -515,7 +515,7 @@
         const stats = await CalcEstShifts(`<%- JSON.stringify(instInfo) %>`);
         console.log(stats);
         // initialize the table at current year
-        FillAggregates("#aggregate_table_body", "<%= new Date(2030, 1, 1).getFullYear() %>", "<%= user.institute %>");
+        FillAggregates("#aggregate_table_body", "<%= new Date().getFullYear() %>", "<%= user.institute %>");
         $('.dropdown-menu a').click(function(){
             $('#the_year').text($(this).text());
             FillAggregates("#aggregate_table_body", $(this).text(), "<%= user.institute %>");
