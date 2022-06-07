@@ -186,7 +186,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="phone">Phone</label>
-                                <input class="form-control" type="tel" value="<%= user.cell %>" name="cell">
+                                <input id="phone" class="form-control" type="tel" value="<%= user.cell %>" name="cell">
                             </div>
                             <br>
                             <button class="btn btn-info" type="submit">Submit</button>
@@ -201,6 +201,7 @@
 </body>
 <script>
     $(document).ready(function(){
+        ValidatePhone('#phone');
         $('.panel-title > a').click(function() {
         $(this).find('i').toggleClass('fa-plus fa-minus')
                 .closest('panel').siblings('panel')
