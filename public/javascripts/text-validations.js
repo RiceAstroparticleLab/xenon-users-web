@@ -75,3 +75,18 @@ function ValidateForm(elem, list) {
     }
   });
 }
+
+// Checks that a phone number is in valid format.
+function ValidatePhone(elem) {
+  $(elem).on('input', function() {
+    // regex for valid phone numbers.
+    var re = /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
+    if (re.test($(this).val())) {
+      $(this).removeClass("invalid");
+      // if bool is true, form will suggest 
+    }
+    else {
+      $(this).addClass("invalid");
+    }
+  });
+}

@@ -42,6 +42,7 @@ function InitializeTable(tablediv) {
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
       { data: "start_date"},
+      { data: "cell", orderable: false},
       { data: "previous_time", defaultContent: '', orderable: false },
       { data: "last_modified", defaultContent: ''},
       { title: '', orderable: false }
@@ -55,12 +56,13 @@ function InitializeTable(tablediv) {
       { title: 'Position', targets: 5 },
       { title: 'Time', targets: 6 },
       { title: 'Start Date', targets: 7 },
+      { title: 'Phone Number', targets: 8 },
       { title: 'Explanations <button type="button" class="btn btn-sm"' +
         'data-html="true" data-toggle="tooltip" data-placement="right" id="explanations"' +
         'data-original-title="Date of moving between institutes and comments on other ' +
         'status changes" style="border-radius:25px;border:transparent;padding:0px 5px;">' +
-        '<i class="fas fa-question"></i></button>', targets: 8 },
-      { visible: false, targets: 9 },
+        '<i class="fas fa-question"></i></button>', targets: 9 },
+      { visible: false, targets: 10 },
       { targets: -1,
         data: null,
         defaultContent: "<button type='button' class='btn-circle'>" + 
