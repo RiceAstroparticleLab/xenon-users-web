@@ -13,7 +13,7 @@ const INSTITUTES_ARRAY = [['Bologna'], ['Coimbra'], ['Columbia'],
                           ['Subatech'], ['Tokyo'], ['Torino'], 
                           ['UChicago', 'Chicago'], ['UCSD', 'UC San Diego'], 
                           ['WIS', 'Weizmann'], ['Zurich']];
-const BASE_URL = '/shifts';
+const BASE_URL = '';
 
 // Makes DataTables table of current members in the fulldirectory page in 
 // selected div (tablediv)
@@ -42,7 +42,7 @@ function InitializeTable(tablediv) {
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
       { data: "start_date"},
-      { data: "cell", orderable: false},
+      { data: "cell", defaultContent: '', orderable: false},
       { data: "previous_time", defaultContent: '', orderable: false },
       { data: "last_modified", defaultContent: ''},
       { title: '', orderable: false }
