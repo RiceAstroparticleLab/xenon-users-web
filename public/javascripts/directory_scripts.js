@@ -13,7 +13,7 @@ const INSTITUTES_ARRAY = [['Bologna'], ['Coimbra'], ['Columbia'],
                           ['Subatech'], ['Tokyo'], ['Torino'], 
                           ['UChicago', 'Chicago'], ['UCSD', 'UC San Diego'], 
                           ['WIS', 'Weizmann'], ['Zurich']];
-const BASE_URL = '';
+const BASE_URL = '/shifts';
 
 // Makes DataTables table of current members in the fulldirectory page in 
 // selected div (tablediv)
