@@ -42,7 +42,7 @@ function InitializeTable(tablediv) {
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
       { data: "start_date"},
-      { data: "cell", orderable: false},
+      { data: "cell", defaultContent: '', orderable: false},
       { data: "previous_time", defaultContent: '', orderable: false },
       { data: "last_modified", defaultContent: ''},
       { title: '', orderable: false }
