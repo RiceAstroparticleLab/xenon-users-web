@@ -21,19 +21,7 @@
             <div style="padding-left:30px">
                 <select id="selectedUser" name="selectedUser" required>
                   <option value="" selected disabled hidden>Please select</option>
-                  <% for (i = 0; i < data.sort( function(a, b) {
-                    const nameA = a.last_name.toUpperCase(); // ignore upper and lowercase
-                    const nameB = b.last_name.toUpperCase(); // ignore upper and lowercase
-                    if (nameA < nameB) {
-                      return -1;
-                    }
-                    if (nameA > nameB) {
-                      return 1;        
-                    }
-                              
-                    // names must be equal
-                    return 0;
-                  }).length; i++) {%>
+                  <% for (i = 0; i < data.length; i++) {%>
                     <option id="<%= i %>" value="<%= data[i]._id %>"><%= data[i].first_name %> <%= data[i].last_name %></option>
                   <%}%>
                 </select>
