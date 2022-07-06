@@ -71,7 +71,7 @@ router.get('/remove_member', ensureAuthenticated, function(req, res) {
     query["institute"] = req.user.institute;
   }
 
-  collection.find(query).toArray(function(e, docs) {
+  collection.find(query).sort({last_name: 1}).toArray(function(e, docs) {
     res.render('removeUser', 
       { page: 'Remove a User', 
         menuId: 'home', 
