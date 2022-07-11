@@ -4,13 +4,15 @@ var router = express.Router();
 var base = process.env.BASE_URL;
 
 function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) { return next(); }
-    req.session.returnTo = req.originalUrl;
-    return res.redirect(base + '/auth/login');
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  req.session.returnTo = req.originalUrl;
+  return res.redirect(base + '/auth/login');
 }
 
 function getNextDayOfWeek(date, dayOfWeek) {
-  // day of week 0 (Mon) to 6 (Sun)
+  // day of week 0 (Sun) to 6 (Sat)
   var resultDate = new Date(date.getTime());
   resultDate.setDate(date.getDate() + (7 + dayOfWeek - date.getDay()) % 7);
   return resultDate;
@@ -25,41 +27,53 @@ function getNextDayOfWeek(date, dayOfWeek) {
 
 // I dont actually use this but plan to eventually display current shifters
 // on home page like nodiaq had
-router.get('/get_current_shifters', ensureAuthenticated, function(req, res) {
+router.get('/get_current_shifters', ensureAuthenticated, function (req, res) {
   var db = req.xenonnt_db;
   var shifts = db.collection('shifts');
   var usersCol = db.collection('users');
   var today = new Date();
-  shifts.find(
-    {
-      "start": {"$lte": today},
-      "end": {"$gte": today}
+  shifts.find({
+    "start": {
+      "$lte": today
+    },
+    "end": {
+      "$gte": today
     }
-  ).toArray(function(e, docs) {
+  }).toArray(function (e, docs) {
     var users = [];
     var qusers = [];
-    for(let i in docs) {
-      users.push({"shifter": docs[i].shifter, "shift_type": docs[i]['type']});
+    for (let i in docs) {
+      users.push({
+        "shifter": docs[i].shifter,
+        "shift_type": docs[i]['type']
+      });
       qusers.push(docs[i]['shifter']);
     }
-    
-    usersCol.find({"daq_id": {"$in": qusers}}).toArray(function(err, cursor) {
-      for(let i in cursor){
-        for(let j in users){
-          if(cursor[i]['daq_id'] === users[j]['shifter']){
+
+    usersCol.find({
+      "daq_id": {
+        "$in": qusers
+      }
+    }).toArray(function (err, cursor) {
+      for (let i in cursor) {
+        for (let j in users) {
+          if (cursor[i]['daq_id'] === users[j]['shifter']) {
             users[j]['shifter_name'] =
               cursor[j]['first_name'] + cursor[j]['last_name'];
-            
-            let fields = [['shifter_email', 'email'], ['shifter_phone', 'cell'],
-              ['shifter_skype', 'skype'], ['shifter_github', 'github']];
-            for(let k in fields){
+
+            let fields = [
+              ['shifter_email', 'email'],
+              ['shifter_phone', 'cell'],
+              ['shifter_skype', 'skype'],
+              ['shifter_github', 'github']
+            ];
+            for (let k in fields) {
               try {
                 users[j][fields[k][0]] = cursor[j][fields[k][1]];
-              }
-              catch(error) {
+              } catch (error) {
                 users[j][fields[k][0]] = 'Not set';
               }
-            }				
+            }
           }
         }
       }
@@ -70,73 +84,110 @@ router.get('/get_current_shifters', ensureAuthenticated, function(req, res) {
 
 // FullCalendar will call this function to populate itself
 // The arguments are fixed as 'start' and 'end', which are ISO dates 
-router.get('/get_shifts', ensureAuthenticated, function(req, res) {
+router.get('/get_shifts', ensureAuthenticated, function (req, res) {
   var db = req.xenonnt_db;
   var collection = db.collection('shifts');
   var q = url.parse(req.url, true).query;
   var start = new Date(q.start);
   var end = new Date(q.end);
 
-  collection.find(
-    {"start": {"$gt": start, "$lt": end}}
-  ).toArray(function(e, docs) {
+  collection.find({
+    "start": {
+      "$gt": start,
+      "$lt": end
+    }
+  }).toArray(function (e, docs) {
     var ret = [];
-    for(let i = 0; i < docs.length; i++){
+    for (let i = 0; i < docs.length; i++) {
       let doc = docs[i];
       ret.push({
         "start": doc['start'].toISOString().substr(0, 19),
         "end": doc['end'].toISOString().substr(0, 19),
-        "title": doc['type'] + ': ' + doc['shifter'] + 
-            '(' + doc['institute'] + ')',
+        "title": doc['type'] + ': ' + doc['shifter'] +
+          '(' + doc['institute'] + ')',
         "type": doc['type'],
         "available": doc['available'],
         "institute": doc['institute'],
         "shifter": doc['shifter']
       });
     }
-    return res.send(ret); 
+    return res.send(ret);
   });
 });
 
 // 
-router.get("/total_shift_aggregates", ensureAuthenticated, function(req, res) {
+router.get("/total_shift_aggregates", ensureAuthenticated, function (req, res) {
   var db = req.xenonnt_db;
   var collection = db.collection('shifts');
 
-  collection.aggregate([
-    {"$match": {"institute": {"$ne": "none"}}},
-    {$group: {
-      "_id": { "institute": "$institute", "yr": {"$year": "$start"}}, 
-      "count": {"$sum": 1}
-    }}, 
-    {$group: {
-      "_id": "$_id.institute", "total": {"$sum": "$count"}, 
-      "years": {$push: {"year": "$_id.yr", "count": "$count"}}
-    }},
-    {$sort: {"total": -1}}
-  ]).toArray(function(err, result) {
+  collection.aggregate([{
+      "$match": {
+        "institute": {
+          "$ne": "none"
+        }
+      }
+    },
+    {
+      $group: {
+        "_id": {
+          "institute": "$institute",
+          "yr": {
+            "$year": "$start"
+          }
+        },
+        "count": {
+          "$sum": 1
+        }
+      }
+    },
+    {
+      $group: {
+        "_id": "$_id.institute",
+        "total": {
+          "$sum": "$count"
+        },
+        "years": {
+          $push: {
+            "year": "$_id.yr",
+            "count": "$count"
+          }
+        }
+      }
+    },
+    {
+      $sort: {
+        "total": -1
+      }
+    }
+  ]).toArray(function (err, result) {
     res.send(result);
   });
 });
 
 // list of DAQ id's for the autocomplete suggestions on the shift calendar
-router.get("/get_lngsids", ensureAuthenticated, function(req, res) {
-    var db = req.xenonnt_db;
-    db.collection('users').distinct("lngs_ldap_uid",  { "lngs_ldap_uid" : { $ne : null } }, function(e, docs) {
-        res.send(docs);
-    });
+router.get("/get_lngsids", ensureAuthenticated, function (req, res) {
+  var db = req.xenonnt_db;
+  db.collection('users').distinct("lngs_ldap_uid", {
+    "lngs_ldap_uid": {
+      $ne: null
+    }
+  }, function (e, docs) {
+    res.send(docs);
+  });
 });
 
 // not currently in use
-router.get("/get_rules", ensureAuthenticated, function(req,res) {
+router.get("/get_rules", ensureAuthenticated, function (req, res) {
   var db = req.xenonnt_db;
   var collection = db.collection('shifts');
   var d = new Date()
   var year = d.getFullYear().toString();
   var dat = new Date("2020-01-01")
-  collection.find(
-    {start: {$gte: ISODate("2020-01-01T00:00:00.000Z")}}
-  ).toArray(function(err, result) {
+  collection.find({
+    start: {
+      $gte: ISODate("2020-01-01T00:00:00.000Z")
+    }
+  }).toArray(function (err, result) {
     l = result.length
     res.send(l.toString());
   });
@@ -144,66 +195,88 @@ router.get("/get_rules", ensureAuthenticated, function(req,res) {
 
 // generates data as of Nov 1 of the current year and adds it to 
 // the mongodb collection shift_calcs
-router.post('/add_to_shift_calcs', ensureAuthenticated, function(req, res) {
+router.post('/add_to_shift_calcs', ensureAuthenticated, function (req, res) {
   var db = req.xenonnt_db;
   var collection = db.collection('shift_calcs');
   var d = new Date();
   var year = d.getFullYear();
-  collection.aggregate([
-    {"$match": {
-      "position":  {$in: ["PI", "Non-permanent Sci.", "Permanent Scientist", "PhD Student", "Thesis Student"]},
-      "start_date": {$lte: new Date(`${year}-11-01`)},
-      $or: [{"end_date": {$exists: false}}, {"end_date": {$gt: new Date(`${year}-11-01`)}}]
-    }},
-    {"$group": {
-      "_id": "$institute",
-      "count": {"$sum": 1}
-    }}
-  ]).toArray(function(err, data) {
+  collection.aggregate([{
+      "$match": {
+        "position": {
+          $in: ["PI", "Non-permanent Sci.", "Permanent Scientist", "PhD Student", "Thesis Student"]
+        },
+        "start_date": {
+          $lte: new Date(`${year}-11-01`)
+        },
+        $or: [{
+          "end_date": {
+            $exists: false
+          }
+        }, {
+          "end_date": {
+            $gt: new Date(`${year}-11-01`)
+          }
+        }]
+      }
+    },
+    {
+      "$group": {
+        "_id": "$institute",
+        "count": {
+          "$sum": 1
+        }
+      }
+    }
+  ]).toArray(function (err, data) {
     // iterate through array and add that new information to the shift_calcs collection
     for (let i = 0; i < data.length; i++) {
       inst = data[i];
-      collection.findOneAndUpdate(
-        {"_id": inst['_id']}, 
-        {"$push": {"years": {"year": year, "phdcount": inst['count']}}}
-      )
+      collection.findOneAndUpdate({
+        "_id": inst['_id']
+      }, {
+        "$push": {
+          "years": {
+            "year": year,
+            "phdcount": inst['count']
+          }
+        }
+      })
     }
-    return res.sendStatus(200); 
+    return res.sendStatus(200);
   });
 });
 
-router.post('/add_shifts', ensureAuthenticated, function(req, res){
+router.post('/add_shifts', ensureAuthenticated, function (req, res) {
   var idoc;
   var db = req.xenonnt_db;
   // Get form data
   var weekday = req.body.shift_change_day;
   var shift_type = req.body.shift_type;
   var credit_multiplier = req.body.credit_multiplier;
-  var start = 
+  var start =
     new Date(Date.UTC(parseInt(req.body.start_date.substr(0, 4)),
-                      parseInt(req.body.start_date.substr(5, 2)) - 1, 
-                      parseInt(req.body.start_date.substr(8, 2)))
-  );
-  var end = 
+      parseInt(req.body.start_date.substr(5, 2)) - 1,
+      parseInt(req.body.start_date.substr(8, 2))));
+  var end =
     new Date(Date.UTC(parseInt(req.body.end_date.substr(0, 4)),
-                      parseInt(req.body.end_date.substr(5, 2)) - 1,
-                      parseInt(req.body.end_date.substr(8, 2)))
-  );
+      parseInt(req.body.end_date.substr(5, 2)) - 1,
+      parseInt(req.body.end_date.substr(8, 2))));
 
   start = getNextDayOfWeek(start, weekday);
-  if (start < end){ 
-    var start_of_shift = 
-      new Date(Date.UTC(start.getFullYear(), start.getMonth(), 
-                        start.getDate(), 0, 0, 0)
-    );
-    var end_of_shift = 
-      new Date(Date.UTC(start.getFullYear(), start.getMonth(), 
-                        start.getDate(), 0, 0, 0)
-    );
-    end_of_shift.setDate(start.getDate() + 7);
-    end_of_shift.setHours(23, 59, 59, 0);
+  var startWeek = new Date(start);
+  startWeek.setDate(startWeek.getDate() + 7);
+  if (start < end) {
+    var start_of_shift =
+      new Date(Date.UTC(start.getFullYear(), start.getMonth(),
+        start.getDate(), 0, 0, 0));
+    var end_of_shift =
+      new Date(Date.UTC(start.getFullYear(), start.getMonth(),
+        start.getDate(), 0, 0, 0));
+    if (end <= startWeek) {
+      end_of_shift.setDate(start.getDate() + 7);
+      end_of_shift.setHours(23, 59, 59, 0);
 
-    idoc = {
+      idoc = {
         "start": start_of_shift,
         "end": end_of_shift,
         "type": shift_type,
@@ -212,28 +285,51 @@ router.post('/add_shifts', ensureAuthenticated, function(req, res){
         "institute": "none",
         "shifter": "none",
         "comment": ""
+      }
+    } else {
+      end_of_shift.setDate(start.getDate() + 14);
+      end_of_shift.setHours(23, 59, 59, 0);
+
+      idoc = {
+        "start": start_of_shift,
+        "end": end_of_shift,
+        "type": shift_type,
+        "available": true,
+        "credit_multiplier": credit_multiplier,
+        "institute": "none",
+        "shifter": "none",
+        "comment": ""
+      }
     }
   }
   db.collection('shifts').insertOne(idoc);
-  return res.sendStatus(200);    
+  return res.sendStatus(200);
 });
 
-router.post('/remove_shifts', ensureAuthenticated, function(req, res) {
+router.post('/remove_shifts', ensureAuthenticated, function (req, res) {
   var db = req.xenonnt_db;
   var collection = db.collection("shifts");
   var start = new Date(req.body.start_date);
   var end = new Date(req.body.end_date);
   var type = req.body.shift_type;
 
-  query = {"start": {"$gte": start, "$lte": end}, "available": true};
-  if(type !== 'all') {
+  query = {
+    "start": {
+      "$gte": start,
+      "$lte": end
+    },
+    "available": true
+  };
+  if (type !== 'all') {
     query['type'] = type;
   }
-  collection.removeOne(query, {multi: true});
+  collection.removeOne(query, {
+    multi: true
+  });
   return res.sendStatus(200);
 });
 
-router.post('/modify_shift', ensureAuthenticated, function(req, res){
+router.post('/modify_shift', ensureAuthenticated, function (req, res) {
   var db = req.xenonnt_db;
   var collection = db.collection('shifts');
   var start = new Date(req.body.start_date);
@@ -242,60 +338,62 @@ router.post('/modify_shift', ensureAuthenticated, function(req, res){
   start.setDate(start.getDate() - 1);
   end.setDate(end.getDate() + 1);
   var doc = {
-        'start': start,
-        'end': end,
-        'shifter': req.body.shifter,
-        'shift_type': req.body.shift_type,
-        'institute': req.body.institute,
-        'comment': req.body.comment,
-        'remove': req.body.remove
+    'start': start,
+    'end': end,
+    'shifter': req.body.shifter,
+    'shift_type': req.body.shift_type,
+    'institute': req.body.institute,
+    'comment': req.body.comment,
+    'remove': req.body.remove
   }
 
   // Update the shift with this user
   if (doc['remove'] === 'false') {
-    collection.updateOne(
-      { 
-        "start": { "$gt": doc['start']}, 
-        "end": { "$lt": doc['end']},
-        "available": true,
-        "type": doc['shift_type']
+    collection.updateOne({
+      "start": {
+        "$gt": doc['start']
       },
-      {
-        "$set": {
-          "shifter": doc['shifter'],
-          "institute": doc['institute'],
-          "comment": doc['comment'],
-          "available": false
-        }
+      "end": {
+        "$lt": doc['end']
+      },
+      "available": true,
+      "type": doc['shift_type']
+    }, {
+      "$set": {
+        "shifter": doc['shifter'],
+        "institute": doc['institute'],
+        "comment": doc['comment'],
+        "available": false
       }
-    ).then(function() {
+    }).then(function () {
       return res.sendStatus(200);
     });
-  }
-  else {
+  } else {
     // Remove the user from the shift
     try {
-      collection.findOneAndUpdate(
-        { 
-          "start": { "$gt": doc['start']},
-          "end": { "$lt": doc['end']},
+      collection.findOneAndUpdate({
+          "start": {
+            "$gt": doc['start']
+          },
+          "end": {
+            "$lt": doc['end']
+          },
           "available": false,
-          "type":doc['shift_type'],
+          "type": doc['shift_type'],
           "shifter": doc['shifter']
-        },
-        {
+        }, {
           "$set": {
             "shifter": "none",
             "institute": "none",
             "comment": '',
             "available": true
           }
-        }, 
-        function(){ 
+        },
+        function () {
           res.sendStatus(200);
         }
       );
-    } catch(e) {
+    } catch (e) {
       console.log(e);
     }
   }
