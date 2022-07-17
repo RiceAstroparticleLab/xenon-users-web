@@ -1,7 +1,7 @@
 /*
  * Scripts for the shift calendar page.
  */
-
+ 
 // Fills in table in (tablediv) which displays the stats for number of shifts
 // done by each institute while highlighting the institute of the user who is 
 // logged in (myinstitute) and sets the header in the (headerdiv)
@@ -12,7 +12,7 @@ function FillAggregates(tablediv, inputYear, myinstitute) {
     var total = 0;
     var totalThisYear = 0;
 
-    for (let i = 0; i < data.length; i ++) {
+    for (let i = 0; i < data.length; i++) {
       let countThisYear = 0;
       let institute = data[i];
       let instituteYears = institute["years"];
