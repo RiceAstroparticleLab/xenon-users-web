@@ -136,7 +136,7 @@ router.get("/total_shift_aggregates", ensureAuthenticated, function (req, res) {
           }
         },
         "count": {
-          "$sum": 1
+          "$sum": "$multiplier"
         }
       }
     },
@@ -281,7 +281,7 @@ router.post('/add_shifts', ensureAuthenticated, function (req, res) {
         "end": end_of_shift,
         "type": shift_type,
         "available": true,
-        "credit_multiplier": credit_multiplier,
+        "multiplier": 1,
         "institute": "none",
         "shifter": "none",
         "comment": ""
@@ -295,7 +295,7 @@ router.post('/add_shifts', ensureAuthenticated, function (req, res) {
         "end": end_of_shift,
         "type": shift_type,
         "available": true,
-        "credit_multiplier": credit_multiplier,
+        "multiplier": 2,
         "institute": "none",
         "shifter": "none",
         "comment": ""
