@@ -38,6 +38,15 @@ function InitializeTable(tablediv) {
       { data: "institute", searchable: true },
       { data: "last_name", searchable: true },
       { data: "first_name", searchable: true },
+      { data: "picture_url", orderable: false, 
+        render: function(data) {
+          if (typeof(data) === 'undefined') {
+            return '';
+          }
+          return '<img style="height: 90px;" src="'+data+'">';
+
+        }
+      },
       { data: "email", orderable: false, searchable: true },
       { data: "position", searchable: true },
       { data: "percent_xenon", orderable: false },
@@ -52,24 +61,25 @@ function InitializeTable(tablediv) {
       { title: 'Institute', targets: 1 },
       { title: 'Last Name', targets: 2 },
       { title: 'First Name', targets: 3 },
-      { title: 'Email', targets: 4 },
-      { title: 'Position', targets: 5 },
-      { title: 'Time', targets: 6 },
-      { title: 'Start Date', targets: 7 },
-      { title: 'Phone Number', targets: 8 },
+      { title: 'Avatar', targets: 4 },
+      { title: 'Email', targets: 5 },
+      { title: 'Position', targets: 6 },
+      { title: 'Time', targets: 7 },
+      { title: 'Start Date', targets: 8 },
+      { title: 'Phone Number', targets: 9 },
       { title: 'Explanations <button type="button" class="btn btn-sm"' +
         'data-html="true" data-toggle="tooltip" data-placement="right" id="explanations"' +
         'data-original-title="Date of moving between institutes and comments on other ' +
         'status changes" style="border-radius:25px;border:transparent;padding:0px 5px;">' +
-        '<i class="fas fa-question"></i></button>', targets: 9 },
-      { visible: false, targets: 10 },
+        '<i class="fas fa-question"></i></button>', targets: 10 },
+      { visible: false, targets: 11 },
       { targets: -1,
         data: null,
         defaultContent: "<button type='button' class='btn-circle'>" + 
                         "<i class='fas fa-pen'></i></button>"
       },
       { visible: false, targets: groupColumn },
-      { targets: [7],
+      { targets: [8],
         render: function(data) {
           if (typeof(data) === 'undefined') {
             return '';
@@ -95,7 +105,7 @@ function InitializeTable(tablediv) {
       api.column(groupColumn, {page: 'current'}).data().each(function(group,i) {
         if (last !== group) {
           $(rows).eq(i).before(
-            '<tr class="group"><td colspan="9"><strong>' + group + 
+            '<tr class="group"><td colspan="10"><strong>' + group + 
               '</strong></td></tr>'
           )
           last = group;
