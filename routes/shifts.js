@@ -252,7 +252,7 @@ router.post('/add_shifts', ensureAuthenticated, function (req, res) {
   // Get form data
   var weekday = req.body.shift_change_day;
   var shift_type = req.body.shift_type;
-  var credit_multiplier = req.body.credit_multiplier;
+  // var credit_multiplier = req.body.credit_multiplier;
   var start =
     new Date(Date.UTC(parseInt(req.body.start_date.substr(0, 4)),
       parseInt(req.body.start_date.substr(5, 2)) - 1,
