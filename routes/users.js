@@ -303,7 +303,7 @@ router.post('/:page/:userid/updateContactInfoAdmin', ensureAuthenticated, functi
       idoc['institute'] = req.body.institute;
       if (idoc['institute'] != previous_doc['institute']) {
         changes += 'Institute: ' + req.body.institute + '<br>';
-        prevtimestr = req.body.prevTime;
+        // prevtimestr = req.body.prevTime;
         // prevtimestr = req.body.prevTime + "Was at " + previous_doc['institute'] + " until " + moment().format("MMM YYYY") + ". ";
         prevtimestr = "Was at " + previous_doc['institute'] + " until " + moment().format("MMM YYYY") + ". ";
 
