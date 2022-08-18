@@ -583,7 +583,7 @@ router.post('/removeuser', function(req, res) {
           });
         })
         console.log(`success. Modified ${req.body.selectedUser}`);
-        res.redirect(base + '/remove_member');
+        res.redirect(base + '/fulldirectory');
       } else {
         console.log("error. Could not send email.");
         res.redirect(base + '/remove_member');
