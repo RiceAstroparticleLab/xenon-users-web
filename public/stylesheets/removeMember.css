@@ -1,0 +1,209 @@
+h1 {
+    font-size: 30px;
+    color: #fff !important;
+    text-transform: uppercase;
+    font-weight: 300 !important;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+h6 {
+    color: #fff !important;
+
+}
+
+a {
+    text-decoration: none !important;
+
+}
+
+.removal-cell {
+    text-align: center;
+}
+
+h6:hover {
+    color: whitesmoke !important;
+}
+
+.hover-underline-animation {
+    display: inline-block;
+    position: relative;
+    color: #fff;
+}
+
+.hover-underline-animation:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+}
+
+.hover-underline-animation:hover:after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.tbl-header {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.tbl-content {
+    height: 500px;
+    overflow-x: auto;
+    margin-top: 0px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+th {
+    padding: 20px 15px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 12px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+td {
+    padding: 15px;
+    text-align: left;
+    vertical-align: middle;
+    font-weight: 300;
+    font-size: 12px;
+    color: #fff;
+    border-bottom: solid 1px rgba(255, 255, 255, 0.1);
+}
+
+
+/* demo styles */
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
+
+body {
+    background: -webkit-linear-gradient(left, #30415d, #30415d);
+    background: linear-gradient(to right, #30415d, #30415d);
+    font-family: 'Roboto', sans-serif;
+}
+
+section {
+    margin: 50px;
+}
+
+
+
+/* for custom scrollbar for webkit browser*/
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::placeholder {
+    color:rgba(255, 255, 255, 0.3)
+}
+
+#github-table, #slack-table {
+    width: 80%;
+}
+
+
+form{
+    position: relative;
+    top: 50%;
+    transition: all .75s;
+    width: 50px;
+    height: 50px;
+    box-sizing: border-box;
+    border-radius: 25px;
+    border: 4px solid white;
+    padding: 5px;
+    margin: 10px 0;
+}
+
+input{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;;
+    height: 42.5px;
+    line-height: 30px;
+    outline: 0;
+    border: 0;
+    display: none;
+    font-size: 1em;
+    border-radius: 20px;
+    padding: 0 20px;
+    background-color: #30415d;
+    color: white;
+}
+
+.fa-solid  {
+    box-sizing: border-box;
+    padding: 10px;
+    width: 42.5px;
+    height: 42.5px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 50%;
+    color: white;
+    text-align: center;
+    font-size: 1.2em;
+    transition: all 1s;
+}
+
+form:hover,
+form:valid{
+    width: 200px;
+    cursor: pointer;
+}
+
+form:hover input,
+form:valid input{
+    display: block;
+}
+
+form:hover .fa,
+form:valid .fa{
+    background: #30415d;
+    color: white;
+}
+
+.tablink {
+    color: white;
+
+}
+
+#tabdiv {
+    text-align: center;
+}
+
+.tablink {
+    height: 100px;
+    width: 100px;
+}
+
+.btn {
+    border-width: 0px !important;
+}
+
+.tabicon {
+    color: rgba(255, 255, 255, 0.3);
+}
