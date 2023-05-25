@@ -3,6 +3,14 @@ var router = express.Router();
 var base = process.env.BASE_URL;
 var today = Date.now()
 var oneYearAgo = new Date(Number(today) - 31556952000);
+var GITHUB_TEAM_TOKEN = process.env.GITHUB_TEAM_TOKEN;
+const { Octokit } = require("@octokit/rest");
+const octokit = new Octokit({
+    auth: GITHUB_TEAM_TOKEN,
+    baseUrl: "https://api.github.com",
+});
+
+
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
@@ -79,6 +87,49 @@ router.get('/remove_member', ensureAuthenticated, function(req, res) {
         data: docs,
         user: req.user,
         base_url: base
+      }
+    );
+  });
+});
+
+//Remove member info (Github, email, Slack)
+router.get('/remove_member_info', ensureAuthenticated, async function(req, res) {
+  var members = [];
+  var collaborators = [];
+  var db = req.xenonnt_db;
+  var collection = db.collection('users');
+
+  var query = {};
+
+  query["active"] = "true";
+  // query["active"] = "false";
+  query["position"] = {$ne: "PI"};
+  query["pending"] = {$exists: false};
+  // query["email"] = {$exists: true};
+  if (!req.user.groups.includes("admin")) {
+    query["institute"] = req.user.institute;
+  }
+
+  const memberDetails = await octokit.orgs.listMembers({org: "RiceAstroparticleLab",});
+  const collaboratorDetails = await octokit.orgs.listOutsideCollaborators({org: "RiceAstroparticleLab",});
+  
+  for (i = 0; i < memberDetails.data.length; i++) {
+    members.push(memberDetails.data[i]);
+  }
+  for (j = 0; j < collaboratorDetails.data.length; j++) {
+    collaborators.push(collaboratorDetails.data[j]);
+  }
+
+  collection.find(query).sort({last_name: 1}).toArray(function(e, docs) {
+    res.render('removeMemberInfo', 
+      { page: 'Remove Member Information', 
+        menuId: 'home', 
+        title: 'Remove Member Information',
+        data: docs,
+        user: req.user,
+        base_url: base,
+        gitMembers: members,
+        outsideCollabs: collaborators
       }
     );
   });
