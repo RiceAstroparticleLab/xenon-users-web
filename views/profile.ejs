@@ -194,7 +194,8 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="orcid">ORCID iD</label>
-                                <input id="orcid" class="form-control" type="text" value="<%= user.orcid %>" pattern="\d{16}" title="ORCID iD must be a 16-digit number" name="orcid">
+                                <small class="form-text text-muted">Must be a 16-digit number, with the last digit possibly being 'X'</small>
+                                <input id="orcid" class="form-control" type="text" value="<%= user.orcid %>" pattern="\d{15}(\d|X)" title="ORCID iD must be a 16-digit number, with the last digit possibly being 'X'" name="orcid">
                             </div>
                             <br>
                             <button class="btn btn-info" type="submit">Submit</button>
