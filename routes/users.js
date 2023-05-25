@@ -229,6 +229,13 @@ router.post('/updateContactInfo', ensureAuthenticated, function(req, res) {
     idoc["cell"] = req.body.cell;
     req.user.cell = req.body.cell;
   }
+  
+  //orcid
+  if (req.body.orcid != "" && req.user.orcid != req.body.orcid) {	
+    idoc["orcid"] = req.body.orcid;
+    req.user.orcid = req.body.orcid;
+  }
+
   if (req.body.favorite_color != "" && req.user.favorite_color != req.body.favorite_color) {
     idoc["favorite_color"] = req.body.favorite_color;
     req.user.favorite_color = req.body.favorite_color;

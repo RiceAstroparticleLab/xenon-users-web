@@ -58,6 +58,10 @@
                                 <td><strong>Percent Xenon:</strong></td>
                                 <td><%= user.percent_xenon %>% </td>
                             </tr>
+                            <tr>
+                                <td><strong>ORCID iD:</strong></td>
+                                <td><%= user.orcid.toString().replace(/(\d{4})(\d{4})(\d{4})(\d{4})/, "$1-$2-$3-$4") %></td>
+                            </tr>
                         </table>
                         <h6 style="color:#aaa;letter-spacing:.7px;padding-top:10px;padding-bottom:10px">ACCOUNTS</h6>
                         <table>
@@ -187,6 +191,10 @@
                             <div class="form-group">
                                 <label class="form-label" for="phone">Phone</label>
                                 <input id="phone" class="form-control" type="tel" value="<%= user.cell %>" name="cell">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="orcid">ORCID iD</label>
+                                <input id="orcid" class="form-control" type="number" value="<%= user.orcid %>" min=0 max=10000000000000000 name="orcid">
                             </div>
                             <br>
                             <button class="btn btn-info" type="submit">Submit</button>
